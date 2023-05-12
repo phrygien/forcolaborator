@@ -1,5 +1,5 @@
-
 <div class="row mb-4">
+      
     @if($notification)
     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4">
         <div id="notification" wire:transition.fade.out.500ms>
@@ -9,7 +9,7 @@
             </div>
         @endif
     </div>
-    <div wire:poll.5s="hideNotification"></div>
+    <div wire:poll.1s="hideNotification"></div>
     </div>
     @endif
 

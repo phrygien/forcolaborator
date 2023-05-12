@@ -55,6 +55,7 @@ class LivTypeSortie extends Component
         try{
 
         TypeSortie::create($data);
+        $this->showToast = true;
         $this->notification = true;
         session()->flash('message', 'Type sortie enregistré!');
         $this->resetValidation();
