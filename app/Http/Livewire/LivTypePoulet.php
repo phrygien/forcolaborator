@@ -174,10 +174,15 @@ class LivTypePoulet extends Component
 
     public function delete()
     {
+        try{
         $this->recordToDelete->delete();
         $this->recordToDelete = null;
         $this->notification = true;
         session()->flash('message', 'Suppression avec sucée');
+    }catch(\Exception $e){
+            //$this->notification = true;
+            session()->flash('error', 'Impossible de supprimer le type. Il est déja utilisé !');
+        }
 
     }
 

@@ -185,7 +185,7 @@ class LivTypeOeuf extends Component
         session()->flash('message', 'Suppression avec sucée');
         }catch(\Exception $e){
             //$this->notification = true;
-            session()->flash('error', 'Impossible de supprimer le type oeuf. Il est déja utilisé !');
+            session()->flash('error', 'Impossible de supprimer le categorie. Il est déja utilisé !');
         }
     }
 
