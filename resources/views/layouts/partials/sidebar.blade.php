@@ -300,7 +300,7 @@
 		{{-- debut gestion sortie --}}
 		<ul class="childNav" data-parent="gsortie">
 			<li class="nav-item">
-				<a href="{{ route('gestion_entree.cycles')}}">
+				<a href="{{ route('gestion_sortie.sortie_poulets')}}">
 					<i class="nav-icon i-Remove-Basket"></i>
 					<span class="item-name">Gestion sortie</span>
 				</a>

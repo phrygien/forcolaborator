@@ -12,6 +12,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\Site\SiteController;
+use App\Http\Controllers\Sortie\SortiepouletController;
 use App\Http\Controllers\TypedepenseController;
 use App\Http\Controllers\TypeoeufController;
 use App\Http\Controllers\TypepouletController;
@@ -48,4 +49,8 @@ Route::group(['prefix' => 'gestion_entree', 'middleware' => 'auth'], function(){
     Route::get('constat_oeuf', [ConstatoeufController::class, 'page'])->name('gestion_entree.constat_oeufs');
     Route::get('donnee_du_jour_constat_oeuf', [ConstatoeufController::class, 'donneeJournalierConstat'])->name('gestion_entree.donnee_du_jour_constat_oeuf');
     Route::get('constat_poulet', [ConstatpouletController::class, 'page'])->name('gestion_entree.constat_poulets');
+});
+
+Route::group(['prefix' => 'gestion_sortie', 'middleware' => 'auth'], function(){
+    Route::get('sortie_poulet', [SortiepouletController::class, 'page'])->name('gestion_sortie.sortie_poulets');
 });
