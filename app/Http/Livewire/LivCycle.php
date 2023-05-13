@@ -48,6 +48,36 @@ class LivCycle extends Component
         $this->id_utilisateur = Auth::user()->id;
     }
 
+    public $selectedType = '';
+
+    public function updatedSelectedType()
+    {
+        $this->resetPage();
+    }
+
+    // public function render()
+    // {
+    //     $cycles = DB::table('cycles')
+    //         ->join('batiments', 'batiments.id', 'cycles.id_batiment')
+    //         ->join('type_poulets', 'type_poulets.id', 'cycles.id_type_poulet')
+    //         ->join('sites', 'sites.id', 'batiments.id_site')
+    //         ->select('cycles.*', 'batiments.nom', 'sites.site', 'type_poulets.type')
+    //         ->where('cycles.actif', 1)
+    //         ->paginate(2);
+
+    //     $sites = $this->getSites();
+    //     $batiments = $this->getBatiments();
+    //     $typePouletActif = TypePoulet::where('actif', 1)->get();
+
+    //     return view('livewire.liv-cycle', [
+    //         'cycles' => $cycles,
+    //         'sites' => $sites,
+    //         'batiments' => $batiments,
+    //     ]);
+    // }
+
+    public $actifValue = 1;
+
     public function render()
     {
         $cycles = DB::table('cycles')
@@ -55,7 +85,10 @@ class LivCycle extends Component
             ->join('type_poulets', 'type_poulets.id', 'cycles.id_type_poulet')
             ->join('sites', 'sites.id', 'batiments.id_site')
             ->select('cycles.*', 'batiments.nom', 'sites.site', 'type_poulets.type')
-            ->where('cycles.actif', 1)
+            ->when($this->selectedType, function ($query) {
+                return $query->where('cycles.id_type_poulet', $this->selectedType);
+            })
+            ->where('cycles.actif', $this->actifValue)
             ->paginate(2);
 
         $sites = $this->getSites();
@@ -66,9 +99,11 @@ class LivCycle extends Component
             'cycles' => $cycles,
             'sites' => $sites,
             'batiments' => $batiments,
+            'typePouletActif' => $typePouletActif,
         ]);
     }
 
+    
     public function getSites()
     {
         return Site::where('actif', 1)->get();

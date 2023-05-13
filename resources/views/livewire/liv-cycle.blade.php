@@ -23,10 +23,18 @@
 
     @if ($afficherListe)
     <div class="col-md-12 mb-3">
-        <div class="card text-left">
-
+        <div class="card">
+            <p>
+                <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2">
+                    <select wire:model="actifValue" class="form-control form-control-rounded">
+                        <option value=""></option>
+                            <option value="1">Actif</option>
+                            <option value="0">Inactif</option>
+                    </select>
+                    
+                </div>
+            </p>
             <div class="card-body">
-                <h4 class="card-title mb-3">{{ __('Liste cycles ') }}</h4>
                 <p>
                     <button class="btn btn-primary btn-rounded" wire:click="formCycle" wire:loading.attr="disabled" wire:target="formCycle">
                         <span wire:loading.remove wire:target="formCycle">Créer cycle</span>
