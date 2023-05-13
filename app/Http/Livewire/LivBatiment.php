@@ -183,10 +183,15 @@ class LivBatiment extends Component
 
     public function delete()
     {
-        $this->recordToDelete->delete();
-        $this->recordToDelete = null;
-        $this->notification = true;
-        session()->flash('message', 'Suppression avec succée');
+        try{
+            $this->recordToDelete->delete();
+            $this->recordToDelete = null;
+            $this->notification = true;
+            session()->flash('message', 'Suppression avec succée');
+        }catch(\Exception $e){
+            //$this->notification = true;
+            session()->flash('error', 'Impossible de supprimer le batiment. Il est déja utilisé !');
+        }
     }
 
 }
