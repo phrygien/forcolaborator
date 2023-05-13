@@ -71,7 +71,7 @@
                         </div>
                         <p class="text-center">
                             <button class="btn btn-secondary btn-rounded" wire:click="cancelDelete()">{{ __('Annuler') }}</button>
-                            <button class="btn btn-warning btn-rounded" wire:click="setCycleInactif()">{{ __('Desactiver') }}</button>
+                            <button class="btn btn-warning btn-rounded" wire:click="desactiverCycle()">{{ __('Desactiver') }}</button>
                         </p>
                         @else
                         @if (session()->has('inactif'))

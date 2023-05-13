@@ -272,6 +272,20 @@ class LivCycle extends Component
         $this->recordToClose = Cycle::findOrFail($id);
     }
 
+    /*
+    * fermeture cycle depuis modal suppression
+    */
+    public function desactiverCycle()
+    {
+        $this->recordToDelete->update([
+            'actif' => 0,
+        ]);
+        $this->notification = true;
+        session()->flash('message', 'Desactivation avec succée !');
+        $this->recordToDelete = null;
+    }
+
+    // fermer cycle depuis liste
     public function setCycleInactif()
     {
         try{
