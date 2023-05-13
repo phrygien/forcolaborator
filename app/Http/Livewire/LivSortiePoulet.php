@@ -27,7 +27,7 @@ class LivSortiePoulet extends Component
     public $clientActifs;
     public $newClient;
     public $existClient;
-
+    public $selectedOption;
     public $recordToDelete;
     public $isLoading;
     public $creatBtn = true;
@@ -120,26 +120,26 @@ class LivSortiePoulet extends Component
         $client->raison_sociale = $this->raison_sociale;
         $client->adresse = $this->adresse;
         $client->save();
-
         //création sortie poulet
         $sortiePoulet = new SortiePoulet();
-        $sortiePoulet->id_type_poulet = $this->id_type_sortie;
+        $sortiePoulet->id_type_poulet = $this->id_type_poulet;
         $sortiePoulet->id_type_sortie = $this->id_type_sortie;
         $sortiePoulet->poids_total = $this->poids_total;
         $sortiePoulet->nombre = $this->nombre;
         $sortiePoulet->prix_unite = $this->prix_unite;
         $sortiePoulet->date_sortie = now();
-        $sortiePoulet->date_action = $this->date_action;
+        $sortiePoulet->date_action = now();
         $sortiePoulet->actif = $this->actif;
         $sortiePoulet->id_client = $client->id;
+        $sortiePoulet->id_utilisateur = $this->id_utilisateur;
 
         $sortiePoulet->save();
 
-        $this->resetFormConstat();
+        $this->resetFormSortie();
         $this->resetValidation();
         $this->isLoading = false;
         $this->notification = true;
-        session()->flash('message', 'Constat poulet bien enregistré!');
+        session()->flash('message', 'Sortie poulet bien enregistré!');
         DB::commit();
 
         }catch(\Exception $e){
@@ -150,24 +150,72 @@ class LivSortiePoulet extends Component
         }
     }
 
+    public function saveExistSortie()
+    {
+        $this->isLoading = true;
+        $data = $this->validate([
+            'id_type_poulet' => 'required|integer',
+            'id_type_sortie' => 'required|integer',
+            'poids_total' => 'required',
+            'nombre' => 'required|integer',
+            'prix_unite' => 'required',
+            'date_sortie' => 'required|date',
+            'id_client' => 'nullable|integer',
+            'id_utilisateur' => 'nullable',
+            'date_action' => 'nullable',
+            'actif' => 'required|integer',
+        ]);
+
+        try{
+
+        //création sortie poulet
+        $sortiePoulet = new SortiePoulet();
+        $sortiePoulet->id_type_poulet = $this->id_type_poulet;
+        $sortiePoulet->id_type_sortie = $this->id_type_sortie;
+        $sortiePoulet->poids_total = $this->poids_total;
+        $sortiePoulet->nombre = $this->nombre;
+        $sortiePoulet->prix_unite = $this->prix_unite;
+        $sortiePoulet->date_sortie = now();
+        $sortiePoulet->date_action = now();
+        $sortiePoulet->actif = $this->actif;
+        $sortiePoulet->id_client = $this->id_client;
+        $sortiePoulet->id_utilisateur = $this->id_utilisateur;
+
+        $sortiePoulet->save();
+
+        $this->resetFormSortie();
+        $this->resetValidation();
+        $this->isLoading = false;
+        $this->notification = true;
+        session()->flash('message', 'Sortie poulet bien enregistré!');
+
+        }catch(\Exception $e){
+
+            return $e->getMessage();
+            //session()->flash('message', $e->getMessage());
+            
+        }
+    }
+
+
     public function cancelCreate()
     {
         $this->isLoading = true;
         $this->createSortie = false;
         $this->afficherListe = true;
-        $this->resetFormConstat();
+        $this->resetFormSortie();
         $this->resetValidation();
         $this->isLoading = false;
         $this->creatBtn = true;
     }
 
-    public function editConstat($id)
+    public function editSortie($id)
     {
         $sortie = SortiePoulet::findOrFail($id);
         $this->sortie_id = $id;
         $this->id_type_poulet = $sortie->id_type_poulet;
         $this->id_type_sortie = $sortie->id_type_sortie;
-        $this->poids_total = $sortie->poids_sortie;
+        $this->poids_total = $sortie->poids_total;
         $this->date_action = $sortie->date_constat;
         $this->nombre = $sortie->nombre;
         $this->prix_unite = $sortie->prix_unite;
@@ -188,7 +236,7 @@ class LivSortiePoulet extends Component
         $this->confirmUpdate = true;
     }
 
-    public function updateConstat()
+    public function updateSortie()
     {
         $this->validate([
             'id_type_poulet' => 'required|integer',
@@ -220,7 +268,7 @@ class LivSortiePoulet extends Component
             ]);
 
             $this->editSortie = false;
-            $this->resetFormConstat();
+            $this->resetFormSortie();
             $this->resetValidation();
             $this->confirmUpdate = false;
             $this->creatBtn = true;
@@ -245,7 +293,7 @@ class LivSortiePoulet extends Component
     {
         $this->confirmUpdate = false;
         $this->editSortie = false;
-        $this->resetFormConstat();
+        $this->resetFormSortie();
         $this->resetValidation();
         $this->creatBtn = true;
         $this->afficherListe = true;

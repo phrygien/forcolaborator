@@ -14,14 +14,14 @@
     <div wire:poll.5s="hideNotification"></div>
     </div>
     @endif
-    {{-- @if($createConstat)
-        @include('livewire.constat_poulets.create')
+    @if($createSortie)
+        @include('livewire.sortie_poulets.create')
     @endif
 
-    @if($editConstat)
-        @include('livewire.constat_poulets.edit')
-    @endif --}}
-    {{-- @livewire('donneejour-constant-oeuf') --}}
+    @if($editSortie)
+        @include('livewire.sortie_poulets.edit')
+    @endif
+
 @if($afficherListe)
 
 <div class="col-md-12">
@@ -117,9 +117,9 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <button wire:click="editConstat({{$sortie->id }})" wire:loading.attr="disabled" wire:target="editConstat({{$sortie->id }})" class="btn btn-raised btn-rounded btn-raised-primary">
-                                        <span wire:loading.remove wire:target="editConstat({{$sortie->id }})"><i class="nav-icon i-Pen-2 font-weight-bold"></i></span>
-                                        <span wire:loading wire:target="editConstat({{$sortie->id }})">
+                                    <button wire:click="editSortie({{$sortie->id }})" wire:loading.attr="disabled" wire:target="editSortie({{$sortie->id }})" class="btn btn-raised btn-rounded btn-raised-primary">
+                                        <span wire:loading.remove wire:target="editSortie({{$sortie->id }})"><i class="nav-icon i-Pen-2 font-weight-bold"></i></span>
+                                        <span wire:loading wire:target="editSortie({{$sortie->id }})">
                                             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                             modification...
                                         </span>
