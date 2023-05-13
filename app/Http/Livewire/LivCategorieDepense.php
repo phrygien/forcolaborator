@@ -171,10 +171,15 @@ class LivCategorieDepense extends Component
 
     public function delete()
     {
-        $this->recordToDelete->delete();
-        $this->recordToDelete = null;
-        $this->notification = true;
-        session()->flash('message', 'Suppression catégorie avec succée!');
+        try{
+            $this->recordToDelete->delete();
+            $this->recordToDelete = null;
+            $this->notification = true;
+            session()->flash('message', 'Suppression catégorie avec succée!');
+        }catch(\Exception $e){
+            //$this->notification = true;
+            session()->flash('error', 'Impossible de supprimer le categorie. Il est déja utilisé !');
+        }
     }
 
     public function removeNotification()

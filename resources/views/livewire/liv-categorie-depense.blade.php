@@ -65,6 +65,11 @@
                     <div class="alert alert-warning text-center">
                         <strong class="text-black">Suppression catégorie !</strong>
                         <p class="text-black">Vous etes sure de supprimer le catégorie : {{$recordToDelete->categorie }}?</p>
+                        @if (session()->has('error'))
+                        <div class="alert alert-warning border-danger" role="alert">
+                            <i class="icon-info1"></i>{{ session('error')}}
+                        </div>
+                        @endif
                         <p class="text-center">
                             <button class="btn btn-secondary btn-rounded" wire:click="cancelDelete()">{{ __('Annuler') }}</button>
                             <button class="btn btn-danger btn-rounded" wire:click="delete()">{{ __('Supprimer') }}</button>
