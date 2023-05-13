@@ -162,7 +162,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($cycles as $cycle)
+                            @forelse ($cycles as $cycle)
                             <tr>
                                 <td>{{ $cycle->description }}</td>
                                 <td>{{ $cycle->type }}</td>
@@ -206,8 +206,14 @@
                                         </svg>
                                     </button>
                                 </td>
-                            </tr>                                  
-                            @endforeach
+                            </tr>  
+                            @empty
+                            <tr>
+                                <td colspan="8" class="text-center">
+                                    <span class="text-25 text-center text-warning">Aucune donnée disponible</span>
+                                </td>
+                            </tr>                                
+                            @endforelse
                         </tbody>
                     </table>
                 </div>

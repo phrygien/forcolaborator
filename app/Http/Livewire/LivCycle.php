@@ -89,7 +89,7 @@ class LivCycle extends Component
                 return $query->where('cycles.id_type_poulet', $this->selectedType);
             })
             ->where('cycles.actif', $this->actifValue)
-            ->paginate(2);
+            ->paginate(10);
 
         $sites = $this->getSites();
         $batiments = $this->getBatiments();
