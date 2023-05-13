@@ -279,6 +279,7 @@ class LivCycle extends Component
                 'id_utilisateur' => $this->id_utilisateur,
                 'date_fermeture' => $this->date_fermeture,
             ]);
+            $this->notification = true;
             session()->flash('message', 'Cycle bien fermé !');
             $this->recordToClose = null;
         }catch(\Exception $e){
