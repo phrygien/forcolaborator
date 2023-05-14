@@ -14,6 +14,7 @@ class SortiePoulet extends Model
     protected $fillable = [
         'id_type_poulet',
         'id_type_sortie',
+        'id_cycle',
         'poids_total',
         'nombre',
         'prix_unite',

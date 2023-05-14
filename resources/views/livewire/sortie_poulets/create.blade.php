@@ -19,6 +19,20 @@
                         @enderror
                     </div>
 
+                    <div class="col-md-6 form-group mb-3">
+                        <label for="picker1">{{ __('Cycle')}}</label>
+                        <select wire:model.defer="id_cycle" class="form-control form-control-rounded">
+                            <option value="">Choisir un cycle</option>
+                            @foreach ($cycleActifs as $cycle)
+                                <option value="{{ $cycle->id }}">{{ $cycle->description }}</option>
+                            @endforeach
+                        </select>
+                        @error('id_cycle') 
+                        <div class="alert alert-danger" role="alert">
+                            {{ $message}}
+                        </div>
+                        @enderror
+                    </div>
                     
                     <div class="col-md-6 form-group mb-3">
                         <label for="picker1">{{ __('Type sortie')}}</label>
@@ -80,7 +94,7 @@
                         <label for="picker1">{{ __('Type client')}}</label>
                         <select wire:model="selectedOption" class="form-control form-control-rounded">
                             <option>Selectioner type client</option>
-                            <option value="nouvele">Nouvelle client</option>
+                            <option value="nouvele">Nouveau client</option>
                             <option value="existe">Client existant</option>
                         </select>
                     </div>

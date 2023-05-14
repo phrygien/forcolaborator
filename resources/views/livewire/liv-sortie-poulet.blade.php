@@ -10,6 +10,12 @@
                 <i class="icon-info1"></i>{{ session('message')}}
             </div>
         @endif
+
+        @if (session()->has('error'))
+        <div class="alert alert-danger border-info" role="alert">
+            <i class="icon-info1"></i>{{ session('error')}}
+        </div>
+        @endif
     </div>
     <div wire:poll.5s="hideNotification"></div>
     </div>
