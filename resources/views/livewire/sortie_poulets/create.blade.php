@@ -156,7 +156,7 @@
                     <div class="col-md-12">
                         @if ($selectedOption == 'existe')
                         <button class="btn btn-primary btn-rounded mr-3" wire:click.prevent="saveExistSortie()" wire:loading.attr="disabled" wire:target="saveExistSortie()">
-                            <span wire:loading.remove wire:target="saveExistSortie"><i class="nav-icon i-Yes font-weight-bold"></i> Enregistrer existe</span>
+                            <span wire:loading.remove wire:target="saveExistSortie"><i class="nav-icon i-Yes font-weight-bold"></i> Enregistrer</span>
                             <span wire:loading wire:target="saveExistSortie">
                                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                 enregistrement...
