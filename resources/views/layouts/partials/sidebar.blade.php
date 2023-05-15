@@ -305,6 +305,13 @@
 					<span class="item-name">Gestion sortie</span>
 				</a>
 			</li>
+
+			<li class="nav-item">
+				<a href="{{ route('gestion_sortie.prix_poulets')}}">
+					<i class="nav-icon i-Money1"></i>
+					<span class="item-name">Prix poulet</span>
+				</a>
+			</li>
 		</ul>
 		{{-- fin gestion sortie--}}
 		<ul class="childNav" data-parent="sessions">
