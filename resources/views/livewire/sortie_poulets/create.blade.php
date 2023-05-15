@@ -5,6 +5,22 @@
             <form>
                 <div class="row">
                     <div class="col-md-6 form-group mb-3">
+                    <label class="radio radio-outline-success">
+                        <input type="radio" name="radio" wire:model="selectedOption" value="existe">
+                        <span>Client existant</span>
+                        <span class="checkmark"></span>
+                    </label>
+                    </div>
+
+                    <div class="col-md-6 form-group mb-3">
+                    <label class="radio radio-outline-warning">
+                        <input type="radio" name="radio" wire:model="selectedOption" value="nouvele">
+                        <span>Nouveau client</span>
+                        <span class="checkmark"></span>
+                    </label>
+                    </div>
+
+                    <div class="col-md-6 form-group mb-3">
                         <label for="picker1">{{ __('Type poulets')}}</label>
                         <select wire:model="id_type_poulet" class="form-control form-control-rounded">
                             <option value="">Choisir un type de poulet</option>
@@ -34,6 +50,7 @@
                         @enderror
                     </div>
                     
+                    <hr>
                     <div class="col-md-6 form-group mb-3">
                         <label for="picker1">{{ __('Type sortie')}}</label>
                         <select wire:model="id_type_sortie" class="form-control form-control-rounded">
@@ -82,7 +99,7 @@
 
                     <div class="col-md-6 form-group mb-3">
                         <label for="firstName2">{{ __('Date sortie')}}</label>
-                        <input type="date" wire:model.defer="date_sortie" class="disable form-control form-control-rounded">
+                        <input type="date" wire:model="date_sortie" disabled class="disable form-control form-control-rounded">
                         @error('date_sortie') 
                         <div class="alert alert-danger" role="alert">
                             {{ $message}}
@@ -90,14 +107,14 @@
                         @enderror
                     </div>
 
-                    <div class="col-md-6 form-group mb-3">
+                    {{-- <div class="col-md-6 form-group mb-3">
                         <label for="picker1">{{ __('Type client')}}</label>
                         <select wire:model="selectedOption" class="form-control form-control-rounded">
                             <option>Selectioner type client</option>
                             <option value="nouvele">Nouveau client</option>
                             <option value="existe">Client existant</option>
                         </select>
-                    </div>
+                    </div> --}}
 
                     @if ($selectedOption == 'existe')
                     <div class="col-md-6 form-group mb-3">
@@ -189,7 +206,7 @@
                         @endif
 
                         <button class="btn btn-danger btn-rounded mr-3" wire:click.prevent="resetFormSortie()" wire:loading.attr="disabled" wire:target="resetFormSortie()">
-                            <span wire:loading.remove wire:target="resetFormSortie"><i class="nav-icon i-Repeat-3 font-weight-bold"></i> Reset</span>
+                            <span wire:loading.remove wire:target="resetFormSortie"><i class="nav-icon i-Repeat-3 font-weight-bold"></i> Reinitialiser</span>
                             <span wire:loading wire:target="resetFormSortie">
                                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                 reinitialisation...

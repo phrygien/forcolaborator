@@ -55,7 +55,7 @@ class LivSortiePoulet extends Component
         ->join('type_sorties', 'type_sorties.id', 'sortie_poulets.id_type_sortie')
         ->join('users', 'users.id', 'sortie_poulets.id_utilisateur')
         ->select('sortie_poulets.*', 'clients.nom', 'type_poulets.type', 'users.name', 'type_sorties.libelle')
-        ->paginate(10);
+        ->paginate(7);
 
         return view('livewire.liv-sortie-poulet', [
             'sorties' => $sorties
@@ -93,7 +93,7 @@ class LivSortiePoulet extends Component
         $this->poids_total = '';
         $this->nombre = '';
         $this->prix_unite = '';
-        $this->date_sortie = '';
+        //$this->date_sortie = '';
         $this->date_action = '';
         $this->actif = '';
         $this->creatBtn = false;
@@ -136,7 +136,7 @@ class LivSortiePoulet extends Component
                 $sortiePoulet->poids_total = $this->poids_total;
                 $sortiePoulet->nombre = $this->nombre;
                 $sortiePoulet->prix_unite = $this->prix_unite;
-                $sortiePoulet->date_sortie = now();
+                $sortiePoulet->date_sortie = $this->date_sortie;
                 $sortiePoulet->date_action = now();
                 $sortiePoulet->actif = $this->actif;
                 $sortiePoulet->id_client = $client->id;
@@ -157,7 +157,7 @@ class LivSortiePoulet extends Component
                 $this->notification = true;
                 session()->flash('message', 'Sortie poulet bien enregistré!');
                 DB::commit();
-        
+                $this->resetPage();
                 }catch(\Exception $e){
                     DB::rollback();
                     //return $e->getMessage();
@@ -200,7 +200,7 @@ class LivSortiePoulet extends Component
                 $sortiePoulet->poids_total = $this->poids_total;
                 $sortiePoulet->nombre = $this->nombre;
                 $sortiePoulet->prix_unite = $this->prix_unite;
-                $sortiePoulet->date_sortie = now();
+                $sortiePoulet->date_sortie = $this->date_sortie;
                 $sortiePoulet->date_action = now();
                 $sortiePoulet->actif = $this->actif;
                 $sortiePoulet->id_client = $this->id_client;
@@ -220,7 +220,9 @@ class LivSortiePoulet extends Component
                 $this->isLoading = false;
                 $this->notification = true;
                 session()->flash('message', 'Sortie poulet bien enregistré!');
-        
+                $this->createSortie = false;
+                $this->afficherListe = true;
+                $this->resetPage();
                 }catch(\Exception $e){
         
                     return $e->getMessage();

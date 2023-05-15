@@ -68,7 +68,7 @@
 
                     <div class="col-md-6 form-group mb-3">
                         <label for="firstName2">{{ __('Date sortie')}}</label>
-                        <input type="date" wire:model.defer="date_sortie" class="disable form-control form-control-rounded">
+                        <input type="date" wire:model="date_sortie" disabled class="disable form-control form-control-rounded">
                         @error('date_sortie') 
                         <div class="alert alert-danger" role="alert">
                             {{ $message}}
