@@ -88,6 +88,21 @@
                     </div>
 
                     <div class="col-md-6 form-group mb-3">
+                        <label for="picker1">{{ __('Prix unite')}}</label>
+                        <select wire:model="prix_unite" class="form-control form-control-rounded">
+                            <option value="">Choisir un prix</option>
+                            @foreach ($prixs as $prix)
+                                <option value="{{ $prix->pu_kg }}">{{ $prix->pu_kg }}</option>
+                            @endforeach
+                        </select>
+                        @error('prix_unite') 
+                        <div class="alert alert-danger" role="alert">
+                            {{ $message}}
+                        </div>
+                        @enderror
+                    </div>
+
+                    {{-- <div class="col-md-6 form-group mb-3">
                         <label for="firstName2">{{ __('Prix unite')}}</label>
                         <input type="number" wire:model.defer="prix_unite" class="form-control form-control-rounded" id="firstName2" placeholder="">
                         @error('prix_unite') 
@@ -95,7 +110,7 @@
                             {{ $message}}
                         </div>
                         @enderror
-                    </div>
+                    </div> --}}
 
                     <div class="col-md-6 form-group mb-3">
                         <label for="firstName2">{{ __('Date sortie')}}</label>

@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use App\Models\Client;
 use App\Models\Cycle;
+use App\Models\PrixPoulet;
 use App\Models\SortiePoulet;
 use App\Models\TypePoulet;
 use App\Models\TypeSortie;
@@ -31,6 +32,10 @@ class LivSortiePoulet extends Component
     public $existClient;
     public $selectedOption;
     public $recordToDelete;
+
+    public $selectedTypePoulet;
+    public $selectedPrixPoulet;
+
     public $isLoading;
     public $creatBtn = true;
     protected $paginationTheme = 'bootstrap';
@@ -47,6 +52,32 @@ class LivSortiePoulet extends Component
         $this->id_utilisateur = Auth::user()->id;
     }
 
+    public $selectedType = '';
+
+    public function updatedSelectedType()
+    {
+        $this->resetPage();
+    }
+
+    public function getPrix()
+    {
+        $prixs = [];
+    
+        if ($this->id_type_poulet) {
+            $prixs = PrixPoulet::where('id_type_poulet', $this->id_type_poulet)
+                        ->where('actif', 1)
+                        ->get();
+        }
+    
+        return $prixs;
+    }
+
+    public function updatedSelectedTypePoulet($value)
+    {
+        $this->prix_unite = null;
+    }
+
+
     public function render()
     {
         $sorties = DB::table('sortie_poulets')
@@ -56,9 +87,10 @@ class LivSortiePoulet extends Component
         ->join('users', 'users.id', 'sortie_poulets.id_utilisateur')
         ->select('sortie_poulets.*', 'clients.nom', 'type_poulets.type', 'users.name', 'type_sorties.libelle')
         ->paginate(7);
-
+        $prixs = $this->getPrix();
         return view('livewire.liv-sortie-poulet', [
-            'sorties' => $sorties
+            'sorties' => $sorties,
+            'prixs' => $prixs
         ]);
     }
 
