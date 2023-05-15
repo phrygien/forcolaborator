@@ -115,14 +115,26 @@ class LivConstatOeuf extends Component
             'date_action' => 'nullable'
         ]);
 
+        DB::beginTransaction();
+        $cycleSelected = Cycle::find($this->id_cycle);
+        $stockActuale = $cycleSelected->nb_poulet;
+
         try{
         ConstatOeuf::create($data);
+        //update stock cyle selected
+        $cycleSelected = Cycle::find($this->id_cycle);
+        $stockActuale = $cycleSelected->nb_poulet;
+        $cycleSelected->update([
+            'nb_poulet' => ($stockActuale + $this->nb),
+        ]);
+        $cycleSelected->save();
+
         $this->resetFormConstat();
         $this->resetValidation();
         $this->isLoading = false;
         $this->notification = true;
         session()->flash('message', 'Constat oeuf bien enregistré!');
-
+        DB::commit();
         }catch(\Exception $e){
             //return $e->getMessage();
             session()->flash('message', $e->getMessage());
