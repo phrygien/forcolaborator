@@ -104,7 +104,7 @@ class LivPrixPoulet extends Component
         $this->actif = $prixPoulet->actif;
         $this->prix_id = $id;
         $this->pu_kg = $prixPoulet->pu_kg;
-        $this->date_application = $this->date_application;
+        $this->date_application = $prixPoulet->date_application;
         $this->editPrix = true;
         $this->createPrix = false;
         $this->btnCreate = false;
