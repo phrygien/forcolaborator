@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>{{ config('app.name', 'Laravel') }}</title>
-    <meta name="description" content="Admin template built with Bootstrap, Angular & Laravel. 300+ UI Components and pages for your next web application project">
-    <meta name="keywords" content="Angular Admin, Laravel admin, Bootstrap Admin, ng bootstrap admin, Project management template, UI Lib">
     <meta name="author" content="UI Lib">
     <link href="https://fonts.googleapis.com/css?family=Nunito:300,400,400i,600,700,800,900" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('assets/styles/css/themes/lite-purple.min.css') }}"></head>
