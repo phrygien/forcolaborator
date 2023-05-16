@@ -71,7 +71,7 @@ class LivSite extends Component
     {
        $this->isLoading = true;
        $data = $this->validate([
-            'site' => 'required|unique:sites,site,' .$this->site_id,
+            'site' => 'required|unique:sites,site',
             'adresse' => 'required',
             'actif' => 'required|integer'
         ]);
