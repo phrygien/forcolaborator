@@ -23,7 +23,13 @@
 				</a>
 				<div class="triangle"></div>
 			</li>
-
+			<li class="nav-item" data-item="gclient">
+				<a class="nav-item-hold" href="#">
+					<i class="nav-icon i-Business-ManWoman"></i>
+					<span class="nav-text">G.Clients</span>
+				</a>
+				<div class="triangle"></div>
+			</li>
 			<li class="nav-item" data-item="gsortie">
 				<a class="nav-item-hold" href="#">
 					<i class="nav-icon i-Remove-Cart"></i>
@@ -314,6 +320,16 @@
 			</li>
 		</ul>
 		{{-- fin gestion sortie--}}
+		{{-- debut gestion client --}}
+		<ul class="childNav" data-parent="gclient">
+			<li class="nav-item">
+				<a href="{{ route('gestion.clients')}}">
+					<i class="nav-icon i-Business-ManWoman"></i>
+					<span class="item-name">Gestion client</span>
+				</a>
+			</li>
+		</ul>
+		{{-- fin gestion client--}}
 		<ul class="childNav" data-parent="sessions">
 			<li class="nav-item">
 				<a href="#">
