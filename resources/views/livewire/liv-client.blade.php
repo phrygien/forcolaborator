@@ -1,7 +1,3 @@
-<div>
-    {{-- If your happiness depends on money, you will never be happy with yourself. --}}
-</div>
-
 <div class="row mb-4">
     @if($notification)
     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4">

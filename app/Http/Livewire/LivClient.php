@@ -22,7 +22,7 @@ class LivClient extends Component
     {
         $clients = Client::select('clients.nom', 'clients.raison_sociale', 'clients.adresse')
         ->leftJoin('sortie_poulets', 'clients.id', '=', 'sortie_poulets.id_client')
-        ->selectRaw('clients.*, SUM(sortie_poulets.nombre * sortie_poulets.prix_unite) as total_montant')
+        ->selectRaw('clients.*, COALESCE(SUM(sortie_poulets.nombre * sortie_poulets.prix_unite), 0) as total_montant')
         ->groupBy('clients.id')
         ->paginate(10);
 
