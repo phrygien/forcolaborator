@@ -22,6 +22,7 @@ class SortiePoulet extends Model
         'id_client',
         'id_utilisateur',
         'date_action',
-        'actif'
+        'actif',
+        'montant',
     ];
 }

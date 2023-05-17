@@ -100,6 +100,7 @@
                                 <th scope="col">{{ __('Date sortie')}}</th>
                                 <th scope="col">{{ __('Poid total')}}</th>
                                 <th scope="col">{{ __('Nombre')}}</th>
+                                <th scope="col">{{ __('Montant total')}}</th>
                                 <th scope="col">{{ __('Utilisateur')}}</th>
                                 <th scope="col">{{ __('Status')}}</th>
                                 <th scope="col" width="149px">{{ __('Actions')}}</th>
@@ -114,6 +115,7 @@
                                 <td>{{ $sortie->date_sortie }}</td>
                                 <td>{{ $sortie->poids_total }}</td>
                                 <td>{{ $sortie->nombre }}</td>
+                                <td><span class="badge bg-info text-white">Ar {{ $sortie->montant }}</span></td>
                                 <td>{{ $sortie->name }}</td>
                                 <td>
                                     @if($sortie->actif == 1)
