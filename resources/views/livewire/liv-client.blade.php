@@ -103,9 +103,9 @@
                                 <td>{{ $client->adresse }}</td>
                                 <td><span class="text-success text-14">{{ $client->total_montant  }}</span> (Ar)</td>
                                 <td>
-                                    <button wire:click="editType({{$client->id }})" wire:loading.attr="disabled" wire:target="editType({{$client->id }})" class="btn btn-raised btn-rounded btn-raised-primary">
-                                        <span wire:loading.remove wire:target="editType({{$client->id }})"><i class="nav-icon i-Pen-2 font-weight-bold"></i></span>
-                                        <span wire:loading wire:target="editType({{$client->id }})">
+                                    <button wire:click="editClient({{$client->id }})" wire:loading.attr="disabled" wire:target="editClient({{$client->id }})" class="btn btn-raised btn-rounded btn-raised-primary">
+                                        <span wire:loading.remove wire:target="editClient({{$client->id }})"><i class="nav-icon i-Pen-2 font-weight-bold"></i></span>
+                                        <span wire:loading wire:target="editClient({{$client->id }})">
                                             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                             modification...
                                         </span>
