@@ -26,6 +26,7 @@ class LivTypeDepense extends Component
     public function mount()
     {
         $this->categoriDepenseActifs = CategorieDepense::where('actif', 1)->get();
+        $this->actif = 1;
     }
 
     public function render()
@@ -52,7 +53,7 @@ class LivTypeDepense extends Component
     public function resetInput()
     {
         $this->type = '';
-        $this->actif = '';
+        $this->actif = 1;
         $this->id_categorie = '';
         $this->resetValidation();
     }
@@ -193,11 +194,24 @@ class LivTypeDepense extends Component
 
     public function delete()
     {
+        try{
         $this->recordToDelete->delete();
         $this->recordToDelete = null;
         $this->notification = true;
         session()->flash('message', 'Suppression avec sucée');
+        }catch(\Exception $e){
+            session()->flash('error', 'Le type depense est déja utilisé ! voulez-vous vraiment le rendre inactif ?');
+        }
 
     }
 
+    public function desactiverTypeDepense()
+    {
+        $this->recordToDelete->update([
+            'actif' => 2,
+        ]);
+        $this->notification = true;
+        session()->flash('message', 'Desactivation avec succée !');
+        $this->recordToDelete = null;
+    }
 }
