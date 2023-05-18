@@ -23,6 +23,11 @@ class LivSite extends Component
 
     public $nom = "mecene";
     
+    public function mount()
+    {
+        $this->actif = 1;
+    }
+
     public function render()
     {
         $sites = Site::paginate(6);
@@ -185,7 +190,17 @@ class LivSite extends Component
         $this->notification = true;
         session()->flash('message', 'Suppression avec sucée');
         }catch(\Exception $e){
-            session()->flash('error', 'Impossible de supprimer le site. Il est déja utilisé !');
+            session()->flash('error', 'Le site est déja utilisé ! voulez-vous vraiment le rendre inactif ?');
         }
+    }
+
+    public function desactiverSite()
+    {
+        $this->recordToDelete->update([
+            'actif' => 0,
+        ]);
+        $this->notification = true;
+        session()->flash('message', 'Desactivation avec succée !');
+        $this->recordToDelete = null;
     }
 }
