@@ -46,6 +46,7 @@ class LivCycle extends Component
         $this->date_fermeture = date('Y-m-d');
         $this->typePouletActif = TypePoulet::where('actif', 1)->get();
         $this->id_utilisateur = Auth::user()->id;
+        $this->actif = 1;
     }
 
     public $selectedType = '';
@@ -143,7 +144,7 @@ class LivCycle extends Component
         $this->nb_poulet = '';
         $this->id_batiment = '';
         $this->date_entre = '';
-        $this->actif = '';
+        $this->actif = 1;
         $this->creatBtn = false;
         $this->selectedSite = '';
         $this->resetValidation();

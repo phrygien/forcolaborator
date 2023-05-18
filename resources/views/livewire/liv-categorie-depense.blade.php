@@ -102,7 +102,7 @@
                                 <th scope="col">{{ __('Libelle catégorie')}}</th>
                                 <th scope="col">{{ __('Commentaires')}}</th>
                                 <th scope="col">{{ __('Status')}}</th>
-                                <th scope="col">{{ __('Date enregistrement')}}</th>
+                                <th scope="col">{{ __('Date de création')}}</th>
                                 <th scope="col" width="149px">{{ __('Actions')}}</th>
                             </tr>
                         </thead>
