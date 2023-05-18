@@ -20,6 +20,11 @@ class LivCategorieDepense extends Component
     public $btnCreate = true;
     protected $paginationTheme = 'bootstrap';
 
+    public function mount()
+    {
+        $this->actif = 1;
+    }
+
     public function render()
     {
         $types = CategorieDepense::paginate(5);
@@ -41,7 +46,7 @@ class LivCategorieDepense extends Component
     {
         $this->categorie = '';
         $this->commentaire = '';
-        $this->actif = '';
+        $this->actif = 1;
         $this->resetValidation();
     }
 
@@ -178,7 +183,7 @@ class LivCategorieDepense extends Component
             session()->flash('message', 'Suppression catégorie avec succée!');
         }catch(\Exception $e){
             //$this->notification = true;
-            session()->flash('error', 'Impossible de supprimer le categorie. Il est déja utilisé !');
+            session()->flash('error', 'Le catégorie est déja utilisé ! voulez-vous vraiment le rendre inactif ?');
         }
     }
 
@@ -190,6 +195,16 @@ class LivCategorieDepense extends Component
     public function hideNotification()
     {
         $this->notification = false;
+    }
+
+    public function desactiverCategorie()
+    {
+        $this->recordToDelete->update([
+            'actif' => 0,
+        ]);
+        $this->notification = true;
+        session()->flash('message', 'Desactivation avec succée !');
+        $this->recordToDelete = null;
     }
 
 }

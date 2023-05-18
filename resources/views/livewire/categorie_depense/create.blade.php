@@ -30,7 +30,7 @@
                         <select wire:model.defer="actif" class="form-control form-control-rounded">
                             <option>Select status</option>
                             <option value="1">Actif</option>
-                            <option value="2">Inactif</option>
+                            <option value="0">Inactif</option>
                         </select>
                         @error('actif') 
                         <div class="alert alert-danger" role="alert">
