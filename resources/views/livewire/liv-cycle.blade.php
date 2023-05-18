@@ -201,7 +201,7 @@
                             </tr>  
                             @empty
                             <tr>
-                                <td colspan="8" class="text-center">
+                                <td colspan="9" class="text-center">
                                     <span class="text-25 text-center text-warning">Aucune donnée disponible</span>
                                 </td>
                             </tr>                                
