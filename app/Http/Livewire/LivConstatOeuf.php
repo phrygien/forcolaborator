@@ -71,7 +71,7 @@ class LivConstatOeuf extends Component
             ->join('cycles', 'cycles.id', 'constat_oeufs.id_cycle')
             ->join('users', 'users.id', 'constat_oeufs.id_utilisateur')
             ->select('constat_oeufs.*', 'type_oeufs.type', 'cycles.description', 'users.name')
-            ->paginate(2);
+            ->paginate(10);
 
             $totalDonneesJournalieres = ConstatOeuf::join('type_oeufs', 'constat_oeufs.id_type_oeuf', '=', 'type_oeufs.id')
             ->whereDate('date_entree', today())
@@ -99,6 +99,7 @@ class LivConstatOeuf extends Component
         $this->id_type_oeuf = '';
         $this->nb = '';
         $this->id_cycle = '';
+        $this->date_entree = date('Y-m-d');
         $this->creatBtn = false;
         $this->resetValidation();
     }

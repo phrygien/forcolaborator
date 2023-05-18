@@ -4,6 +4,23 @@
             <div class="card-title mb-3">{{ __('Modification constat oeuf')}}</div>
             <form>
                 <div class="row">
+
+                    <div class="col-md-6 form-group mb-3">
+                        <label for="picker1">{{ __('Cycle')}}</label>
+                        <select wire:model.defer="id_cycle" class="form-control form-control-rounded">
+                            <option>Choisir un cycle</option>
+                            @foreach ($cycleActifs as $cycle)
+                                <option value="{{ $cycle->id }}">{{ $cycle->description }}</option>
+                            @endforeach
+                        </select>
+                        @error('id_cycle') 
+                        <div class="alert alert-danger" role="alert">
+                            {{ $message}}
+                        </div>
+                        @enderror
+                    </div>
+
+                    
                     <div class="col-md-6 form-group mb-3">
                         <label for="picker1">{{ __('Type oeuf')}}</label>
                         <select wire:model.defer="id_type_oeuf" class="form-control form-control-rounded">
@@ -23,22 +40,6 @@
                         <label for="firstName2">{{ __('Nombre oeuf')}}</label>
                         <input type="number" wire:model.defer="nb" class="form-control form-control-rounded" id="firstName2" placeholder="">
                         @error('nb') 
-                        <div class="alert alert-danger" role="alert">
-                            {{ $message}}
-                        </div>
-                        @enderror
-                    </div>
-
-
-                    <div class="col-md-6 form-group mb-3">
-                        <label for="picker1">{{ __('Cycle')}}</label>
-                        <select wire:model.defer="id_cycle" class="form-control form-control-rounded">
-                            <option>Choisir un cycle</option>
-                            @foreach ($cycleActifs as $cycle)
-                                <option value="{{ $cycle->id }}">{{ $cycle->description }}</option>
-                            @endforeach
-                        </select>
-                        @error('id_cycle') 
                         <div class="alert alert-danger" role="alert">
                             {{ $message}}
                         </div>
