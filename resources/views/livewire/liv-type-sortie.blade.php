@@ -68,6 +68,15 @@
                         <div class="alert alert-warning border-danger" role="alert">
                             <i class="icon-info1"></i>{{ session('error')}}
                         </div>
+                        <p class="text-center">
+                            <button class="btn btn-secondary btn-rounded" wire:click="cancelDelete()">{{ __('Annuler') }}</button>
+                            <button class="btn btn-warning btn-rounded" wire:click="desactiverType()">{{ __('Desactiver') }}</button>
+                        </p>
+                        @else
+                        @if (session()->has('inactif'))
+                        <div class="alert alert-info border-info" role="alert">
+                            <i class="icon-info1"></i>{{ session('inactif')}}
+                        </div>
                         @endif
                         <p class="text-center">
                             <button class="btn btn-secondary btn-rounded" wire:click="cancelDelete()">{{ __('Annuler') }}</button>
@@ -78,6 +87,7 @@
                                 </svg>
                             </button>
                         </p>
+                        @endif
                     </div>
                     </div>
                 </div>
@@ -95,7 +105,7 @@
                             <tr>
                                 <th scope="col">{{ __('Libelle type')}}</th>
                                 <th scope="col">{{ __('Status')}}</th>
-                                <th scope="col">{{ __('Date enregistrement')}}</th>
+                                <th scope="col">{{ __('Date de création')}}</th>
                                 <th scope="col" width="149px">{{ __('Actions')}}</th>
                             </tr>
                         </thead>
