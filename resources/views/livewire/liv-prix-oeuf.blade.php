@@ -100,7 +100,7 @@
                             @foreach ($prixs as $prix)
                             <tr>
                                 <td>{{ $prix->type }}</td>
-                                <td>{{ $prix->pu }}</td>
+                                <td>Ar. {{ $prix->pu }}</td>
                                 <td>
                                     @if($prix->actif == 1)
                                         <span class="badge badge-success">Actif</span>

@@ -13,7 +13,7 @@
                                 <option value="{{ $typeoeuf->id }}">{{ $typeoeuf->type }}</option>
                             @endforeach
                         </select>
-                        @error('id_type_poulet') 
+                        @error('id_type_oeuf') 
                         <div class="alert alert-danger" role="alert">
                             {{ $message}}
                         </div>
