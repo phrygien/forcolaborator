@@ -13,6 +13,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\Site\SiteController;
 use App\Http\Controllers\Sortie\ClientController;
+use App\Http\Controllers\Sortie\PrixoeufController;
 use App\Http\Controllers\Sortie\PrixpouletController;
 use App\Http\Controllers\Sortie\SortieoeufController;
 use App\Http\Controllers\Sortie\SortiepouletController;
@@ -58,6 +59,7 @@ Route::group(['prefix' => 'gestion_sortie', 'middleware' => 'auth'], function(){
     Route::get('sortie_poulet', [SortiepouletController::class, 'page'])->name('gestion_sortie.sortie_poulets');
     Route::get('prix_poulet',[PrixpouletController::class, 'page'])->name('gestion_sortie.prix_poulets');
     Route::get('sortie_oeuf', [SortieoeufController::class, 'page'])->name('gestion_sortie.sortie_oeufs');
+    Route::get('prix_oeuf', [PrixoeufController::class, 'page'])->name('gestion_sortie.prix_oeufs');
 });
 
 Route::group(['prefix' => 'gestion', 'middleware' => 'auth'], function(){

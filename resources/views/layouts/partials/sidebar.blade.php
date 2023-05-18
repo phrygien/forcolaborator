@@ -318,6 +318,12 @@
 				</a>
 			</li>
 			<li class="nav-item">
+				<a href="{{ route('gestion_sortie.prix_oeufs')}}">
+					<i class="nav-icon i-Money1"></i>
+					<span class="item-name">Prix oeuf</span>
+				</a>
+			</li>
+			<li class="nav-item">
 				<a href="{{ route('gestion_sortie.sortie_oeufs')}}">
 					<i class="nav-icon i-Remove-Basket"></i>
 					<span class="item-name">Sortie oeuf</span>
