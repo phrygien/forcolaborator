@@ -32,9 +32,9 @@
 
                     <div class="col-md-6 form-group mb-3">
                         <label for="picker1">{{ __('Status')}}</label>
-                        <select wire:model.defer="actif" class="form-control form-control-rounded">
+                        <select wire:model="actif" class="form-control form-control-rounded">
                             <option>Select status</option>
-                            <option value="1">Actif</option>
+                            <option value="1" selected>Actif</option>
                             <option value="2">Inactif</option>
                         </select>
                         @error('actif') 

@@ -29,6 +29,7 @@ class LivBatiment extends Component
     public function mount()
     {
         $this->sitesActif = Site::where('actif', 1)->get();
+        $this->actif = 1;
     }
 
     public function render()
@@ -48,13 +49,14 @@ class LivBatiment extends Component
         $this->afficherListe = false;
         $this->isLoading = false;
         $this->creatBtn = false;
+        //$this->actif = 1;
     }
 
     public function resetFormBatiment()
     {
         $this->nom = '';
         $this->id_site = '';
-        $this->actif = '';
+        $this->actif = 1;
         $this->creatBtn = false;
         $this->resetValidation();
     }
@@ -188,10 +190,22 @@ class LivBatiment extends Component
             $this->recordToDelete = null;
             $this->notification = true;
             session()->flash('message', 'Suppression avec succée');
+            $this->resetPage();
         }catch(\Exception $e){
             //$this->notification = true;
-            session()->flash('error', 'Impossible de supprimer le batiment. Il est déja utilisé !');
+            session()->flash('error', 'Le batiment est déja utilisé ! voulez-vous vraiment le rendre inactif ?');
         }
+    }
+
+    public function desactiverBatiment()
+    {
+        $this->recordToDelete->update([
+            'actif' => 0,
+        ]);
+        $this->notification = true;
+        session()->flash('message', 'Desactivation avec succée !');
+        $this->resetPage();
+        $this->recordToDelete = null;
     }
 
 }
