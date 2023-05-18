@@ -65,7 +65,7 @@ class LivSite extends Component
     {
         $this->site = '';
         $this->adresse = '';
-        $this->actif = '';
+        $this->actif = 1;
         $this->resetValidation();
     }
 
