@@ -18,6 +18,11 @@ class LivTypePoulet extends Component
     public $btnCreate = true;
     protected $paginationTheme = 'bootstrap';
 
+    public function mount()
+    {
+        $this->actif = 1;
+    }
+
     public function render()
     {
         $types = TypePoulet::paginate(5);
@@ -38,7 +43,7 @@ class LivTypePoulet extends Component
     public function resetInput()
     {
         $this->type = '';
-        $this->actif = '';
+        $this->actif = 1;
         $this->resetValidation();
     }
 
@@ -181,9 +186,19 @@ class LivTypePoulet extends Component
         session()->flash('message', 'Suppression avec sucée');
     }catch(\Exception $e){
             //$this->notification = true;
-            session()->flash('error', 'Impossible de supprimer le type. Il est déja utilisé !');
+            session()->flash('error', 'Le type de poulet est déja utilisé ! voulez-vous vraiment le rendre inactif ?');
         }
 
+    }
+
+    public function desactiverType()
+    {
+        $this->recordToDelete->update([
+            'actif' => 2,
+        ]);
+        $this->notification = true;
+        session()->flash('message', 'Desactivation avec succée !');
+        $this->recordToDelete = null;
     }
 
 }
