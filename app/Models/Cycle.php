@@ -15,9 +15,9 @@ class Cycle extends Model
         'id_type_poulet',
         'nb_poulet',
         'id_batiment',
-        'date_entre',
+        'date_debut',
         'actif',
         'id_utilisateur',
-        'date_fermeture'
+        'date_arret'
     ];
 }

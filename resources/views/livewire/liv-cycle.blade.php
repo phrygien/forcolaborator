@@ -154,11 +154,12 @@
                                 <th scope="col">{{ __('Description')}}</th>
                                 <th scope="col">{{ __('Type poulet')}}</th>
                                 <th scope="col">{{ __('Nombre poulet')}}</th>
-                                <th scope="col">{{ __('Site')}}</th>
-                                <th scope="col">{{ __('Batiment')}}</th>
-                                <th scope="col">{{ __('Date entrée')}}</th>
+                                <th scope="col">{{ __('Batiment du cycle')}}</th>
+                                <th scope="col">{{ __('Site du batiment du cycle')}}</th>
+                                <th scope="col">{{ __('Date de début du cycle')}}</th>
+                                <th scope="col">{{ __("Date d’arrêt du cycle")}}</th>
                                 <th scope="col">{{ __('Status')}}</th>
-                                <th scope="col" width="248px">{{ __('Actions')}}</th>
+                                <th scope="col" width="150px">{{ __('Actions')}}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -166,10 +167,11 @@
                             <tr>
                                 <td>{{ $cycle->description }}</td>
                                 <td>{{ $cycle->type }}</td>
-                                <td>{{ $cycle->nb_poulet }}</td>
-                                <td>{{ $cycle->site }}</td>
+                                <td>{{ number_format($cycle->nb_poulet, 0, ',', ' ') }}</td>
                                 <td>{{ $cycle->nom }}</td>
-                                <td>{{ $cycle->date_entre }}</td>
+                                <td>{{ $cycle->site }}</td>
+                                <td>{{ $cycle->date_debut }}</td>
+                                <td>{{ $cycle->date_arret }}</td>
                                 <td>
                                     @if($cycle->actif == 1)
                                         <span class="badge badge-success">Actif</span>
@@ -178,16 +180,6 @@
                                     @endif
                                 </td>
                                 <td>
-                                    @if($cycle->actif == 1)
-                                    <button wire:click="comfirmerFermeture({{$cycle->id }})" wire:loading.attr="disabled" wire:target="comfirmerFermeture({{$cycle->id }})" class="btn btn-raised btn-rounded btn-raised-warning">
-                                        <span wire:loading.remove wire:target="comfirmerFermeture({{$cycle->id }})"><i class="nav-icon i-Broke-Link-2 font-weight-bold"></i></span>
-                                        <span wire:loading wire:target="comfirmerFermeture({{$cycle->id }})">
-                                            <svg wire:loading wire:target="comfirmerFermeture({{$cycle->id }})"  class="spinner" viewBox="0 0 50 50">
-                                                <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="4"></circle>
-                                            </svg>
-                                        </span>
-                                    </button>
-                                    @endif 
 
                                     <button wire:click="editCycle({{$cycle->id }})" wire:loading.attr="disabled" wire:target="editCycle({{$cycle->id }})" class="btn btn-raised btn-rounded btn-raised-primary">
                                         <span wire:loading.remove wire:target="editCycle({{$cycle->id }})"><i class="nav-icon i-Pen-2 font-weight-bold"></i></span>

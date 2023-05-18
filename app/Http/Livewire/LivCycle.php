@@ -21,7 +21,7 @@ class LivCycle extends Component
     public $createCycle = false, $editCycle= false;
 
     public $cycle_id, $description, $id_type_poulet, $actif,
-    $nb_poulet, $id_batiment, $date_entre, $id_utilisateur, $date_fermeture;
+    $nb_poulet, $id_batiment, $date_debut, $id_utilisateur, $date_arret;
     
     public $batimentsActif;
     public $typePouletActif;
@@ -42,8 +42,8 @@ class LivCycle extends Component
 
     public function mount()
     {
-        $this->date_entre = date('Y-m-d');
-        $this->date_fermeture = date('Y-m-d');
+        $this->date_debut = date('Y-m-d');
+        //$this->date_fermeture = date('Y-m-d');
         $this->typePouletActif = TypePoulet::where('actif', 1)->get();
         $this->id_utilisateur = Auth::user()->id;
         $this->actif = 1;
@@ -90,6 +90,7 @@ class LivCycle extends Component
                 return $query->where('cycles.id_type_poulet', $this->selectedType);
             })
             ->where('cycles.actif', $this->actifValue)
+            ->orderBy('cycles.created_at', 'desc')
             ->paginate(10);
 
         $sites = $this->getSites();
@@ -143,8 +144,9 @@ class LivCycle extends Component
         $this->id_type_poulet = '';
         $this->nb_poulet = '';
         $this->id_batiment = '';
-        $this->date_entre = '';
+        $this->date_debut = date('Y-m-d');;
         $this->actif = 1;
+        $this->date_arret = '';
         $this->creatBtn = false;
         $this->selectedSite = '';
         $this->resetValidation();
@@ -158,9 +160,11 @@ class LivCycle extends Component
             'id_type_poulet' => 'required|integer',
             'nb_poulet' => 'required|integer',
             'id_batiment' => 'required|integer',
-            'date_entre' => 'required|date',
+            'date_debut' => 'required|date',
             'actif' => 'required|integer',
-            'id_utilisateur' => 'nullable'
+            'id_utilisateur' => 'nullable',
+            'date_arret' => 'required',
+            'selectedSite' => 'required'
         ]);
 
         try{
@@ -196,9 +200,10 @@ class LivCycle extends Component
         $this->id_type_poulet = $cycle->id_type_poulet;
         $this->nb_poulet = $cycle->nb_poulet;
         $this->id_batiment = $cycle->id_batiment;
-        $this->date_entre = $cycle->date_entre;
+        $this->date_debut = $cycle->date_debut;
         $this->actif = $cycle->actif;
         $this->id_utilisateur = $cycle->id_utilisateur;
+        $this->date_arret = $cycle->date_arret;
 
         $this->editCycle = true;
         $this->createCycle = false;
@@ -218,9 +223,10 @@ class LivCycle extends Component
             'id_type_poulet' => 'required|integer',
             'nb_poulet' => 'required|integer',
             'id_batiment' => 'required|integer',
-            'date_entre' => 'required|date',
+            'date_debut' => 'required|date',
             'actif' => 'required|integer',
-            'id_utilisateur' => 'nullable'
+            'id_utilisateur' => 'nullable',
+            'date_arret' => 'required',
         ]);
 
         try{
@@ -231,9 +237,10 @@ class LivCycle extends Component
                 'id_type_poulet' => $this->id_type_poulet,
                 'nb_poulet' => $this->nb_poulet,
                 'id_batiment' => $this->id_batiment,
-                'date_entre' => $this->date_entre,
+                'date_debut' => $this->date_debut,
                 'actif' => $this->actif,
                 'id_utilisateur' => $this->id_utilisateur,
+                'date_arret' => $this->date_arret,
             ]);
 
             $this->editCycle = false;
@@ -327,7 +334,7 @@ class LivCycle extends Component
         try{
             $this->recordToClose->update([
                 'id_utilisateur' => $this->id_utilisateur,
-                'date_fermeture' => $this->date_fermeture,
+                'date_arret' => $this->date_arret,
             ]);
             $this->notification = true;
             session()->flash('message', 'Cycle bien fermé !');

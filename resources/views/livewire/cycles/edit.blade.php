@@ -5,6 +5,36 @@
             <form>
                 <div class="row">
                     <div class="col-md-6 form-group mb-3">
+                        <label for="picker1">{{ __('Site')}}</label>
+                        <select wire:model="selectedSite" class="form-control form-control-rounded">
+                            <option>Choisir un site pour avoir batiment</option>
+                            @foreach ($sites as $site)
+                                <option value="{{ $site->id }}">{{ $site->site }}</option>
+                            @endforeach
+                        </select>
+                        @error('selectedSite') 
+                        <div class="alert alert-danger" role="alert">
+                            {{ $message}}
+                        </div>
+                        @enderror
+                    </div>
+
+                    <div class="col-md-6 form-group mb-3">
+                        <label for="picker1">{{ __('Batiment')}}</label>
+                        <select wire:model="id_batiment" class="form-control form-control-rounded">
+                            <option value="">Choisir un batiment</option>
+                            @foreach ($batiments as $batiment)
+                                <option value="{{ $batiment->id }}">{{ $batiment->nom }}</option>
+                            @endforeach
+                        </select>
+                        @error('id_batiment') 
+                        <div class="alert alert-danger" role="alert">
+                            {{ $message}}
+                        </div>
+                        @enderror
+                    </div>
+
+                    <div class="col-md-6 form-group mb-3">
                         <label for="firstName2">{{ __('Description cycle')}}</label>
                         <input type="text" wire:model.defer="description" class="form-control form-control-rounded" id="firstName2" placeholder="">
                         @error('description') 
@@ -39,26 +69,10 @@
                         @enderror
                     </div>
 
-
                     <div class="col-md-6 form-group mb-3">
-                        <label for="picker1">{{ __('Site')}}</label>
-                        <select wire:model="selectedSite" class="form-control form-control-rounded">
-                            <option>Choisir un site pour avoir batiment</option>
-                            @foreach ($sites as $site)
-                                <option value="{{ $site->id }}">{{ $site->site }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div class="col-md-6 form-group mb-3">
-                        <label for="picker1">{{ __('Batiment')}}</label>
-                        <select wire:model="id_batiment" class="form-control form-control-rounded">
-                            <option value="">Choisir un batiment</option>
-                            @foreach ($batiments as $batiment)
-                                <option value="{{ $batiment->id }}">{{ $batiment->nom }}</option>
-                            @endforeach
-                        </select>
-                        @error('id_batiment') 
+                        <label for="firstName2">{{ __('Date début')}}</label>
+                        <input type="date" wire:model="date_debut" class="form-control form-control-rounded">
+                        @error('date_debut') 
                         <div class="alert alert-danger" role="alert">
                             {{ $message}}
                         </div>
@@ -66,9 +80,9 @@
                     </div>
 
                     <div class="col-md-6 form-group mb-3">
-                        <label for="firstName2">{{ __('Date entrée')}}</label>
-                        <input type="date" wire:model.defer="date_entre" class="form-control form-control-rounded">
-                        @error('date_entre') 
+                        <label for="firstName2">{{ __('Date arret')}}</label>
+                        <input type="date" wire:model.defer="date_arret" class="form-control form-control-rounded">
+                        @error('date_arret') 
                         <div class="alert alert-danger" role="alert">
                             {{ $message}}
                         </div>
