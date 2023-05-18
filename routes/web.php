@@ -23,7 +23,7 @@ use App\Http\Controllers\TypepouletController;
 use App\Http\Controllers\TypesortieController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 
 Auth::routes();
