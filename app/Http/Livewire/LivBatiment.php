@@ -65,7 +65,7 @@ class LivBatiment extends Component
     {
         $this->isLoading = true;
         $data = $this->validate([
-            'nom' => 'required',
+            'nom' => 'required|unique:batiments,nom',
             'id_site' => 'required|integer',
             'actif' => 'required|integer'
         ]);
@@ -117,7 +117,7 @@ class LivBatiment extends Component
     public function updateBatiment()
     {
         $this->validate([
-            'nom' => 'required',
+            'nom' => 'required|unique:batiments,nom,'.$this->batiment_id,
             'id_site' => 'required',
             'actif' => 'required'
         ]);
