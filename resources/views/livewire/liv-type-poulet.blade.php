@@ -101,7 +101,7 @@
                             <tr>
                                 <th scope="col">{{ __('Libelle type')}}</th>
                                 <th scope="col">{{ __('Status')}}</th>
-                                <th scope="col">{{ __('Date de création de la ligne')}}</th>
+                                <th scope="col">{{ __('Date de création')}}</th>
                                 <th scope="col" width="149px">{{ __('Actions')}}</th>
                             </tr>
                         </thead>
