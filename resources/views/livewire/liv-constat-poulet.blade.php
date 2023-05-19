@@ -90,10 +90,11 @@
                         <thead>
                             <tr>
                                 <th scope="col">{{ __('Type poulet')}}</th>
-                                <th scope="col">{{ __('Nombre poulet')}}</th>
+                                <th scope="col">{{ __('Poids moyen')}}</th>
                                 <th scope="col">{{ __('Cycle')}}</th>
                                 <th scope="col">{{ __('Date constat')}}</th>
                                 <th scope="col">{{ __('Utilisateur')}}</th>
+                                <th scope="col">{{ __('Derniere modification')}}</th>
                                 <th scope="col" width="149px">{{ __('Actions')}}</th>
                             </tr>
                         </thead>
@@ -105,6 +106,7 @@
                                 <td>{{ $constat->description }}</td>
                                 <td>{{ $constat->date_constat }}</td>
                                 <td>{{ $constat->name }}</td>
+                                <td>{{ $constat->updated_at }}</td>
                                 <td>
                                     <button wire:click="editConstat({{$constat->id }})" wire:loading.attr="disabled" wire:target="editConstat({{$constat->id }})" class="btn btn-raised btn-rounded btn-raised-primary">
                                         <span wire:loading.remove wire:target="editConstat({{$constat->id }})"><i class="nav-icon i-Pen-2 font-weight-bold"></i></span>

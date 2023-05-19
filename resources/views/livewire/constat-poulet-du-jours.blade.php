@@ -7,16 +7,18 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th scope="col">{{ __('Description cycle')}}</th>
-                            <th scope="col">{{ __('Somme du nombre poulet')}}</th>
-                            <th scope="col" width="149px">{{ __('Total')}}</th>
+                            <th scope="col">{{ __('Cycle')}}</th>
+                            <th scope="col">{{ __('Type poulet')}}</th>
+                            <th scope="col">{{ __('Poids moyen')}}</th>
+                            <th scope="col" width="149px">{{ __('Nb constat')}}</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse ($constatsDuJour as $constat)
                         <tr>
                             <th scope="row">{{ $constat->description }}</th>
-                            <th><span class="badge bg-success text-white text-14">{{ $constat->total_nb }} poulets</span></th>
+                            <th scope="row">{{ $constat->type }}</th>
+                            <th><span class="badge bg-success text-white text-14">{{ $constat->total_nb }} Kg</span></th>
                             <td><span class="badge bg-info text-white text-14">{{ $constat->total_constats }} constat(s)</span></td>
                         </tr>
                         @empty
