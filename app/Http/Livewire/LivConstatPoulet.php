@@ -156,7 +156,7 @@ class LivConstatPoulet extends Component
     public function updateConstat()
     {
         $this->validate([
-            'poids_moyen' => 'required,' .$this->constat_id,
+            'poids_moyen' => 'required',
             'id_cycle' => 'required|integer',
             'date_constat' => 'required|date',
             'date_action' => 'nullable',
