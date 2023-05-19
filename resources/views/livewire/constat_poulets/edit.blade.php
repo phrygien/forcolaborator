@@ -5,32 +5,6 @@
             <form>
                 <div class="row">
                     <div class="col-md-6 form-group mb-3">
-                        <label for="picker1">{{ __('Type poulet')}}</label>
-                        <select wire:model.defer="id_type_poulet" class="form-control form-control-rounded">
-                            <option value="">Choisir un type de poulet</option>
-                            @foreach ($typePouletActifs as $typepoulet)
-                                <option value="{{ $typepoulet->id }}">{{ $typepoulet->type }}</option>
-                            @endforeach
-                        </select>
-                        @error('id_type_poulet') 
-                        <div class="alert alert-danger" role="alert">
-                            {{ $message}}
-                        </div>
-                        @enderror
-                    </div>
-
-                    <div class="col-md-6 form-group mb-3">
-                        <label for="firstName2">{{ __('Nombre oeuf')}}</label>
-                        <input type="number" wire:model.defer="nb" class="form-control form-control-rounded" id="firstName2" placeholder="">
-                        @error('nb') 
-                        <div class="alert alert-danger" role="alert">
-                            {{ $message}}
-                        </div>
-                        @enderror
-                    </div>
-
-
-                    <div class="col-md-6 form-group mb-3">
                         <label for="picker1">{{ __('Cycle')}}</label>
                         <select wire:model.defer="id_cycle" class="form-control form-control-rounded">
                             <option>Choisir un cycle</option>
@@ -44,6 +18,17 @@
                         </div>
                         @enderror
                     </div>
+
+                    <div class="col-md-6 form-group mb-3">
+                        <label for="firstName2">{{ __('Poids moyene')}}</label>
+                        <input type="number" wire:model.defer="poids_moyen" class="form-control form-control-rounded" id="firstName2" placeholder="">
+                        @error('poids_moyen') 
+                        <div class="alert alert-danger" role="alert">
+                            {{ $message}}
+                        </div>
+                        @enderror
+                    </div>
+
 
                     <div class="col-md-6 form-group mb-3">
                         <label for="firstName2">{{ __('Date constat')}}</label>

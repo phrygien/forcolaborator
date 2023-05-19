@@ -22,7 +22,7 @@ class LivConstatPoulet extends Component
 
     public $createConstat = false, $editConstat= false;
 
-    public $constat_id, $nb, $id_type_poulet, $id_cycle, $date_constat, $date_action, $id_utilisateur;
+    public $constat_id, $poids_moyen, $id_cycle, $date_constat, $date_action, $id_utilisateur;
 
     public $confirmUpdate;
     public $typePouletActifs;
@@ -51,8 +51,8 @@ class LivConstatPoulet extends Component
     public function render()
     {
         $constats = DB::table('constat_poulets')
-            ->join('type_poulets', 'type_poulets.id', 'constat_poulets.id_type_poulet')
             ->join('cycles', 'cycles.id', 'constat_poulets.id_cycle')
+            ->join('type_poulets', 'type_poulets.id', 'cycles.id_type_poulet')
             ->join('users', 'users.id', 'constat_poulets.id_utilisateur')
             ->select('constat_poulets.*', 'type_poulets.type', 'cycles.description', 'users.name')
             ->paginate(10);
@@ -73,9 +73,9 @@ class LivConstatPoulet extends Component
 
     public function resetFormConstat()
     {
-        $this->id_type_poulet = '';
-        $this->nb = '';
+        $this->poids_moyen = '';
         $this->id_cycle = '';
+        $this->date_constat = date('Y-m-d');
         $this->creatBtn = false;
         $this->resetValidation();
     }
@@ -84,8 +84,7 @@ class LivConstatPoulet extends Component
     {
         $this->isLoading = true;
         $data = $this->validate([
-            'id_type_poulet' => 'required|integer',
-            'nb' => 'required|integer',
+            'poids_moyen' => 'required|unique:constat_poulets,poids_moyen',
             'id_cycle' => 'required|integer',
             'date_constat' => 'required|date',
             'id_utilisateur' => 'nullable',
@@ -100,13 +99,14 @@ class LivConstatPoulet extends Component
         ConstatPoulet::create($data);
 
         //update stock cyle selected
-        $cycleSelected = Cycle::find($this->id_cycle);
-        $stockActuale = $cycleSelected->nb_poulet;
-        $cycleSelected->update([
-            'nb_poulet' => ($stockActuale + $this->nb),
-        ]);
-        $cycleSelected->save();
+        // $cycleSelected = Cycle::find($this->id_cycle);
+        // $stockActuale = $cycleSelected->nb_poulet;
+        // $cycleSelected->update([
+        //     'nb_poulet' => ($stockActuale + $this->nb),
+        // ]);
 
+        $cycleSelected->save();
+        
         $this->resetFormConstat();
         $this->resetValidation();
         $this->isLoading = false;
@@ -136,8 +136,8 @@ class LivConstatPoulet extends Component
     {
         $constat = ConstatPoulet::findOrFail($id);
         $this->constat_id = $id;
-        $this->id_type_poulet = $constat->id_type_poulet;
-        $this->nb = $constat->nb;
+        //$this->id_type_poulet = $constat->id_type_poulet;
+        $this->poids_moyen = $constat->poids_moyen;
         $this->id_cycle = $constat->id_cycle;
         $this->date_constat = $constat->date_constat;
         $this->id_utilisateur = $constat->id_utilisateur;
@@ -156,8 +156,7 @@ class LivConstatPoulet extends Component
     public function updateConstat()
     {
         $this->validate([
-            'id_type_poulet' => 'required|integer',
-            'nb' => 'required|integer',
+            'poids_moyen' => 'required|unique:constat_poulets,poids_moyen,' .$this->constat_id,
             'id_cycle' => 'required|integer',
             'date_constat' => 'required|date',
             'date_action' => 'nullable',
@@ -168,8 +167,7 @@ class LivConstatPoulet extends Component
             
             $constat = ConstatPoulet::findOrFail($this->constat_id);
             $constat->update([
-                'id_type_poulet' => $this->id_type_poulet,
-                'nb' => $this->nb,
+                'poids_moyen' => $this->poids_moyen,
                 'id_cycle' => $this->id_cycle,
                 'date_constat' => $this->date_constat,
                 'date_action' => $this->date_action,

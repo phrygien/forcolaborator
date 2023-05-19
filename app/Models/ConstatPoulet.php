@@ -12,8 +12,7 @@ class ConstatPoulet extends Model
     protected $table = "constat_poulets";
 
     protected $fillable = [
-        'id_type_poulet',
-        'nb',
+        'poids_moyen',
         'id_cycle',
         'date_constat',
         'id_utilisateur',
