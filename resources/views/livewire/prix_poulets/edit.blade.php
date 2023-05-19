@@ -20,7 +20,7 @@
                     </div>
 
                     <div class="col-md-6 form-group mb-3">
-                        <label for="firstName2">{{ __('Prix / KG')}}</label>
+                        <label for="firstName2">{{ __('Prix Ar/ KG')}}</label>
                         <input type="number" wire:model.defer="pu_kg" class="form-control form-control-rounded" id="firstName2" placeholder="">
                         @error('pu_kg') 
                         <div class="alert alert-danger" role="alert">

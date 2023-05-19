@@ -69,11 +69,21 @@
                         <div class="alert alert-warning border-danger" role="alert">
                             <i class="icon-info1"></i>{{ session('error')}}
                         </div>
+                        <p class="text-center">
+                            <button class="btn btn-secondary btn-rounded" wire:click="cancelDelete()">{{ __('Annuler') }}</button>
+                            <button class="btn btn-warning btn-rounded" wire:click="desactiverPrix()">{{ __('Desactiver') }}</button>
+                        </p>
+                        @else
+                        @if (session()->has('inactif'))
+                        <div class="alert alert-info border-info" role="alert">
+                            <i class="icon-info1"></i>{{ session('inactif')}}
+                        </div>
                         @endif
                         <p class="text-center">
                             <button class="btn btn-secondary btn-rounded" wire:click="cancelDelete()">{{ __('Annuler') }}</button>
                             <button class="btn btn-danger btn-rounded" wire:click="delete()">{{ __('Supprimer') }}</button>
                         </p>
+                        @endif
                     </div>
                     </div>
                 </div>
@@ -90,7 +100,7 @@
                         <thead>
                             <tr>
                                 <th scope="col">{{ __('Type poulet')}}</th>
-                                <th scope="col">{{ __('Prix /Kg')}}</th>
+                                <th scope="col">{{ __('Prix Ar / Kg')}}</th>
                                 <th scope="col">{{ __('Status')}}</th>
                                 <th scope="col">{{ __('Date application')}}</th>
                                 <th scope="col" width="149px">{{ __('Actions')}}</th>
@@ -108,7 +118,7 @@
                                         <span class="badge badge-danger">Inactif</span>
                                     @endif
                                 </td>
-                                <td>{{ $prix->date_application }}</td>
+                                <td>{{ get_formatted_date($prix->date_application, "d / M/ Y") }}</td>
                                 <td>
                                     <button wire:click="editType({{$prix->id }})" wire:loading.attr="disabled" wire:target="editType({{$prix->id }})" class="btn btn-raised btn-rounded btn-raised-primary">
                                         <span wire:loading.remove wire:target="editType({{$prix->id }})"><i class="nav-icon i-Pen-2 font-weight-bold"></i></span>

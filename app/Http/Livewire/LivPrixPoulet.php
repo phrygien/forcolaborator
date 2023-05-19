@@ -27,6 +27,7 @@ class LivPrixPoulet extends Component
     {
         $this->typePouletActif = TypePoulet::where('actif', 1)->get();
         $this->id_utilisateur = Auth::user()->id;
+        $this->actif = 1;
     }
 
     public function render()
@@ -53,7 +54,7 @@ class LivPrixPoulet extends Component
     public function resetInput()
     {
         $this->id_type_poulet = '';
-        $this->actif = '';
+        $this->actif = 1;
         $this->date_application = '';
         $this->pu_kg = '';
         $this->resetValidation();
@@ -209,9 +210,19 @@ class LivPrixPoulet extends Component
         session()->flash('message', 'Suppression avec sucée');
     }catch(\Exception $e){
             //$this->notification = true;
-            session()->flash('error', 'Impossible de supprimer le prix. Il est déja utilisé !');
+            session()->flash('error', 'Le prix poulet est déja utilisé ! voulez-vous vraiment le rendre inactif ?');
         }
 
+    }
+
+    public function desactiverPrix()
+    {
+        $this->recordToDelete->update([
+            'actif' => 2,
+        ]);
+        $this->notification = true;
+        session()->flash('message', 'Desactivation avec succée !');
+        $this->recordToDelete = null;
     }
 
 }
