@@ -90,7 +90,7 @@ class LivCycle extends Component
                 return $query->where('cycles.id_type_poulet', $this->selectedType);
             })
             ->where('cycles.actif', $this->actifValue)
-            ->orderBy('cycles.created_at', 'desc')
+            ->orderBy('cycles.date_debut', 'desc')
             ->paginate(10);
 
         $sites = $this->getSites();
@@ -163,7 +163,7 @@ class LivCycle extends Component
             'date_debut' => 'required|date',
             'actif' => 'required|integer',
             'id_utilisateur' => 'nullable',
-            'date_arret' => 'required',
+            'date_arret' => 'nullable',
             'selectedSite' => 'required'
         ]);
 
@@ -226,7 +226,7 @@ class LivCycle extends Component
             'date_debut' => 'required|date',
             'actif' => 'required|integer',
             'id_utilisateur' => 'nullable',
-            'date_arret' => 'required',
+            'date_arret' => 'nullable',
         ]);
 
         try{

@@ -153,11 +153,11 @@
                             <tr>
                                 <th scope="col">{{ __('Description')}}</th>
                                 <th scope="col">{{ __('Type poulet')}}</th>
-                                <th scope="col">{{ __('Nombre poulet')}}</th>
-                                <th scope="col">{{ __('Batiment du cycle')}}</th>
-                                <th scope="col">{{ __('Site du batiment du cycle')}}</th>
-                                <th scope="col">{{ __('Date de début du cycle')}}</th>
-                                <th scope="col">{{ __("Date d’arrêt du cycle")}}</th>
+                                <th scope="col">{{ __('Nb poulet')}}</th>
+                                <th scope="col">{{ __('Batiment')}}</th>
+                                <th scope="col">{{ __('Site')}}</th>
+                                <th scope="col">{{ __('Date début')}}</th>
+                                <th scope="col">{{ __("Date d’arrêt")}}</th>
                                 <th scope="col">{{ __('Status')}}</th>
                                 <th scope="col" width="150px">{{ __('Actions')}}</th>
                             </tr>
@@ -170,8 +170,14 @@
                                 <td>{{ number_format($cycle->nb_poulet, 0, ',', ' ') }}</td>
                                 <td>{{ $cycle->nom }}</td>
                                 <td>{{ $cycle->site }}</td>
-                                <td>{{ $cycle->date_debut }}</td>
-                                <td>{{ $cycle->date_arret }}</td>
+                                <td>{{ get_formatted_date($cycle->date_debut, "d/M/Y") }}</td>
+                                <td>
+                                    @if($cycle->date_arret == null)
+                                    
+                                    @else
+                                    {{ get_formatted_date($cycle->date_arret, 'd/M/Y') }}
+                                    @endif
+                                </td>
                                 <td>
                                     @if($cycle->actif == 1)
                                         <span class="badge badge-success">Actif</span>
