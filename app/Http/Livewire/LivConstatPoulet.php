@@ -84,7 +84,7 @@ class LivConstatPoulet extends Component
     {
         $this->isLoading = true;
         $data = $this->validate([
-            'poids_moyen' => 'required|unique:constat_poulets,poids_moyen',
+            'poids_moyen' => 'required',
             'id_cycle' => 'required|integer',
             'date_constat' => 'required|date',
             'id_utilisateur' => 'nullable',
@@ -156,7 +156,7 @@ class LivConstatPoulet extends Component
     public function updateConstat()
     {
         $this->validate([
-            'poids_moyen' => 'required|unique:constat_poulets,poids_moyen,' .$this->constat_id,
+            'poids_moyen' => 'required,' .$this->constat_id,
             'id_cycle' => 'required|integer',
             'date_constat' => 'required|date',
             'date_action' => 'nullable',
