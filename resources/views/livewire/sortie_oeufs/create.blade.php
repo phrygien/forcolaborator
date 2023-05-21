@@ -23,7 +23,7 @@
                     <div class="col-md-6 form-group mb-3">
                         <label for="picker1">{{ __('Type oeuf')}}</label>
                         <select wire:model="id_type_oeuf" class="form-control form-control-rounded">
-                            <option value="">Choisir un type de poulet</option>
+                            <option value="">Choisir un type d'oeuf</option>
                             @foreach ($typeOeufActifs as $typeoeuf)
                                 <option value="{{ $typeoeuf->id }}">{{ $typeoeuf->type }}</option>
                             @endforeach

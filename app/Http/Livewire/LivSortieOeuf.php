@@ -308,7 +308,7 @@ class LivSortieOeuf extends Component
                 'actif' => $this->actif,
                 'date_action' => $this->date_action,
                 'id_utilisateur' => $this->id_utilisateur,
-                'montant' => ($this->prix_unite * $this->nombre),
+                'montant' => ($this->pu * $this->qte),
             ]);
 
             $this->editSortie = false;
