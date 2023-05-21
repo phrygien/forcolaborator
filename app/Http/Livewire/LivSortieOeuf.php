@@ -53,6 +53,7 @@ class LivSortieOeuf extends Component
         $this->clientActifs = Client::all();
         $this->cycleActifs = Cycle::where('actif', 1)->get();
         $this->id_utilisateur = Auth::user()->id;
+        $this->actif = 1;
         //$this->montant = ($this->prix_unite * $this->nombre);
     }
 
@@ -90,6 +91,7 @@ class LivSortieOeuf extends Component
         ->join('type_sorties', 'type_sorties.id', 'sortie_oeufs.id_type_sortie')
         ->join('users', 'users.id', 'sortie_oeufs.id_utilisateur')
         ->select('sortie_oeufs.*', 'clients.nom', 'type_oeufs.type', 'users.name', 'type_sorties.libelle')
+        ->where('sortie_oeufs.actif', 1)
         ->paginate(7);
         $prixs = $this->getPrix();
         return view('livewire.liv-sortie-oeuf', [
@@ -127,7 +129,7 @@ class LivSortieOeuf extends Component
         $this->adresse = '';
         $this->qte = '';
         $this->pu = '';
-        //$this->date_sortie = '';
+        $this->date_sortie = date('Y-m-d');
         $this->date_action = '';
         $this->montant = '';
         $this->actif = 1;
