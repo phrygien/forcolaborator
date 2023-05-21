@@ -4,8 +4,10 @@ namespace App\Http\Livewire;
 
 use App\Models\Client;
 use App\Models\Cycle;
+use App\Models\PrixOeuf;
 use App\Models\PrixPoulet;
 use App\Models\SortieOeuf;
+use App\Models\TypeOeuf;
 use App\Models\TypePoulet;
 use App\Models\TypeSortie;
 use Illuminate\Support\Facades\Auth;
@@ -20,11 +22,11 @@ class LivSortieOeuf extends Component
 
     public $createSortie = false, $editSortie= false;
 
-    public $sortie_id, $id_type_oeuf, $id_type_sortie, $qte, $pu, $id_utilisateur,
-    $date_sortie, $id_client, $id_cycle, $actif, $date_action, $nom, $raison_sociale, $adresse, $montant;
+    public $sortie_id, $id_type_oeuf, $id_type_sortie, $qte, $pu, $id_utilisateur,$montant,
+    $date_sortie, $id_client, $actif, $date_action, $nom, $raison_sociale, $adresse;
 
     public $confirmUpdate;
-    public $typePouletActifs;
+    public $typeOeufActifs;
     public $typeSortieActifs;
     public $clientActifs;
     public $newClient;
@@ -46,7 +48,7 @@ class LivSortieOeuf extends Component
     {
         $this->date_action = date('Y-m-d');
         $this->date_sortie = date('Y-m-d');
-        $this->typePouletActifs = TypePoulet::where('actif', 1)->get();
+        $this->typeOeufActifs = TypeOeuf::where('actif', 1)->get();
         $this->typeSortieActifs = TypeSortie::where('actif', 1)->get();
         $this->clientActifs = Client::all();
         $this->cycleActifs = Cycle::where('actif', 1)->get();
@@ -65,8 +67,8 @@ class LivSortieOeuf extends Component
     {
         $prixs = [];
     
-        if ($this->id_type_poulet) {
-            $prixs = PrixPoulet::where('id_type_poulet', $this->id_type_poulet)
+        if ($this->id_type_oeuf) {
+            $prixs = PrixOeuf::where('id_type_oeuf', $this->id_type_oeuf)
                         ->where('actif', 1)
                         ->get();
         }
@@ -76,21 +78,21 @@ class LivSortieOeuf extends Component
 
     public function updatedSelectedTypePoulet($value)
     {
-        $this->prix_unite = null;
+        $this->pu = null;
     }
 
 
     public function render()
     {
-        $sorties = DB::table('sortie_poulets')
-        ->join('type_poulets', 'type_poulets.id', 'sortie_poulets.id_type_poulet')
-        ->join('clients', 'clients.id', 'sortie_poulets.id_client')
-        ->join('type_sorties', 'type_sorties.id', 'sortie_poulets.id_type_sortie')
-        ->join('users', 'users.id', 'sortie_poulets.id_utilisateur')
-        ->select('sortie_poulets.*', 'clients.nom', 'type_poulets.type', 'users.name', 'type_sorties.libelle')
+        $sorties = DB::table('sortie_oeufs')
+        ->join('type_oeufs', 'type_oeufs.id', 'sortie_oeufs.id_type_oeuf')
+        ->join('clients', 'clients.id', 'sortie_oeufs.id_client')
+        ->join('type_sorties', 'type_sorties.id', 'sortie_oeufs.id_type_sortie')
+        ->join('users', 'users.id', 'sortie_oeufs.id_utilisateur')
+        ->select('sortie_oeufs.*', 'clients.nom', 'type_oeufs.type', 'users.name', 'type_sorties.libelle')
         ->paginate(7);
         $prixs = $this->getPrix();
-        return view('livewire.liv-sortie-poulet', [
+        return view('livewire.liv-sortie-oeuf', [
             'sorties' => $sorties,
             'prixs' => $prixs
         ]);
@@ -117,20 +119,18 @@ class LivSortieOeuf extends Component
 
     public function resetFormSortie()
     {
-        $this->id_type_poulet = '';
+        $this->id_type_oeuf = '';
         $this->id_type_sortie = '';
         $this->id_client = '';
-        $this->id_cycle = '';
         $this->nom = '';
         $this->raison_sociale = '';
         $this->adresse = '';
-        $this->poids_total = '';
-        $this->nombre = '';
-        $this->prix_unite = '';
+        $this->qte = '';
+        $this->pu = '';
         //$this->date_sortie = '';
         $this->date_action = '';
         $this->montant = '';
-        $this->actif = '';
+        $this->actif = 1;
         $this->creatBtn = false;
         $this->resetValidation();
     }
@@ -139,12 +139,12 @@ class LivSortieOeuf extends Component
     {
         $this->isLoading = true;
         $this->validate([
-            'id_type_poulet' => 'required|integer',
+            'id_type_oeuf' => 'required|integer',
             'id_type_sortie' => 'required|integer',
-            'id_cycle' => 'required|integer',
-            'poids_total' => 'required',
-            'nombre' => 'required|integer',
-            'prix_unite' => 'required',
+            //'id_cycle' => 'required|integer',
+            'nom' => 'required',
+            'qte' => 'required|integer',
+            'pu' => 'required',
             'date_sortie' => 'required|date',
             'id_client' => 'nullable|integer',
             'id_utilisateur' => 'nullable',
@@ -154,9 +154,6 @@ class LivSortieOeuf extends Component
         ]);
 
         DB::beginTransaction();
-        $cycleSelected = Cycle::find($this->id_cycle);
-        $stockActuale = $cycleSelected->nb_poulet;
-        if($stockActuale >= $this->nombre){
             try{
                 //creation de nouvele client
                 $client = new Client();
@@ -164,35 +161,26 @@ class LivSortieOeuf extends Component
                 $client->raison_sociale = $this->raison_sociale;
                 $client->adresse = $this->adresse;
                 $client->save();
-                //création sortie poulet
-                $sortiePoulet = new SortiePoulet();
-                $sortiePoulet->id_type_poulet = $this->id_type_poulet;
-                $sortiePoulet->id_type_sortie = $this->id_type_sortie;
-                $sortiePoulet->id_cycle = $this->id_cycle;
-                $sortiePoulet->poids_total = $this->poids_total;
-                $sortiePoulet->nombre = $this->nombre;
-                $sortiePoulet->prix_unite = $this->prix_unite;
-                $sortiePoulet->date_sortie = $this->date_sortie;
-                $sortiePoulet->date_action = now();
-                $sortiePoulet->actif = $this->actif;
-                $sortiePoulet->id_client = $client->id;
-                $sortiePoulet->id_utilisateur = $this->id_utilisateur;
-                $sortiePoulet->montant = ($this->prix_unite * $this->nombre);
+                //création sortie oeuf
+                $sortieOeuf = new SortieOeuf();
+                $sortieOeuf->id_type_oeuf = $this->id_type_oeuf;
+                $sortieOeuf->id_type_sortie = $this->id_type_sortie;
+                $sortieOeuf->qte = $this->qte;
+                $sortieOeuf->pu = $this->pu;
+                $sortieOeuf->date_sortie = $this->date_sortie;
+                $sortieOeuf->date_action = now();
+                $sortieOeuf->actif = $this->actif;
+                $sortieOeuf->id_client = $client->id;
+                $sortieOeuf->id_utilisateur = $this->id_utilisateur;
+                $sortieOeuf->montant = ($this->pu * $this->qte);
         
-                $sortiePoulet->save();
-                //update stock cyle selected
-                $cycleSelected = Cycle::find($this->id_cycle);
-                $stockActuale = $cycleSelected->nb_poulet;
-                $cycleSelected->update([
-                    'nb_poulet' => ($stockActuale - $this->nombre),
-                ]);
-                $cycleSelected->save();
+                $sortieOeuf->save();
         
                 $this->resetFormSortie();
                 $this->resetValidation();
                 $this->isLoading = false;
                 $this->notification = true;
-                session()->flash('message', 'Sortie poulet bien enregistré!');
+                session()->flash('message', 'Sortie oeuf bien enregistré!');
                 DB::commit();
                 $this->resetPage();
                 }catch(\Exception $e){
@@ -201,63 +189,48 @@ class LivSortieOeuf extends Component
                     session()->flash('message', $e->getMessage());
                     
                 }
-        }else{
-            $this->notification = true;
-            session()->flash('error', 'Operation impossible, stock du cycle insufusant!');
-        }
     }
 
     public function saveExistSortie()
     {
         $this->isLoading = true;
         $data = $this->validate([
-            'id_type_poulet' => 'required|integer',
+            'id_type_oeuf' => 'required|integer',
             'id_type_sortie' => 'required|integer',
-            'poids_total' => 'required',
-            'nombre' => 'required|integer',
-            'prix_unite' => 'required',
+            //'id_cycle' => 'required|integer',
+            'qte' => 'required|integer',
+            'pu' => 'required',
             'date_sortie' => 'required|date',
             'id_client' => 'nullable|integer',
             'id_utilisateur' => 'nullable',
             'date_action' => 'nullable',
             'actif' => 'required|integer',
+            'montant' => 'nullable',
         ]);
-
-        $cycleSelected = Cycle::find($this->id_cycle);
-        $stockActuale = $cycleSelected->nb_poulet;
-        if($stockActuale >= $this->nombre){
 
             try{
 
                 //création sortie poulet
-                $sortiePoulet = new SortiePoulet();
-                $sortiePoulet->id_type_poulet = $this->id_type_poulet;
-                $sortiePoulet->id_type_sortie = $this->id_type_sortie;
-                $sortiePoulet->id_cycle = $this->id_cycle;
-                $sortiePoulet->poids_total = $this->poids_total;
-                $sortiePoulet->nombre = $this->nombre;
-                $sortiePoulet->prix_unite = $this->prix_unite;
-                $sortiePoulet->date_sortie = $this->date_sortie;
-                $sortiePoulet->date_action = now();
-                $sortiePoulet->actif = $this->actif;
-                $sortiePoulet->id_client = $this->id_client;
-                $sortiePoulet->id_utilisateur = $this->id_utilisateur;
-                $sortiePoulet->montant = ($this->prix_unite * $this->nombre);
+                $sortieOeuf = new SortieOeuf();
+                $sortieOeuf->id_type_oeuf = $this->id_type_oeuf;
+                $sortieOeuf->id_type_sortie = $this->id_type_sortie;
+                $sortieOeuf->qte = $this->qte;
+                $sortieOeuf->pu = $this->pu;
+                $sortieOeuf->date_sortie = $this->date_sortie;
+                $sortieOeuf->date_action = now();
+                $sortieOeuf->actif = $this->actif;
+                $sortieOeuf->id_client = $this->id_client;
+                $sortieOeuf->id_utilisateur = $this->id_utilisateur;
+                $sortieOeuf->montant = ($this->pu * $this->qte);
         
-                $sortiePoulet->save();
         
-                $cycleSelected = Cycle::find($this->id_cycle);
-                $stockActuale = $cycleSelected->nb_poulet;
-                $cycleSelected->update([
-                    'nb_poulet' => ($stockActuale - $this->nombre),
-                ]);
-                $cycleSelected->save();
+                $sortieOeuf->save();
         
                 $this->resetFormSortie();
                 $this->resetValidation();
                 $this->isLoading = false;
                 $this->notification = true;
-                session()->flash('message', 'Sortie poulet bien enregistré!');
+                session()->flash('message', 'Sortie oeuf bien enregistré!');
                 $this->createSortie = false;
                 $this->afficherListe = true;
                 $this->resetPage();
@@ -267,10 +240,6 @@ class LivSortieOeuf extends Component
                     //session()->flash('message', $e->getMessage());
                     
                 }
-        }else{
-            $this->notification = true;
-            session()->flash('error', 'Operation impossible, stock du cycle insufusant!');
-        }
     }
 
 
@@ -287,14 +256,13 @@ class LivSortieOeuf extends Component
 
     public function editSortie($id)
     {
-        $sortie = SortiePoulet::findOrFail($id);
+        $sortie = SortieOeuf::findOrFail($id);
         $this->sortie_id = $id;
-        $this->id_type_poulet = $sortie->id_type_poulet;
+        $this->id_type_oeuf = $sortie->id_type_oeuf;
         $this->id_type_sortie = $sortie->id_type_sortie;
-        $this->poids_total = $sortie->poids_total;
         $this->date_action = $sortie->date_constat;
-        $this->nombre = $sortie->nombre;
-        $this->prix_unite = $sortie->prix_unite;
+        $this->qte = $sortie->qte;
+        $this->pu = $sortie->pu;
         $this->date_sortie = $sortie->date_sortie;
         $this->id_client = $sortie->id_client;
         $this->actif = $sortie->actif;
@@ -316,11 +284,10 @@ class LivSortieOeuf extends Component
     public function updateSortie()
     {
         $this->validate([
-            'id_type_poulet' => 'required|integer',
+            'id_type_oeuf' => 'required|integer',
             'id_type_sortie' => 'required|integer',
-            'poids_total' => 'required',
-            'nombre' => 'required|integer',
-            'prix_unite' => 'required',
+            'qte' => 'required|integer',
+            'pu' => 'required',
             'date_sortie' => 'required|date',
             'id_client' => 'nullable|integer',
             'id_utilisateur' => 'nullable',
@@ -330,13 +297,12 @@ class LivSortieOeuf extends Component
 
         try{
             
-            $sortie = SortiePoulet::findOrFail($this->sortie_id);
+            $sortie = SortieOeuf::findOrFail($this->sortie_id);
             $sortie->update([
-                'id_type_poulet' => $this->id_type_poulet,
+                'id_type_oeuf' => $this->id_type_oeuf,
                 'id_type_sortie' => $this->id_type_sortie,
-                'poids_total' => $this->poids_total,
-                'nombre' => $this->nombre,
-                'prix_unite' => $this->prix_unite,
+                'qte' => $this->qte,
+                'pu' => $this->pu,
                 'date_sortie' => $this->date_sortie,
                 'id_client' => $this->id_client,
                 'actif' => $this->actif,
@@ -389,7 +355,7 @@ class LivSortieOeuf extends Component
 
     public function comfirmerDelete($id)
     {
-        $this->recordToDelete = SortiePoulet::findOrFail($id);
+        $this->recordToDelete = SortieOeuf::findOrFail($id);
     }
 
     public function cancelDelete()
