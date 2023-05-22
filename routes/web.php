@@ -59,6 +59,7 @@ Route::group(['prefix' => 'gestion_sortie', 'middleware' => 'auth'], function(){
     Route::get('sortie_poulet', [SortiepouletController::class, 'page'])->name('gestion_sortie.sortie_poulets');
     Route::get('prix_poulet',[PrixpouletController::class, 'page'])->name('gestion_sortie.prix_poulets');
     Route::get('sortie_oeuf', [SortieoeufController::class, 'page'])->name('gestion_sortie.sortie_oeufs');
+    Route::get('sortie_oeuf2', [SortieoeufController::class, 'page2'])->name('gestion_sortie.sortie_oeufs2');
     Route::get('prix_oeuf', [PrixoeufController::class, 'page'])->name('gestion_sortie.prix_oeufs');
 });
 

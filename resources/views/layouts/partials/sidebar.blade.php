@@ -329,6 +329,12 @@
 					<span class="item-name">Sortie oeuf</span>
 				</a>
 			</li>
+			<li class="nav-item">
+				<a href="{{ route('gestion_sortie.sortie_oeufs2')}}">
+					<i class="nav-icon i-Remove-Basket"></i>
+					<span class="item-name">Sortie oeuf2</span>
+				</a>
+			</li>
 		</ul>
 		{{-- fin gestion sortie--}}
 		{{-- debut gestion client --}}
