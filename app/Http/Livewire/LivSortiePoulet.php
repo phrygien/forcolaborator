@@ -99,19 +99,19 @@ class LivSortiePoulet extends Component
 
     public function updatedMontant($value)
     {
-        if (is_numeric($value) && is_numeric($this->nombre) && $this->nombre != 0) {
-            $this->prix_unite = $value / $this->nombre;
+        if (is_numeric($value) && is_numeric($this->poids_total) && $this->poids_total != 0) {
+            $this->poids_total = $value / $this->poids_total;
         }
     }
 
     public function updatedPrixUnite($value)
     {
-        if (is_numeric($value) && is_numeric($this->nombre) && $this->nombre != 0) {
-            $this->montant = $value * $this->nombre;
+        if (is_numeric($value) && is_numeric($this->poids_total) && $this->poids_total != 0) {
+            $this->montant = $value * $this->poids_total;
         }
     }
 
-    public function updatedNombre($value)
+    public function updatedPoidsTotal($value)
     {
         if (is_numeric($value) && is_numeric($this->prix_unite) && $value != 0) {
             $this->montant = $this->prix_unite * $value;
@@ -216,14 +216,14 @@ class LivSortiePoulet extends Component
                         $sortiePoulet->actif = $this->actif;
                         $sortiePoulet->id_client = $client->id;
                         $sortiePoulet->id_utilisateur = $this->id_utilisateur;
-                        $sortiePoulet->montant = ($this->prix_unite * $this->nombre);
+                        $sortiePoulet->montant = ($this->prix_unite * $this->poids_total);
                 
                         $sortiePoulet->save();
                         //update stock cyle selected
                         $cycleSelected = Cycle::find($this->id_cycle);
                         $stockActuale = $cycleSelected->nb_poulet;
                         $cycleSelected->update([
-                            'nb_poulet' => ($stockActuale - $this->nombre),
+                            'nb_poulet' => ($stockActuale - $this->poids_total),
                         ]);
                         $cycleSelected->save();
                 
@@ -265,7 +265,7 @@ class LivSortiePoulet extends Component
             $sortiePoulet->actif = $this->actif;
             $sortiePoulet->id_client = $client->id;
             $sortiePoulet->id_utilisateur = $this->id_utilisateur;
-            $sortiePoulet->montant = ($this->prix_unite * $this->nombre);
+            $sortiePoulet->montant = ($this->prix_unite * $this->poids_total);
             $sortiePoulet->save();
             $this->resetFormSortie();
             $this->resetValidation();
@@ -449,7 +449,7 @@ class LivSortiePoulet extends Component
                 'actif' => $this->actif,
                 'date_action' => $this->date_action,
                 'id_utilisateur' => $this->id_utilisateur,
-                'montant' => ($this->prix_unite * $this->nombre),
+                'montant' => ($this->prix_unite * $this->poids_total),
             ]);
 
             $this->editSortie = false;
