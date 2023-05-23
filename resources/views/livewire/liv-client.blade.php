@@ -91,8 +91,10 @@
                                 <th scope="col">{{ __('Nom')}}</th>
                                 <th scope="col">{{ __('Raison sociale')}}</th>
                                 <th scope="col">{{ __('Adresse')}}</th>
-                                <th scope="col">{{ __('Montant total vente poulet')}}</th>
-                                <th scope="col">{{ __('Montant total vente oeuf')}}</th>
+                                <th scope="col">{{ __('Montant vente poulet')}}</th>
+                                <th scope="col">{{ __('Montant vente oeuf')}}</th>
+                                <th scope="col">{{ __('Derniere vente poulet')}}</th>
+                                <th scope="col">{{ __('Derniere vente oeuf')}}</th>
                                 <th scope="col" width="149px">{{ __('Actions')}}</th>
                             </tr>
                         </thead>
@@ -104,6 +106,20 @@
                                 <td>{{ $client->adresse }}</td>
                                 <td><span class="text-success text-14">{{ $client->total_montant_poulet  }}</span> (Ar)</td>
                                 <td><span class="text-success text-14">{{ $client->total_montant_oeuf  }}</span> (Ar)</td>
+                                <td>
+                                    @if($client->date_vente_poulet !=null)
+                                    {{  get_formatted_date($client->date_vente_poulet, 'd / M / Y') }}
+                                    @else
+                                    N/A
+                                    @endif
+                                </td>
+                                <td>
+                                    @if($client->date_vente_oeuf !=null)
+                                    {{  get_formatted_date($client->date_vente_oeuf, 'd/ M/ Y') }}
+                                    @else
+                                        N/A
+                                    @endif
+                                </td>
                                 <td>
                                     <button wire:click="editClient({{$client->id }})" wire:loading.attr="disabled" wire:target="editClient({{$client->id }})" class="btn btn-raised btn-rounded btn-raised-primary">
                                         <span wire:loading.remove wire:target="editClient({{$client->id }})"><i class="nav-icon i-Pen-2 font-weight-bold"></i></span>

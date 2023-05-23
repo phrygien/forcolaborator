@@ -2,6 +2,8 @@
 
 namespace App\Http\Livewire;
 use App\Models\Client;
+use App\Models\SortieOeuf;
+use App\Models\SortiePoulet;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -21,17 +23,20 @@ class LivClient extends Component
     public function render()
     {
         $clients = Client::select('clients.nom', 'clients.raison_sociale', 'clients.adresse')
-        ->leftJoin('sortie_poulets', 'clients.id', '=', 'sortie_poulets.id_client')
-        ->leftJoin('sortie_oeufs', 'clients.id', '=', 'sortie_oeufs.id_client')
-        ->selectRaw('clients.*, COALESCE(SUM(sortie_poulets.poids_total * sortie_poulets.prix_unite), 0) as total_montant_poulet,
-        COALESCE(SUM(sortie_oeufs.qte * sortie_oeufs.pu), 0) as total_montant_oeuf')
-        ->groupBy('clients.id')
-        ->paginate(10);
-
+            ->leftJoin('sortie_poulets', 'clients.id', '=', 'sortie_poulets.id_client')
+            ->leftJoin('sortie_oeufs', 'clients.id', '=', 'sortie_oeufs.id_client')
+            ->selectRaw('clients.*, COALESCE(SUM(sortie_poulets.poids_total * sortie_poulets.prix_unite), 0) as total_montant_poulet,
+                COALESCE(SUM(sortie_oeufs.qte * sortie_oeufs.pu), 0) as total_montant_oeuf,
+                (SELECT MAX(date_sortie) FROM sortie_poulets WHERE id_client = clients.id) as date_vente_poulet,
+                (SELECT MAX(date_sortie) FROM sortie_oeufs WHERE id_client = clients.id) as date_vente_oeuf')
+            ->groupBy('clients.id')
+            ->paginate(10);
+    
         return view('livewire.liv-client', [
             'clients' => $clients
         ]);
-    }
+    }    
+    
 
     public function formClient()
     {
