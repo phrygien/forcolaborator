@@ -91,7 +91,8 @@
                                 <th scope="col">{{ __('Nom')}}</th>
                                 <th scope="col">{{ __('Raison sociale')}}</th>
                                 <th scope="col">{{ __('Adresse')}}</th>
-                                <th scope="col">{{ __('Montant total de vente')}}</th>
+                                <th scope="col">{{ __('Montant total vente poulet')}}</th>
+                                <th scope="col">{{ __('Montant total vente oeuf')}}</th>
                                 <th scope="col" width="149px">{{ __('Actions')}}</th>
                             </tr>
                         </thead>
@@ -101,7 +102,8 @@
                                 <td>{{ $client->nom }}</td>
                                 <td>{{ $client->raison_sociale }}</td>
                                 <td>{{ $client->adresse }}</td>
-                                <td><span class="text-success text-14">{{ $client->total_montant  }}</span> (Ar)</td>
+                                <td><span class="text-success text-14">{{ $client->total_montant_poulet  }}</span> (Ar)</td>
+                                <td><span class="text-success text-14">{{ $client->total_montant_oeuf  }}</span> (Ar)</td>
                                 <td>
                                     <button wire:click="editClient({{$client->id }})" wire:loading.attr="disabled" wire:target="editClient({{$client->id }})" class="btn btn-raised btn-rounded btn-raised-primary">
                                         <span wire:loading.remove wire:target="editClient({{$client->id }})"><i class="nav-icon i-Pen-2 font-weight-bold"></i></span>
