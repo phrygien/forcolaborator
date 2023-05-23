@@ -180,7 +180,7 @@ class LivSortieOeuf extends Component
         $this->validate([
             'id_type_oeuf' => 'required|integer',
             'id_type_sortie' => 'required|integer',
-            //'id_cycle' => 'required|integer',
+            'montant' => 'required|integer',
             'nom' => 'required',
             'qte' => 'required|integer',
             'pu' => 'required',
@@ -189,7 +189,6 @@ class LivSortieOeuf extends Component
             'id_utilisateur' => 'nullable',
             'date_action' => 'nullable',
             'actif' => 'required|integer',
-            'montant' => 'nullable',
         ]);
 
         DB::beginTransaction();
@@ -236,7 +235,7 @@ class LivSortieOeuf extends Component
         $data = $this->validate([
             'id_type_oeuf' => 'required|integer',
             'id_type_sortie' => 'required|integer',
-            //'id_cycle' => 'required|integer',
+            'montant' => 'required|integer',
             'qte' => 'required|integer',
             'pu' => 'required',
             'date_sortie' => 'required|date',
@@ -244,7 +243,6 @@ class LivSortieOeuf extends Component
             'id_utilisateur' => 'nullable',
             'date_action' => 'nullable',
             'actif' => 'required|integer',
-            'montant' => 'nullable',
         ]);
 
             try{
@@ -326,6 +324,7 @@ class LivSortieOeuf extends Component
             'id_type_oeuf' => 'required|integer',
             'id_type_sortie' => 'required|integer',
             'qte' => 'required|integer',
+            'montant' => 'required|integer',
             'pu' => 'required',
             'date_sortie' => 'required|date',
             'id_client' => 'nullable|integer',
