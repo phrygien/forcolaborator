@@ -161,7 +161,7 @@
 <div class="overlay">
     <div class="centered">
     <div class="alert alert-warning text-center">
-        <strong class="text-black">{{ __('Modification constat poulet')}} !</strong>
+        <strong class="text-black">{{ __('Modification sortie oeuf')}} !</strong>
         <p class="text-black">Pouvez-vous confirmer cette modification ?</p>
         <p class="text-center">
             <button class="btn btn-secondary btn-rounded" wire:click="cancelModal()">{{ __('Annuler') }}</button>
