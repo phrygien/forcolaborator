@@ -77,9 +77,46 @@ class LivSortieOeuf extends Component
         return $prixs;
     }
 
-    public function updatedSelectedTypePoulet($value)
+    public function updatedIdTypeOeuf()
     {
-        $this->pu = null;
+        $dernierSortieOeuf = SortieOeuf::where('id_type_oeuf', $this->id_type_oeuf)
+            ->orderByDesc('date_sortie')
+            ->first();
+
+        if ($dernierSortieOeuf) {
+            $this->pu = $dernierSortieOeuf->pu;
+        } else {
+            $dernierPrixOeuf = PrixOeuf::where('id_type_oeuf', $this->id_type_oeuf)
+                ->orderByDesc('date_application')
+                ->first();
+
+            if ($dernierPrixOeuf) {
+                $this->pu = $dernierPrixOeuf->pu;
+            } else {
+                $this->pu = null;
+            }
+        }
+    }
+
+    public function updatedMontant($value)
+    {
+        if (is_numeric($value) && is_numeric($this->qte) && $this->qte != 0) {
+            $this->qte = $value / $this->qte;
+        }
+    }
+
+    public function updatedPu($value)
+    {
+        if (is_numeric($value) && is_numeric($this->qte) && $this->qte != 0) {
+            $this->montant = $value * $this->qte;
+        }
+    }
+
+    public function updatedQte($value)
+    {
+        if (is_numeric($value) && is_numeric($this->pu) && $value != 0) {
+            $this->montant = $this->pu * $value;
+        }
     }
 
 
