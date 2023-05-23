@@ -177,6 +177,7 @@ class LivSortiePoulet extends Component
     public function saveNewSortie()
     {
         $this->isLoading = true;
+        if($this->selectedOption == "existe"){
         $this->validate([
             'id_type_poulet' => 'required|integer',
             'id_type_sortie' => 'required|integer',
@@ -190,7 +191,22 @@ class LivSortiePoulet extends Component
             'actif' => 'required|integer',
             'montant' => 'nullable',
         ]);
-
+        }else{
+            $this->validate([
+                'id_type_poulet' => 'required|integer',
+                'id_type_sortie' => 'required|integer',
+                'poids_total' => 'required',
+                'nombre' => 'required|integer',
+                'nom' => 'required',
+                'prix_unite' => 'required',
+                'date_sortie' => 'required|date',
+                'id_client' => 'nullable|integer',
+                'id_utilisateur' => 'nullable',
+                'date_action' => 'nullable',
+                'actif' => 'required|integer',
+                'montant' => 'nullable',
+            ]);     
+        }
         if($this->id_cycle !=null){
                 $cycleSelected = Cycle::find($this->id_cycle);
                 $stockActuale = $cycleSelected->nb_poulet;
