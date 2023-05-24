@@ -37,7 +37,7 @@
 
                     <div class="col-md-6 form-group mb-3">
                         <label for="picker1">{{ __('Cycle')}}</label>
-                        <select wire:model.defer="id_cycle" class="form-control form-control-rounded">
+                        <select wire:model="id_cycle" class="form-control form-control-rounded">
                             <option value="">Choisir un cycle</option>
                             @foreach ($cycleActifs as $cycle)
                                 <option value="{{ $cycle->id }}">{{ $cycle->description }}</option>
@@ -79,7 +79,7 @@
                                         
                     <div class="col-md-6 form-group mb-3">
                         <label for="firstName2">{{ __('Poids total')}}</label>
-                        <input type="number" wire:model.defer="poids_total" class="form-control form-control-rounded" id="firstName2" placeholder="">
+                        <input type="number" wire:model="poids_total" class="form-control form-control-rounded" id="firstName2" placeholder="">
                         @error('poids_total') 
                         <div class="alert alert-danger" role="alert">
                             {{ $message}}
@@ -87,7 +87,7 @@
                         @enderror
                     </div>
 
-                    <div class="col-md-6 form-group mb-3">
+                    {{-- <div class="col-md-6 form-group mb-3">
                         <label for="picker1">{{ __('Selectioner un prix')}}</label>
                         <select wire:model="prix_unite" class="form-control form-control-rounded">
                             <option value="">Choisir un prix</option>
@@ -100,12 +100,22 @@
                             {{ $message}}
                         </div>
                         @enderror --}}
-                    </div>
+                    {{-- </div> --}}
 
                     <div class="col-md-6 form-group mb-3">
                         <label for="firstName2">{{ __('Prix unitaire')}}</label>
                         <input type="number" wire:model="prix_unite" class="form-control form-control-rounded" id="firstName2" placeholder="">
                         @error('prix_unite') 
+                        <div class="alert alert-danger" role="alert">
+                            {{ $message}}
+                        </div>
+                        @enderror
+                    </div>
+
+                    <div class="col-md-6 form-group mb-3">
+                        <label for="firstName2">{{ __('Montant total')}}</label>
+                        <input type="number" disabled wire:model="montant" class="form-control form-control-rounded" id="firstName2" placeholder="">
+                        @error('montant') 
                         <div class="alert alert-danger" role="alert">
                             {{ $message}}
                         </div>
@@ -160,7 +170,7 @@
                     </div>
                     <div class="col-md-6 form-group mb-3">
                         <label for="firstName2">{{ __('Raison sociale client')}}</label>
-                        <input type="text" wire:model.defer="raison_sociale" class="form-control form-control-rounded" id="firstName2" placeholder="">
+                        <input type="text" wire:model="raison_sociale" class="form-control form-control-rounded" id="firstName2" placeholder="">
                         @error('raison_sociale') 
                         <div class="alert alert-danger" role="alert">
                             {{ $message}}
@@ -169,7 +179,7 @@
                     </div>
                     <div class="col-md-6 form-group mb-3">
                         <label for="firstName2">{{ __('Adresse client')}}</label>
-                        <input type="text" wire:model.defer="adresse" class="form-control form-control-rounded" id="firstName2" placeholder="">
+                        <input type="text" wire:model="adresse" class="form-control form-control-rounded" id="firstName2" placeholder="">
                         @error('adresse') 
                         <div class="alert alert-danger" role="alert">
                             {{ $message}}
@@ -182,7 +192,7 @@
 
                     <div class="col-md-6 form-group mb-3">
                         <label for="picker1">{{ __('Status sortie')}}</label>
-                        <select wire:model.defer="actif" class="form-control form-control-rounded">
+                        <select wire:model="actif" class="form-control form-control-rounded">
                             <option>Select status</option>
                             <option value="1">Actif</option>
                             <option value="2">Inactif</option>
@@ -196,7 +206,7 @@
 
                     <div class="col-md-6 form-group mb-3" hidden>
                         <label for="firstName2">{{ __('Utilisateur ID')}}</label>
-                        <input type="text" wire:model.defer="id_utilisateur" class="form-control form-control-rounded">
+                        <input type="text" wire:model="id_utilisateur" class="form-control form-control-rounded">
                     </div>
 
                     <div class="col-md-12">

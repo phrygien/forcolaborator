@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePrixOeufsTable extends Migration
+class CreateLibelleDepensesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,10 @@ class CreatePrixOeufsTable extends Migration
      */
     public function up()
     {
-        Schema::create('prix_oeufs', function (Blueprint $table) {
+        Schema::create('libelle_depenses', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('id_type_oeuf');
-            $table->string('date_application');
-            $table->float('pu');
+            $table->string('libelle');
             $table->integer('actif')->default(1);
-            $table->integer('id_utilisateur');
-            $table->foreign('id_type_oeuf')->references('id')->on('type_oeufs');
             $table->timestamps();
         });
     }
@@ -32,6 +28,6 @@ class CreatePrixOeufsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('prix_oeufs');
+        Schema::dropIfExists('libelle_depenses');
     }
 }

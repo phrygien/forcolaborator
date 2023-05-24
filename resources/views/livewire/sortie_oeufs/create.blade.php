@@ -63,21 +63,6 @@
 
 
                     <div class="col-md-6 form-group mb-3">
-                        <label for="picker1">{{ __('Selectioner un prix')}}</label>
-                        <select wire:model="pu" class="form-control form-control-rounded">
-                            <option value="">Choisir un prix</option>
-                            @foreach ($prixs as $prix)
-                                <option value="{{ $prix->pu }}">{{ $prix->pu }}</option>
-                            @endforeach
-                        </select>
-                        {{-- @error('prix_unite') 
-                        <div class="alert alert-danger" role="alert">
-                            {{ $message}}
-                        </div>
-                        @enderror --}}
-                    </div>
-
-                    <div class="col-md-6 form-group mb-3">
                         <label for="firstName2">{{ __('Prix unitaire')}}</label>
                         <input type="number" wire:model="pu" class="form-control form-control-rounded" id="firstName2" placeholder="">
                         @error('pu') 
@@ -87,6 +72,16 @@
                         @enderror
                     </div>
 
+                    <div class="col-md-6 form-group mb-3">
+                        <label for="firstName2">{{ __('Montant total')}}</label>
+                        <input type="number" disabled wire:model="montant" class="form-control form-control-rounded" id="firstName2" placeholder="">
+                        @error('montant') 
+                        <div class="alert alert-danger" role="alert">
+                            {{ $message}}
+                        </div>
+                        @enderror
+                    </div>
+                    
                     <div class="col-md-6 form-group mb-3">
                         <label for="firstName2">{{ __('Date sortie')}}</label>
                         <input type="date" wire:model="date_sortie" disabled class="disable form-control form-control-rounded">

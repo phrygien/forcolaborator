@@ -33,7 +33,7 @@
                                     </span>
                                 	@enderror
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group mb-3">
                                     <label for="password">Mot de passe</label>
                                     <input id="password" name="password" class="form-control form-control-rounded @error('password') is-invalid @enderror" type="password">
 									@error('password')
@@ -45,10 +45,6 @@
                                 <button class="btn btn-rounded btn-primary btn-block mt-2">S'identifier</button>
 
                             </form>
-
-                            <div class="mt-3 text-center">
-                                <a href="forgot.html" class="text-muted"><u>Mot de passe oublié ?</u></a>
-                            </div>
                         </div>
                     </div>
                     <div class="col-md-6 text-center " style="background-size: cover;background-image: url(./assets/images/authentification.png)">

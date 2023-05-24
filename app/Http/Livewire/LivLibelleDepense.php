@@ -1,47 +1,46 @@
 <?php
 
 namespace App\Http\Livewire;
-use App\Models\Client;
-use App\Models\SortieOeuf;
-use App\Models\SortiePoulet;
+
+use App\Models\CategorieDepense;
+use App\Models\LibelleDepense;
+use App\Models\TypeDepense;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\DB;
 
-class LivClient extends Component
+class LivLibelleDepense extends Component
 {
     use WithPagination;
-    public $isLoading, $client_id, $nom, $raison_sociale, $adresse;
+    public $isLoading, $libelle_id, $libelle, $actif;
     public $afficherListe=true;
-    public $createClient=false;
-    public $editClient=false;
+    public $createLibelle=false;
+    public $editLibelle=false;
     public $notification =false; 
     public $confirmUpdate = false; 
     public $recordToDelete;
     public $btnCreate = true;
+    public $categoriDepenseActifs;
+
     protected $paginationTheme = 'bootstrap';
+
+    public function mount()
+    {
+        $this->actif = 1;
+    }
 
     public function render()
     {
-        $clients = Client::select('clients.nom', 'clients.raison_sociale', 'clients.adresse')
-            ->leftJoin('sortie_poulets', 'clients.id', '=', 'sortie_poulets.id_client')
-            ->leftJoin('sortie_oeufs', 'clients.id', '=', 'sortie_oeufs.id_client')
-            ->selectRaw('clients.*, COALESCE(SUM(sortie_poulets.poids_total * sortie_poulets.prix_unite), 0) as total_montant_poulet,
-                COALESCE(SUM(sortie_oeufs.qte * sortie_oeufs.pu), 0) as total_montant_oeuf,
-                (SELECT MAX(date_sortie) FROM sortie_poulets WHERE id_client = clients.id) as date_vente_poulet,
-                (SELECT MAX(date_sortie) FROM sortie_oeufs WHERE id_client = clients.id) as date_vente_oeuf')
-            ->groupBy('clients.id')
-            ->paginate(10);
-    
-        return view('livewire.liv-client', [
-            'clients' => $clients
+        $libelles = LibelleDepense::where('actif', 1)->paginate(10);
+        return view('livewire.liv-libelle-depense', [
+            'libelles' => $libelles
         ]);
-    }    
-    
+    }
 
-    public function formClient()
+    public function formLibelle()
     {
         $this->isLoading = true;
-        $this->createClient =true;
+        $this->createLibelle =true;
         $this->afficherListe = false;
         $this->btnCreate = false;
         $this->isLoading = false;
@@ -49,26 +48,24 @@ class LivClient extends Component
 
     public function resetInput()
     {
-        $this->nom = '';
-        $this->raison_sociale = '';
-        $this->adresse = '';
+        $this->libelle = '';
+        $this->actif = 1;
         $this->resetValidation();
     }
 
-    public function saveClient()
+    public function saveLibelle()
     {
         $this->isLoading = true;
         $data = $this->validate([
-            'nom' => 'required|unique:clients,nom',
-            'raison_sociale' => 'required',
-            'adresse' => 'required'
+            'libelle' => 'required|unique:libelle_depenses,libelle',
+            'actif' => 'required|integer'
         ]);
 
         try{
 
-        Client::create($data);
+        LibelleDepense::create($data);
         $this->notification = true;
-        session()->flash('message', 'Client bien enregistré!');
+        session()->flash('message', 'Libelle depense enregistré!');
         $this->resetValidation();
         $this->resetInput();
         $this->isLoading = false;
@@ -81,7 +78,7 @@ class LivClient extends Component
     public function cancelCreate()
     {
         $this->isLoading = true;
-        $this->createClient = false;
+        $this->createLibelle = false;
         $this->afficherListe = true;
         $this->resetInput();
         $this->resetValidation();
@@ -89,20 +86,19 @@ class LivClient extends Component
         $this->isLoading = false;
     }
 
-    public function editClient($id)
+    public function editLibelle($id)
     {
         $this->isLoading = true;
 
-        $client = Client::findOrFail($id);
-        $this->nom = $client->nom;
-        $this->raison_sociale = $client->raison_sociale;
-        $this->adresse = $client->adresse;
-        $this->client_id = $id;
-        $this->editClient = true;
-        $this->createClient = false;
+        $libelleDepense = LibelleDepense::findOrFail($id);
+        $this->libelle = $libelleDepense->libelle;
+        $this->actif = $libelleDepense->actif;
+        $this->libelle_id = $id;
+        $this->editLibelle = true;
+        $this->createLibelle = false;
         $this->btnCreate = false;
-        $this->isLoading = false;
         $this->afficherListe = false;
+        $this->isLoading = false;
     }
 
     public function removeNotification()
@@ -121,33 +117,31 @@ class LivClient extends Component
         $this->confirmUpdate = true;
     }
 
-    public function updateClient()
+    public function updateLibelle()
     {
         $this->isLoading = true;
 
         $this->validate([
-            'nom' => 'required|unique:clients,nom,' . $this->client_id,
-            'raison_sociale' => 'required',
-            'adresse' => 'required'
+            'libelle' => 'required|unique:libelle_depenses,libelle,' . $this->libelle_id,
+            'actif' => 'required'
         ]);
 
         try{
 
-            $client = Client::findOrFail($this->client_id);
-            $client->update([
-                'nom' => $this->nom,
-                'raison_sociale' => $this->raison_sociale,
-                'adresse' => $this->adresse,
+            $libelleDepense = LibelleDepense::findOrFail($this->libelle_id);
+            $libelleDepense->update([
+                'libelle' => $this->libelle,
+                'actif' => $this->actif
             ]);
 
             session()->flash('message', 'Modification avec sucée');
-            $this->editClient = false;
+            $this->editLibelle = false;
             $this->notification = true;
             $this->resetInput();
             $this->resetValidation();
             $this->confirmUpdate = false;
-            $this->afficherListe = true;
             $this->btnCreate = true;
+            $this->afficherListe = true;
 
             $this->isLoading = false;
         }catch(\Exception $e){
@@ -161,7 +155,7 @@ class LivClient extends Component
         $this->isLoading = true;
 
         $this->confirmUpdate = false;
-        $this->editClient = true;
+        $this->editLibelle = true;
 
         $this->isLoading = false;
     }
@@ -171,7 +165,7 @@ class LivClient extends Component
         $this->isLoading = true;
 
         $this->confirmUpdate = false;
-        $this->editClient = false;
+        $this->editLibelle = false;
         $this->resetInput();
         $this->resetValidation();
         $this->btnCreate = true;
@@ -181,7 +175,7 @@ class LivClient extends Component
 
     public function confirmerDelete($id)
     {
-        $this->recordToDelete = Client::findOrFail($id);
+        $this->recordToDelete = LibelleDepense::findOrFail($id);
     }
 
     public function cancelDelete()
@@ -196,11 +190,19 @@ class LivClient extends Component
         $this->recordToDelete = null;
         $this->notification = true;
         session()->flash('message', 'Suppression avec sucée');
-    }catch(\Exception $e){
-            //$this->notification = true;
-            session()->flash('error', 'Impossible de supprimer le client. Il est déja utilisé !');
+        }catch(\Exception $e){
+            session()->flash('error', 'Le libelle depense est déja utilisé ! voulez-vous vraiment le rendre inactif ?');
         }
 
     }
 
+    public function desactiverLibelle()
+    {
+        $this->recordToDelete->update([
+            'actif' => 2,
+        ]);
+        $this->notification = true;
+        session()->flash('message', 'Desactivation avec succée !');
+        $this->recordToDelete = null;
+    }
 }

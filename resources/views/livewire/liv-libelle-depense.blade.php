@@ -13,12 +13,12 @@
     </div>
     @endif
 
-    @if($createType)
-        @include('livewire.categorie_depense.create')
+    @if($createLibelle)
+        @include('livewire.libelle_depenses.create')
     @endif
 
-    @if($editType)
-        @include('livewire.categorie_depense.edit')
+    @if($editLibelle)
+        @include('livewire.libelle_depenses.edit')
     @endif
 
     @if ($afficherListe)
@@ -26,11 +26,11 @@
         <div class="card text-left">
 
             <div class="card-body">
-                <h4 class="card-title mb-3">{{ __('Liste catégorie de depense ') }}</h4>
+                <h4 class="card-title mb-3">{{ __('Liste libelle dépenses ') }}</h4>
                 <p>
-                    <button class="btn btn-primary btn-rounded" wire:click="formType" wire:loading.attr="disabled" wire:target="formType">
-                        <span wire:loading.remove wire:target="formType">Créer catégorie</span>
-                        <span wire:loading wire:target="formType">
+                    <button class="btn btn-primary btn-rounded" wire:click="formLibelle" wire:loading.attr="disabled" wire:target="formLibelle">
+                        <span wire:loading.remove wire:target="formLibelle">Créer libelle depense</span>
+                        <span wire:loading wire:target="formLibelle">
                             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                             création...
                         </span>
@@ -63,15 +63,15 @@
                 <div class="overlay">
                     <div class="centered">
                     <div class="alert alert-warning text-center">
-                        <strong class="text-black">Suppression catégorie !</strong>
-                        <p class="text-black">Vous etes sure de supprimer le catégorie : {{$recordToDelete->categorie }}?</p>
+                        <strong class="text-black">Suppression libelle depense !</strong>
+                        <p class="text-black">Vous etes sure de supprimer libelle depense : {{$recordToDelete->libelle }}?</p>
                         @if (session()->has('error'))
                         <div class="alert alert-warning border-danger" role="alert">
                             <i class="icon-info1"></i>{{ session('error')}}
                         </div>
                         <p class="text-center">
                             <button class="btn btn-secondary btn-rounded" wire:click="cancelDelete()">{{ __('Annuler') }}</button>
-                            <button class="btn btn-warning btn-rounded" wire:click="desactiverCategorie()">{{ __('Desactiver') }}</button>
+                            <button class="btn btn-warning btn-rounded" wire:click="desactiverLibelle()">{{ __('Desactiver') }}</button>
                         </p>
                         @else
                         @if (session()->has('inactif'))
@@ -99,51 +99,49 @@
                     <table class="table table-striped table-hover">
                         <thead>
                             <tr>
-                                <th scope="col">{{ __('Libelle catégorie')}}</th>
-                                <th scope="col">{{ __('Commentaires')}}</th>
+                                <th scope="col">{{ __('Libelle')}}</th>
                                 <th scope="col">{{ __('Status')}}</th>
-                                <th scope="col">{{ __('Date de création')}}</th>
+                                <th scope="col">{{ __('Date création')}}</th>
                                 <th scope="col" width="149px">{{ __('Actions')}}</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($types as $type)
+                            @forelse ($libelles as $libelle)
                             <tr>
-                                <td>{{ $type->categorie }}</td>
-                                <td>{{ $type->commentaire }}</td>
+                                <td>{{ $libelle->libelle }}</td>
                                 <td>
-                                    @if($type->actif == 1)
+                                    @if($libelle->actif == 1)
                                         <span class="badge badge-success">Actif</span>
                                     @else
                                         <span class="badge badge-danger">Inactif</span>
                                     @endif
                                 </td>
-                                <td>{{ $type->created_at->format('d, M y') }}</td>
+                                <td>{{ get_formatted_date($libelle->created_at, "d / M/ Y") }}</td>
                                 <td>
-                                    <button wire:click="editType({{$type->id }})" wire:loading.attr="disabled" wire:target="editType({{$type->id }})" class="btn btn-raised btn-rounded btn-raised-primary">
-                                        <span wire:loading.remove wire:target="editType({{$type->id }})"><i class="nav-icon i-Pen-2 font-weight-bold"></i></span>
-                                        <span wire:loading wire:target="editType({{$type->id }})">
+                                    <button wire:click="editLibelle({{$libelle->id }})" wire:loading.attr="disabled" wire:target="editLibelle({{$libelle->id }})" class="btn btn-raised btn-rounded btn-raised-primary">
+                                        <span wire:loading.remove wire:target="editLibelle({{$libelle->id }})"><i class="nav-icon i-Pen-2 font-weight-bold"></i></span>
+                                        <span wire:loading wire:target="editLibelle({{$libelle->id }})">
                                             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                             modification...
                                         </span>
                                     </button>
-                                    <button class="btn btn-raised btn-rounded btn-raised-danger"  wire:click="confirmerDelete({{$type->id }})">
+                                    <button class="btn btn-raised btn-rounded btn-raised-danger"  wire:click="confirmerDelete({{$libelle->id }})">
                                         <i class="nav-icon i-Close-Window font-weight-bold"></i>
                                     </button>
                                 </td>
-                            </tr> 
+                            </tr>                                  
                             @empty
                             <tr>
-                                <td colspan="5" class="text-center">
+                                <td colspan="4" class="text-center">
                                     <span class="text-20 text-center text-secondary">pas de donnée pour le moment !</span>
                                 </td>
                             </tr>                                
-                            @endforelse                                 
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
 
-                {{ $types->links() }}
+                {{ $libelles->links() }}
 
             </div>
         </div>

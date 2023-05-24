@@ -134,7 +134,7 @@
                             @empty
                             <tr>
                                 <td colspan="4" class="text-center">
-                                    <span class="text-25 text-center text-warning">Aucune donnée disponible</span>
+                                    <span class="text-20 text-center text-secondary">pas de donnée pour le moment !</span>
                                 </td>
                             </tr>                                
                             @endforelse

@@ -110,7 +110,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($types as $type)
+                            @forelse ($types as $type)
                             <tr>
                                 <td>{{ $type->libelle }}</td>
                                 <td>
@@ -140,7 +140,13 @@
                                     </button>
                                 </td>
                             </tr>                                  
-                            @endforeach
+                            @empty
+                            <tr>
+                                <td colspan="4" class="text-center">
+                                    <span class="text-20 text-center text-secondary">pas de donnée pour le moment !</span>
+                                </td>
+                            </tr>                                
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
