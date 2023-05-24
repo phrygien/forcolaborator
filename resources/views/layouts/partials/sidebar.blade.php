@@ -281,6 +281,12 @@
 					<span class="item-name">{{ __('Type sortie')}}</span>
 				</a>
 			</li>
+			<li class="nav-item">
+				<a href="{{ route('parametrages.libelle_depense')}}">
+					<i class="nav-icon i-Remove-Basket"></i>
+					<span class="item-name">{{ __('Libelle depense')}}</span>
+				</a>
+			</li>
 		</ul>
 		{{-- Fin sous menu parametrages --}}
 		<ul class="childNav" data-parent="gentree">
