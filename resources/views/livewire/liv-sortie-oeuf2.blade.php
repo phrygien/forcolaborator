@@ -5,40 +5,55 @@
 
             <div class="card-body">
                 <h4 class="card-title mb-3">
-                    <button wire:click.prevent="addDynamicInput" class="btn btn-primary">Ajouter ligne</button>
+                    <button wire:click="addProduit" class="btn btn-outline-primary btn-rounded">Ajouter details sortie</button>
                 </h4>
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
                             <tr>
                                 <th scope="col">Constat</th>
-                                <th scope="col">Stock Disponible</th>
-                                <th scope="col">Qte</th>
-                                <th scope="col">Action</th>
+                                <th scope="col">Quantité</th>
+                                <th scope="col">Montant</th>
+                                <th scope="col" width="149px">Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($dynamicInputs as $index => $dynamicInput)
+                            @foreach ($produitsDisponibles as $produitDisponible)
+                            <li>ID: {{ $produitDisponible->id}} / Date entrée: {{ $produitDisponible->date_entree}} </li>
+                            @endforeach
+                            @foreach ($sortie['produits'] as $index => $produit)
                             <tr>
                                 <th scope="row">
-                                    <select class="form-control form-control-rounded"  wire:model="addDynamicInput.{{ $index }}">
-                                        <option>Option 1</option>
-                                        @foreach ($constats as $const )
-                                        <option>{{ $const->date_entree}}</option>
+                                    <select class="form-control form-control-rounded"  wire:model="sortie.produits.{{ $index }}.id_constat">
+                                        <option value="">Sélectionner un produit</option>
+                                        @foreach ($produitsDisponibles as $produitDisponible)
+                                        @php
+                                            $produitDejaAffiche = false;
+                                        @endphp
+                                        @foreach ($sortie['produits'] as $i => $prod)
+                                            @if ($i < $index && $prod['id_constat'] == $produitDisponible->id)
+                                                @php
+                                                    $produitDejaAffiche = true;
+                                                @endphp
+                                                @break
+                                            @endif
                                         @endforeach
+                                        @if (!$produitDejaAffiche)
+                                            <option value="{{ $produitDisponible->id }}">{{ $produitDisponible->date_entree }}</option>
+                                        @endif
+                                    @endforeach
                                     </select>
+                                    </select>
+                                    
                                 </th>
                                 <td>
-                                    <input class="form-control form-control-rounded" id="credit2" placeholder="Disponible">
+                                    <input class="form-control form-control-rounded"  wire:model="sortie.produits.{{ $index }}.qte" id="credit2" placeholder="Quantité à sortir">
                                 </td>
                                 <td>
-                                    <input class="form-control form-control-rounded" id="credit2" placeholder="Card">
+                                    <input class="form-control form-control-rounded"  wire:model="sortie.produits.{{ $index }}.montant_total" id="credit2" placeholder="Montant total">
                                 </td>
                                 <td>
-                                    <a href="#" class="text-success mr-2">
-                                        <i class="nav-icon i-Pen-2 font-weight-bold"></i>
-                                    </a>
-                                    <a href="#" class="text-danger mr-2"  wire:click.prevent="removeDynamicInput({{ $index }})">
+                                    <a href="#" class="text-danger mr-2"  wire:click="removeProduit({{ $index }})">
                                         <i class="nav-icon i-Close-Window font-weight-bold"></i>
                                     </a>
                                 </td>
