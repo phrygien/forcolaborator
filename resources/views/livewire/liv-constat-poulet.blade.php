@@ -108,7 +108,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($constats as $constat)
+                                    @forelse ($constats as $constat)
                                     <tr>
                                         <td>{{ $constat->description }}</td>
                                         <td>{{ $constat->type }}</td>
@@ -129,7 +129,13 @@
                                             </button>
                                         </td>
                                     </tr>                                  
-                                    @endforeach
+                                    @empty
+                                    <tr>
+                                        <td colspan="7" class="text-center">
+                                            <span class="text-20 text-center text-secondary">pas de donnée pour le moment !</span>
+                                        </td>
+                                    </tr>                                
+                                    @endforelse
                                 </tbody>
                             </table>
                         </div>

@@ -99,7 +99,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($clients as $client)
+                            @forelse ($clients as $client)
                             <tr>
                                 <td>{{ $client->nom }}</td>
                                 <td>{{ $client->raison_sociale }}</td>
@@ -133,7 +133,13 @@
                                     </button>
                                 </td>
                             </tr>                                  
-                            @endforeach
+                            @empty
+                            <tr>
+                                <td colspan="8" class="text-center">
+                                    <span class="text-20 text-center text-secondary">pas de donnée pour le moment !</span>
+                                </td>
+                            </tr>                                
+                            @endforelse
                         </tbody>
                     </table>
                 </div>

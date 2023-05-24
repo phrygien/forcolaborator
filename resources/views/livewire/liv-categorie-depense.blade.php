@@ -107,7 +107,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($types as $type)
+                            @forelse ($types as $type)
                             <tr>
                                 <td>{{ $type->categorie }}</td>
                                 <td>{{ $type->commentaire }}</td>
@@ -131,8 +131,14 @@
                                         <i class="nav-icon i-Close-Window font-weight-bold"></i>
                                     </button>
                                 </td>
-                            </tr>                                  
-                            @endforeach
+                            </tr> 
+                            @empty
+                            <tr>
+                                <td colspan="5" class="text-center">
+                                    <span class="text-20 text-center text-secondary">pas de donnée pour le moment !</span>
+                                </td>
+                            </tr>                                
+                            @endforelse                                 
                         </tbody>
                     </table>
                 </div>

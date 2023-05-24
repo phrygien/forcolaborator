@@ -112,7 +112,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($sites as $site)
+                            @forelse ($sites as $site)
                             <tr>
                                 <td>{{ $site->site }}</td>
                                 <td>{{ $site->adresse }}</td>
@@ -138,8 +138,14 @@
                                         </svg>
                                     </button>
                                 </td>
-                            </tr>                                  
-                            @endforeach
+                            </tr> 
+                            @empty
+                            <tr>
+                                <td colspan="5" class="text-center">
+                                    <span class="text-20 text-center text-secondary">pas de donnée pour le moment !</span>
+                                </td>
+                            </tr>                                
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
