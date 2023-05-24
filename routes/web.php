@@ -8,6 +8,7 @@ use App\Http\Controllers\Entree\CycleController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LibelledepenseController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PermissionController;
@@ -46,6 +47,7 @@ Route::group(['prefix' => 'parametrages', 'middleware' => 'auth'], function(){
     Route::get('categorie_depense', [CategoriedepenseController::class, 'page'])->name('parametrages.categorie_depenses');
     Route::get('type_depense', [TypedepenseController::class, 'page'])->name('parametrages.type_depenses');
     Route::get('type_sortie', [TypesortieController::class, 'page'])->name('parametrages.type_sorties');
+    Route::get('libelle_depense', [LibelledepenseController::class, 'page'])->name('parametrages.libelle_depense');
 });
 
 Route::group(['prefix' => 'gestion_entree', 'middleware' => 'auth'], function(){
