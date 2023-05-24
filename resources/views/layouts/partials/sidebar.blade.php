@@ -283,7 +283,7 @@
 			</li>
 			<li class="nav-item">
 				<a href="{{ route('parametrages.libelle_depense')}}">
-					<i class="nav-icon i-Remove-Basket"></i>
+					<i class="nav-icon i-Financial"></i>
 					<span class="item-name">{{ __('Libelle depense')}}</span>
 				</a>
 			</li>
