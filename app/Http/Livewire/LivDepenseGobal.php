@@ -38,6 +38,8 @@ class LivDepenseGobal extends Component
     protected $paginationTheme = 'bootstrap';
     public $notification;
 
+    public $createDetail = false;
+
     public function mount()
     {
         $this->date_entree = date('Y-m-d');
@@ -69,6 +71,13 @@ class LivDepenseGobal extends Component
         $this->afficherListe = false;
         $this->isLoading = false;
         $this->creatBtn = false;
+    }
+
+    public function formUtilisationDepense()
+    {
+        $this->isLoading =true;
+        $this->createDetail = true;
+        $this->isLoading = false;
     }
 
     public function resetFormDepense()

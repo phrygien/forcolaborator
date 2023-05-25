@@ -78,9 +78,9 @@
                                 enregistrement...
                             </span>
                         </button>
-                        <button class="btn btn-success btn-rounded mr-3" wire:click.prevent="saveDepense()" wire:loading.attr="disabled" wire:target="saveDepense()">
-                            <span wire:loading.remove wire:target="saveDepense"><i class="nav-icon i-Yes font-weight-bold"></i> Enregistrer et detailler</span>
-                            <span wire:loading wire:target="saveDepense">
+                        <button class="btn btn-success btn-rounded mr-3" wire:click.prevent="formUtilisationDepense" wire:loading.attr="disabled" wire:target="formUtilisationDepense">
+                            <span wire:loading.remove wire:target="formUtilisationDepense"><i class="nav-icon i-Yes font-weight-bold"></i> Enregistrer et detailler</span>
+                            <span wire:loading wire:target="formUtilisationDepense">
                                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                 enregistrement...
                             </span>
