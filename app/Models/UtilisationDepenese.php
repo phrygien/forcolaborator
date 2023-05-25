@@ -15,7 +15,7 @@ class UtilisationDepenese extends Model
         'date_utilisation',
         'qte',
         'montant',
-        'utilisation_cicble',
+        'utilisation_cible',
         'id_depense_brut',  
     ];
 }
