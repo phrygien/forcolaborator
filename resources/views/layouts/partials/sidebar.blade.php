@@ -363,7 +363,7 @@
 				</a>
 			</li>
 			<li class="nav-item">
-				<a href="">
+				<a href="{{ route('gestion_depense.utilisation_depenses')}}">
 					<i class="nav-icon i-Wallet"></i>
 					<span class="item-name">Utilisation depense</span>
 				</a>
