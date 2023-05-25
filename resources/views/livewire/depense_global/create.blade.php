@@ -78,6 +78,13 @@
                                 enregistrement...
                             </span>
                         </button>
+                        <button class="btn btn-success btn-rounded mr-3" wire:click.prevent="saveDepense()" wire:loading.attr="disabled" wire:target="saveDepense()">
+                            <span wire:loading.remove wire:target="saveDepense"><i class="nav-icon i-Yes font-weight-bold"></i> Enregistrer et detailler</span>
+                            <span wire:loading wire:target="saveDepense">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                enregistrement...
+                            </span>
+                        </button>
                         <button class="btn btn-danger btn-rounded mr-3" wire:click.prevent="resetFormDepense()" wire:loading.attr="disabled" wire:target="resetFormDepense()">
                             <span wire:loading.remove wire:target="resresetFormDepenseetFormBatiment"><i class="nav-icon i-Repeat-3 font-weight-bold"></i> Reset</span>
                             <span wire:loading wire:target="resetFormDepense">
