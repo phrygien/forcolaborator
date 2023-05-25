@@ -37,6 +37,13 @@
 				</a>
 				<div class="triangle"></div>
 			</li>
+			<li class="nav-item" data-item="gdepense">
+				<a class="nav-item-hold" href="#">
+					<i class="nav-icon i-Financial"></i>
+					<span class="nav-text">Gestion depense</span>
+				</a>
+				<div class="triangle"></div>
+			</li>
 
 			<li class="nav-item" data-item="sessions">
 				<a class="nav-item-hold" href="#">
@@ -347,6 +354,22 @@
 			</li>
 		</ul>
 		{{-- fin gestion client--}}
+		{{-- debut gestion depense --}}
+		<ul class="childNav" data-parent="gdepense">
+			<li class="nav-item">
+				<a href="{{ route('gestion_depense.depense_globales')}}">
+					<i class="nav-icon i-Money-Bag"></i>
+					<span class="item-name">Depense globale</span>
+				</a>
+			</li>
+			<li class="nav-item">
+				<a href="">
+					<i class="nav-icon i-Wallet"></i>
+					<span class="item-name">Utilisation depense</span>
+				</a>
+			</li>
+		</ul>
+		{{-- fin gestion depense--}}
 		<ul class="childNav" data-parent="sessions">
 			<li class="nav-item">
 				<a href="#">
