@@ -17,5 +17,4 @@
           </nav>
           @livewire('liv-utilisation-depense')
 </div>
-
 </x-ferme-layout>
