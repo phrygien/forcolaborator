@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BatimentController;
 use App\Http\Controllers\CategoriedepenseController;
+use App\Http\Controllers\Depense\DepenseglobalContoller;
 use App\Http\Controllers\Entree\ConstatoeufController;
 use App\Http\Controllers\Entree\ConstatpouletController;
 use App\Http\Controllers\Entree\CycleController;
@@ -66,4 +67,8 @@ Route::group(['prefix' => 'gestion_sortie', 'middleware' => 'auth'], function(){
 
 Route::group(['prefix' => 'gestion', 'middleware' => 'auth'], function(){
     Route::get('client', [ClientController::class, 'page'])->name('gestion.clients');
+});
+
+Route::group(['prefix' => 'gestion_depense', 'middleware' => 'auth'], function(){
+    Route::get('depense_globale', [DepenseglobalContoller::class, 'page'])->name('gestion_depense.depense_globales');
 });
