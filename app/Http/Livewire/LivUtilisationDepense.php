@@ -3,10 +3,12 @@
 namespace App\Http\Livewire;
 
 use App\Models\DepenseGlobal;
+use App\Models\TypeDepense;
 use App\Models\UtilisationDepenese;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Symfony\Component\VarDumper\VarDumper;
 
 class LivUtilisationDepense extends Component
 {
@@ -15,9 +17,11 @@ class LivUtilisationDepense extends Component
     
     public $createUtilisation = false, $editUtilisation = false;
 
-    public $utilisation_id, $date_utilisation, $qte, $montant, $utilisation_cible, $id_depense_brut;
-
-    public $depenseGlobals;
+    public $utilisation_id, $date_utilisation, $qte_brut, $qte, $montant, $utilisation_cible, $id_depense_brut, $montant_brut;
+    public $selectedType = '';
+    public $depenseglobals;
+    public $typeDepenseActif;
+    public $idLibelleDepense;
 
     public $confirmUpdate;
     public $recordToDelete;
@@ -28,7 +32,48 @@ class LivUtilisationDepense extends Component
 
     public function mount()
     {
-        $this->depenseGlobals = DepenseGlobal::all();
+        $this->typeDepenseActif = TypeDepense::where('actif', 1)->get();
+    }
+
+    public function updateSelectedType()
+    {
+        $this->resetPage();
+        $this->resetFormUtilisation();
+    }
+
+    public function getDepense()
+    {
+        $depenses = [];
+        if ($this->selectedType) {
+            $depenses = DepenseGlobal::where('id_type_depense', $this->selectedType)
+            ->get();
+        }
+
+        return $depenses;
+    }
+
+    public function updatedIdDepenseBrut($value)
+    {
+        $depense = DepenseGlobal::findOrFail($value);
+
+        $this->montant_brut = $depense->montant_total;
+        $this->qte_brut = $depense->qte;
+
+        $this->calculateMontant();
+    }
+
+    public function updatedQte()
+    {
+        $this->calculateMontant();
+    }
+
+    public function calculateMontant()
+    {
+        if (is_numeric($this->qte)) {
+        $this->montant = $this->qte * ($this->montant_brut / $this->qte_brut);
+        }else{
+            $this->montant = 0;
+        }
     }
 
     public function render()
@@ -41,8 +86,10 @@ class LivUtilisationDepense extends Component
                         ->orderBy('utilisation_depenses.date_utilisation', 'desc')
                         ->paginate(10);
 
+        $depenses = $this->getDepense();
         return view('livewire.liv-utilisation-depense', [
-            'utilisations' => $utilisations
+            'utilisations' => $utilisations,
+            'depenses' => $depenses,
         ]);
     }
 
