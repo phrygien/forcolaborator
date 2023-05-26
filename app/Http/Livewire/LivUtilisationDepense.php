@@ -208,7 +208,7 @@ class LivUtilisationDepense extends Component
         $this->montant = $utilisation->montant;
         $this->utilisation_cible = $utilisation->utilisation_cible;
         $this->id_depense_brut = $utilisation->id_depense_brut;
-
+        //if($this->utilisation_cible == '')
         $this->editUtilisation = true;
         $this->createUtilisation = false;
         $this->creatBtn = false;
@@ -268,7 +268,7 @@ class LivUtilisationDepense extends Component
     {
         $this->confirmUpdate = false;
         $this->editUtilisation = false;
-        $this->resetFormDepense();
+        $this->resetFormUtilisation();
         $this->resetValidation();
         $this->creatBtn = true;
         $this->afficherListe = true;
