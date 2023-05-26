@@ -16,6 +16,10 @@
         @include('livewire.depense_global.create')
     @endif
 
+    @if($createDetail)
+        @livewire('liv-create-detail')
+    @endif
+
     @if($editDepense)
         @include('livewire.depense_global.edit')
     @endif
@@ -111,7 +115,7 @@
                                 <td>{{ $depense->libelle }}</td>
                                 <td>{{ $depense->type }}</td>
                                 <td>{{ number_format($depense->qte, 0, ',', ' ') }}</td>
-                                <td>{{ number_format($depense->montant_total, 0, ',', ' ') }}</td>
+                                <td>{{ number_format($depense->montant_total, 0, ',', ' ') }} ( Ar )</td>
                                 <td>{{ get_formatted_date($depense->date_entree, "d / M / Y") }}</td>
                                 <td>{{ get_formatted_date($depense->created_at, "d / M / Y H:m:s") }}</td>
                                 <td>{{ get_formatted_date($depense->updated_at, "d / M / Y H:m:s") }}</td>

@@ -69,36 +69,37 @@
                         <label for="firstName2">{{ __('Utilisateur ID')}}</label>
                         <input type="text" wire:model.defer="id_utilisateur" class="form-control form-control-rounded">
                     </div>
-
-                    <div class="col-md-12">
-                        <button class="btn btn-primary btn-rounded mr-3" wire:click.prevent="saveDepense()" wire:loading.attr="disabled" wire:target="saveDepense()">
-                            <span wire:loading.remove wire:target="saveDepense"><i class="nav-icon i-Yes font-weight-bold"></i> Enregistrer</span>
-                            <span wire:loading wire:target="saveDepense">
-                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                enregistrement...
-                            </span>
-                        </button>
-                        <button class="btn btn-success btn-rounded mr-3" wire:click.prevent="formUtilisationDepense" wire:loading.attr="disabled" wire:target="formUtilisationDepense">
-                            <span wire:loading.remove wire:target="formUtilisationDepense"><i class="nav-icon i-Yes font-weight-bold"></i> Enregistrer et detailler</span>
-                            <span wire:loading wire:target="formUtilisationDepense">
-                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                enregistrement...
-                            </span>
-                        </button>
-                        <button class="btn btn-danger btn-rounded mr-3" wire:click.prevent="resetFormDepense()" wire:loading.attr="disabled" wire:target="resetFormDepense()">
-                            <span wire:loading.remove wire:target="resresetFormDepenseetFormBatiment"><i class="nav-icon i-Repeat-3 font-weight-bold"></i> Reset</span>
-                            <span wire:loading wire:target="resetFormDepense">
-                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                reinitialisation...
-                            </span>
-                        </button>
-                        <button class="btn btn-secondary btn-rounded" wire:click.prevent="cancelCreate()" wire:loading.attr="disabled" wire:target="cancelCreate()">
+                    <div class="col-md-12 mt-3">
+                        <button class="float-right btn btn-secondary btn-rounded mr-2 " wire:click.prevent="cancelCreate()" wire:loading.attr="disabled" wire:target="cancelCreate()">
                             <span wire:loading.remove wire:target="cancelCreate"><i class="nav-icon i-Arrow-Back font-weight-bold"></i> Retour</span>
                             <span wire:loading wire:target="cancelCreate">
                                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                 annulation...
                             </span>
                         </button>
+                        <button class="float-right btn btn-success btn-rounded mr-3" wire:click.prevent="formUtilisationDepense" wire:loading.attr="disabled" wire:target="formUtilisationDepense">
+                            <span wire:loading.remove wire:target="formUtilisationDepense"><i class="nav-icon i-Yes font-weight-bold"></i> Enregistrer et detailler</span>
+                            <span wire:loading wire:target="formUtilisationDepense">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                enregistrement...
+                            </span>
+                        </button>
+                        <button class="float-right btn btn-danger btn-rounded mr-3" wire:click.prevent="resetFormDepense()" wire:loading.attr="disabled" wire:target="resetFormDepense()">
+                            <span wire:loading.remove wire:target="resresetFormDepenseetFormBatiment"><i class="nav-icon i-Repeat-3 font-weight-bold"></i> Reset</span>
+                            <span wire:loading wire:target="resetFormDepense">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                reinitialisation...
+                            </span>
+                        </button>
+
+                        <button class="float-right btn btn-primary btn-rounded mr-3" wire:click.prevent="saveDepense()" wire:loading.attr="disabled" wire:target="saveDepense()">
+                            <span wire:loading.remove wire:target="saveDepense"><i class="nav-icon i-Yes font-weight-bold"></i> Enregistrer</span>
+                            <span wire:loading wire:target="saveDepense">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                enregistrement...
+                            </span>
+                        </button>
+
                     </div>
                 </div>
             </form>

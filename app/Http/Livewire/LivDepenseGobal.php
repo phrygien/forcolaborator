@@ -24,11 +24,13 @@ class LivDepenseGobal extends Component
     public $createDepense = false, $editDepense= false;
 
     public $depense_id, $id_libelle_depense, $id_type_depense,
-    $date_entree, $qte, $id_utilisateur, $montant_total;
+    $date_entree, $qte, $id_utilisateur, $montant_total, $montant_brut, $montant, $qte_value, $qte_brut, $btn_disabled, $id_depense_brut,
+    $date_utilisation, $utilisation_cible;
     
     public $libelleDepenseActifs;
     public $typeDepenseActifs;
-
+    public $typeDepenseActif;
+    
     public $confirmUpdate;
 
     public $recordToDelete;
@@ -39,6 +41,10 @@ class LivDepenseGobal extends Component
     public $notification;
 
     public $createDetail = false;
+    // public $selectedType = '';
+    // public $choix_cycle = false;
+    // public $choix_site = false;
+    // public $cycles, $sites;
 
     public function mount()
     {
@@ -46,7 +52,92 @@ class LivDepenseGobal extends Component
         $this->libelleDepenseActifs = LibelleDepense::where('actif', 1)->get();
         $this->typeDepenseActifs = TypeDepense::where('actif', 1)->get();
         $this->id_utilisateur = Auth::user()->id;
+
+        // $this->typeDepenseActif = TypeDepense::where('actif', 1)->get();
+        // $this->cycles = Cycle::where('actif', 1)->get();
+        // $this->sites = Site::where('actif', 1)->get();
     }
+
+    // public function updateSelectedType($value)
+    // {
+    //     $this->resetPage();
+    //     $this->resetFormUtilisation();
+        
+    //     $cibles = [];
+
+    //     if($value ==6){
+    //     $cibles = DB::table('cycles')
+    //                 ->select('cycles.description as cible, cycles.id as id')
+    //                 ->get();
+    //     }
+
+    //     if($value ==7){
+    //         $cibles = DB::table('sites')
+    //         ->select('sites.name as cible, sites.id as id')
+    //         ->get();
+    //     }
+
+    //     return $cibles;
+    // }
+
+    // public function getDepense()
+    // {
+    //     $depenses = [];
+    //     if ($this->selectedType) {
+    //         $depenses = DepenseGlobal::where('id_type_depense', $this->selectedType)
+    //         ->get();
+    //     }
+
+    //     return $depenses;
+    // }
+
+    // public function updatedIdDepenseBrut($value)
+    // {
+    //     if($this->id_depense_brut){
+    //         $depense = DepenseGlobal::findOrFail($value);
+
+    //         $this->montant_brut = $depense->montant_total;
+    //         $this->qte_brut = $depense->qte;
+
+    //         $this->calculateMontant();
+
+    //         if($depense->id_type_depense == 6){
+    //             $this->choix_cycle = true;
+    //             $this->choix_site = false;
+    //         }
+
+    //         if($depense->id_type_depense == 7){
+    //             $this->choix_site = true;
+    //             $this->choix_cycle = false;
+    //         }
+    //     }
+    // }
+
+    // public function updatedQteValue()
+    // {
+    //     $this->calculateMontant();
+    //     $this->disponibilite();
+    // }
+
+    // public function calculateMontant()
+    // {
+    //     if (is_numeric($this->qte_value)) {
+    //     $this->montant = $this->qte_value * ($this->montant_brut / $this->qte_brut);
+    //     }else{
+    //         $this->montant = 0;
+    //     }
+    // }
+
+    // public function disponibilite()
+    // {
+    //     if($this->qte > $this->qte_brut)
+    //     {
+    //         session()->flash('error', 'La Qte d\'utilisation ne doit pas >  aux Qte brute'.' / '. 'Qte brute du depense est : '.$this->qte_brut);
+    //         $this->btn_disabled = 'disabled';
+    //     }else{
+    //         $this->btn_disabled = '';
+    //     }
+    // }
 
     public function render()
     {
@@ -58,27 +149,90 @@ class LivDepenseGobal extends Component
             ->orderBy('depense_globals.date_entree', 'desc')
             ->paginate(10);
 
+        // $depenses_globals = $this->getDepense();
         return view('livewire.liv-depense-gobal', [
             'depenses' => $depenses,
+            // 'depense_globals' => $depenses_globals,
         ]);
     }
 
+    // public function resetFormUtilisation()
+    // {
+    //     $this->date_utilisation = '';
+    //     $this->qte = '';
+    //     $this->qte_brut = '';
+    //     $this->montant_brut = '';
+    //     $this->id_depense_brut = '';
+    //     $this->montant = '';
+    //     $this->utilisation_cible = '';
+    //     $this->creatBtn = false;
+    //     $this->resetValidation();
+    // }
 
     public function formDepense()
     {
         $this->isLoading = true;
         $this->createDepense = true;
+        $this->createDetail = false;
         $this->afficherListe = false;
         $this->isLoading = false;
         $this->creatBtn = false;
     }
 
     public function formUtilisationDepense()
-    {
-        $this->isLoading =true;
-        $this->createDetail = true;
-        $this->isLoading = false;
+{
+    $this->isLoading = true;
+    //$this->createDepense = false;
+    $data = $this->validate([
+        'id_libelle_depense' => 'required|integer',
+        'id_type_depense' => 'required|integer',
+        'qte' => 'required|numeric',
+        'montant_total' => 'required|numeric',
+        'date_entree' => 'required|date',
+        'id_utilisateur' => 'nullable',
+    ]);
+
+    try {
+            DepenseGlobal::create($data);
+            $this->createDetail = true;
+            $this->createDepense = false;
+            $this->resetFormDepense();
+            $this->resetValidation();
+            $this->isLoading = false;
+            $this->notification = true;
+            session()->flash('message', 'Dépense globale bien enregistrée!');
+    } catch (\Exception $e) {
+        return $e->getMessage();
     }
+}
+
+
+    // public function formUtilisationDepense()
+    // {
+    //     $this->isLoading =true;
+    //     $this->createDepense = false;
+    //     $data = $this->validate([
+    //         'id_libelle_depense' => 'required|integer',
+    //         'id_type_depense' => 'required|integer',
+    //         'qte' => 'required|numeric',
+    //         'montant_total' => 'required|numeric',
+    //         'date_entree' => 'required|date',
+    //         'id_utilisateur' => 'nullable',
+    //     ]);
+
+    //     try{
+    //     DepenseGlobal::create($data);
+    //     $this->resetFormDepense();
+    //     $this->resetValidation();
+    //     $this->isLoading = false;
+    //     $this->notification = true;
+    //     session()->flash('message', 'Depense globale bien enregistré!');
+    //     $this->createDetail = true;
+        
+    //     }catch(\Exception $e){
+    //         return $e->getMessage();
+    //     }
+    // }
 
     public function resetFormDepense()
     {

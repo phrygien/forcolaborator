@@ -13,7 +13,6 @@
     <link rel="stylesheet" href="{{ asset('assets/styles/vendor/pickadate/classic.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/styles/vendor/pickadate/classic.date.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/styles/css/spiner.css')}}">
-
 	@livewireStyles
     @stack('styles')
 	
@@ -26,7 +25,6 @@
     <script src="{{ asset('assets/js/vendor/pickadate/picker.js') }}"></script>
     <script src="{{ asset('assets/js/vendor/pickadate/picker.date.js') }}"></script>
     <script src="{{ asset('assets/js/form.basic.script.js') }}"></script>
-
     <script src="{{ asset('assets/js/es5/echart.options.min.js') }}"></script>
     <script src="{{ asset('assets/js/es5/dashboard.v1.script.min.js') }}"></script>
     <script src="{{ asset('assets/js/es5/script.min.js') }}"></script>
@@ -321,6 +319,11 @@
 	@livewireScripts
     @stack('scripts')
 
+    <script>
+        $(document).ready(function() {
+            $('.js-example-basic-single').select2();
+        });
+    </script>
 </body>
 
 </html>
