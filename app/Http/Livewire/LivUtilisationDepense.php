@@ -29,7 +29,7 @@ class LivUtilisationDepense extends Component
     public $creatBtn = true;
     protected $paginationTheme = 'bootstrap';
     public $notification;
-
+    public $btn_disabled = '';
     public function mount()
     {
         $this->typeDepenseActif = TypeDepense::where('actif', 1)->get();
@@ -65,6 +65,7 @@ class LivUtilisationDepense extends Component
     public function updatedQte()
     {
         $this->calculateMontant();
+        $this->disponibilite();
     }
 
     public function calculateMontant()
@@ -73,6 +74,17 @@ class LivUtilisationDepense extends Component
         $this->montant = $this->qte * ($this->montant_brut / $this->qte_brut);
         }else{
             $this->montant = 0;
+        }
+    }
+
+    public function disponibilite()
+    {
+        if($this->qte > $this->qte_brut)
+        {
+            session()->flash('error', 'La Qte d\'utilisation ne doit pas >  aux Qte brute'.' / '. 'Qte brute du depense est : '.$this->qte_brut);
+            $this->btn_disabled = 'disabled';
+        }else{
+            $this->btn_disabled = '';
         }
     }
 
@@ -106,6 +118,8 @@ class LivUtilisationDepense extends Component
     {
         $this->date_utilisation = '';
         $this->qte = '';
+        $this->qte_brut = '';
+        $this->montant_brut = '';
         $this->id_depense_brut = '';
         $this->montant = '';
         $this->utilisation_cible = '';

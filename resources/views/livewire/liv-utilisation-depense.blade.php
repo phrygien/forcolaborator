@@ -113,8 +113,8 @@
                                 <td>{{ number_format($utilisation->qte, 0, ',', ' ') }}</td>
                                 <td>{{ number_format($utilisation->montant, 0, ',', ' ') }}</td>
                                 <td>{{ get_formatted_date($utilisation->date_utilisation, "d / M / Y") }}</td>
-                                <td>{{ get_formatted_date($depense->created_at, "d / M / Y H:m:s") }}</td>
-                                <td>{{ get_formatted_date($depense->updated_at, "d / M / Y H:m:s") }}</td>
+                                <td>{{ get_formatted_date($utilisation->created_at, "d / M / Y H:m:s") }}</td>
+                                <td>{{ get_formatted_date($utilisation->updated_at, "d / M / Y H:m:s") }}</td>
                                 <td>
                                     <button wire:click="editDepense({{$utilisation->id }})" wire:loading.attr="disabled" wire:target="editDepense({{$utilisation->id }})" class="btn btn-raised btn-rounded btn-raised-primary">
                                         <span wire:loading.remove wire:target="editDepense({{$utilisation->id }})"><i class="nav-icon i-Pen-2 font-weight-bold"></i></span>

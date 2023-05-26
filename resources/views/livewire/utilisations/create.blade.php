@@ -6,6 +6,20 @@
                 <div class="row">
 
                     <div class="col-md-6 form-group mb-3">
+                        <label for="picker1">{{ __('Utilisation cible')}}</label>
+                        <select wire:model.defer="utilisation_cible" class="form-control form-control-rounded">
+                            <option>Selectioner un utilisation cible</option>
+                            <option value="1">Actif</option>
+                            <option value="2">Inactif</option>
+                        </select>
+                        @error('utilisation_cible') 
+                        <div class="alert alert-danger" role="alert">
+                            {{ $message}}
+                        </div>
+                        @enderror
+                    </div>
+
+                    <div class="col-md-6 form-group mb-3">
                         <label for="picker1">{{ __('Type depense')}}</label>
                         <select wire:model="selectedType" class="form-control form-control-rounded">
                             <option value="">Choisir un type de dépense</option>
@@ -63,6 +77,11 @@
                             {{ $message}}
                         </div>
                         @enderror
+                        @if (session()->has('error'))
+                        <div class="alert alert-warning border-info" role="alert">
+                            {{ session('error')}}
+                        </div>
+                        @endif
                     </div>
 
                     <div class="col-md-6 form-group mb-3">
@@ -77,7 +96,7 @@
 
                     <div class="col-md-6 form-group mb-3">
                         <label for="firstName2">{{ __('Date utilisation')}}</label>
-                        <input type="date" wire:model="date_utilisation" disabled class="disable form-control form-control-rounded">
+                        <input type="date" wire:model="date_utilisation" class="form-control form-control-rounded">
                         @error('date_utilisation') 
                         <div class="alert alert-danger" role="alert">
                             {{ $message}}
@@ -86,17 +105,17 @@
                     </div>
 
                     <div class="col-md-12">
-                        <button class="btn btn-primary btn-rounded mr-3" wire:click.prevent="saveExistSortie()" wire:loading.attr="disabled" wire:target="saveExistSortie()">
-                            <span wire:loading.remove wire:target="saveExistSortie"><i class="nav-icon i-Yes font-weight-bold"></i> Enregistrer</span>
-                            <span wire:loading wire:target="saveExistSortie">
+                        <button {{ $btn_disabled }} class="btn btn-primary btn-rounded mr-3" wire:click.prevent="saveUtilisation()" wire:loading.attr="disabled" wire:target="saveUtilisation()">
+                            <span wire:loading.remove wire:target="saveUtilisation"><i class="nav-icon i-Yes font-weight-bold"></i> Enregistrer</span>
+                            <span wire:loading wire:target="saveUtilisation">
                                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                 enregistrement...
                             </span>
                         </button>
 
-                        <button class="btn btn-danger btn-rounded mr-3" wire:click.prevent="resetFormSortie()" wire:loading.attr="disabled" wire:target="resetFormSortie()">
-                            <span wire:loading.remove wire:target="resetFormSortie"><i class="nav-icon i-Repeat-3 font-weight-bold"></i> Reinitialiser</span>
-                            <span wire:loading wire:target="resetFormSortie">
+                        <button class="btn btn-danger btn-rounded mr-3" wire:click.prevent="resetFormUtilisation()" wire:loading.attr="disabled" wire:target="resetFormUtilisation()">
+                            <span wire:loading.remove wire:target="resetFormUtilisation"><i class="nav-icon i-Repeat-3 font-weight-bold"></i> Reinitialiser</span>
+                            <span wire:loading wire:target="resetFormUtilisation">
                                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                 reinitialisation...
                             </span>
