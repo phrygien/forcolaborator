@@ -2,7 +2,9 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\Cycle;
 use App\Models\DepenseGlobal;
+use App\Models\Site;
 use App\Models\TypeDepense;
 use App\Models\UtilisationDepenese;
 use Illuminate\Support\Facades\DB;
@@ -30,15 +32,38 @@ class LivUtilisationDepense extends Component
     protected $paginationTheme = 'bootstrap';
     public $notification;
     public $btn_disabled = '';
+
+    public $choix_cycle = false;
+    public $choix_site = false;
+    public $cycles, $sites;
+
     public function mount()
     {
         $this->typeDepenseActif = TypeDepense::where('actif', 1)->get();
+        $this->cycles = Cycle::where('actif', 1)->get();
+        $this->sites = Site::where('actif', 1)->get();
     }
 
-    public function updateSelectedType()
+    public function updateSelectedType($value)
     {
         $this->resetPage();
         $this->resetFormUtilisation();
+        
+        $cibles = [];
+
+        if($value ==6){
+        $cibles = DB::table('cycles')
+                    ->select('cycles.description as cible, cycles.id as id')
+                    ->get();
+        }
+
+        if($value ==7){
+            $cibles = DB::table('sites')
+            ->select('sites.name as cible, sites.id as id')
+            ->get();
+        }
+
+        return $cibles;
     }
 
     public function getDepense()
@@ -54,12 +79,24 @@ class LivUtilisationDepense extends Component
 
     public function updatedIdDepenseBrut($value)
     {
-        $depense = DepenseGlobal::findOrFail($value);
+        if($this->id_depense_brut){
+            $depense = DepenseGlobal::findOrFail($value);
 
-        $this->montant_brut = $depense->montant_total;
-        $this->qte_brut = $depense->qte;
+            $this->montant_brut = $depense->montant_total;
+            $this->qte_brut = $depense->qte;
 
-        $this->calculateMontant();
+            $this->calculateMontant();
+
+            if($depense->id_type_depense == 6){
+                $this->choix_cycle = true;
+                $this->choix_site = false;
+            }
+
+            if($depense->id_type_depense == 7){
+                $this->choix_site = true;
+                $this->choix_cycle = false;
+            }
+        }
     }
 
     public function updatedQte()
@@ -99,6 +136,7 @@ class LivUtilisationDepense extends Component
                         ->paginate(10);
 
         $depenses = $this->getDepense();
+
         return view('livewire.liv-utilisation-depense', [
             'utilisations' => $utilisations,
             'depenses' => $depenses,

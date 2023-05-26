@@ -61,7 +61,7 @@
                     <div class="centered">
                     <div class="alert alert-warning text-center">
                         <strong class="text-black">Suppression utilisation dépense !</strong>
-                        <p class="text-black">Vous etes sure de supprimer l'utilisation depense de : {{$recordToDelete->date_utilisation }}?</p>
+                        <p class="text-black">Vous etes sure de supprimer l'utilisation depense du : {{ get_formatted_date($recordToDelete->date_utilisation, 'd / M / Y') }}?</p>
                         @if (session()->has('error'))
                         <div class="alert alert-warning border-danger" role="alert">
                             <i class="icon-info1"></i>{{ session('error')}}
@@ -99,6 +99,7 @@
                                 <th scope="col">{{ __('Type dépense')}}</th>
                                 <th scope="col">{{ __('Quantité utilisé')}}</th>
                                 <th scope="col">{{ __('Montant total')}}</th>
+                                <th scope="col">{{ __('Utilisation cible')}}</th>
                                 <th scope="col">{{ __('Date utilisation')}}</th>
                                 <th scope="col">{{ __('Date création')}}</th>
                                 <th scope="col">{{ __('Dernier modification')}}</th>
@@ -112,14 +113,15 @@
                                 <td>{{ $utilisation->type }}</td>
                                 <td>{{ number_format($utilisation->qte, 0, ',', ' ') }}</td>
                                 <td>{{ number_format($utilisation->montant, 0, ',', ' ') }}</td>
+                                <td>{{ $utilisation->utilisation_cible }}</td>
                                 <td>{{ get_formatted_date($utilisation->date_utilisation, "d / M / Y") }}</td>
                                 <td>{{ get_formatted_date($utilisation->created_at, "d / M / Y H:m:s") }}</td>
                                 <td>{{ get_formatted_date($utilisation->updated_at, "d / M / Y H:m:s") }}</td>
                                 <td>
-                                    <button wire:click="editDepense({{$utilisation->id }})" wire:loading.attr="disabled" wire:target="editDepense({{$utilisation->id }})" class="btn btn-raised btn-rounded btn-raised-primary">
-                                        <span wire:loading.remove wire:target="editDepense({{$utilisation->id }})"><i class="nav-icon i-Pen-2 font-weight-bold"></i></span>
-                                        <span wire:loading wire:target="editDepense({{$utilisation->id }})">
-                                            <svg wire:loading wire:target="editDepense({{$utilisation->id }})"  class="spinner" viewBox="0 0 50 50">
+                                    <button wire:click="editUtilisation({{$utilisation->id }})" wire:loading.attr="disabled" wire:target="editUtilisation({{$utilisation->id }})" class="btn btn-raised btn-rounded btn-raised-primary">
+                                        <span wire:loading.remove wire:target="editUtilisation({{$utilisation->id }})"><i class="nav-icon i-Pen-2 font-weight-bold"></i></span>
+                                        <span wire:loading wire:target="editUtilisation({{$utilisation->id }})">
+                                            <svg wire:loading wire:target="editUtilisation({{$utilisation->id }})"  class="spinner" viewBox="0 0 50 50">
                                                 <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="4"></circle>
                                             </svg>
                                         </span>

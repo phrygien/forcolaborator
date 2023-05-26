@@ -4,21 +4,6 @@
             <div class="card-title mb-3">{{ __('Création utilisation dépense')}}</div>
             <form>
                 <div class="row">
-
-                    <div class="col-md-6 form-group mb-3">
-                        <label for="picker1">{{ __('Utilisation cible')}}</label>
-                        <select wire:model.defer="utilisation_cible" class="form-control form-control-rounded">
-                            <option>Selectioner un utilisation cible</option>
-                            <option value="1">Actif</option>
-                            <option value="2">Inactif</option>
-                        </select>
-                        @error('utilisation_cible') 
-                        <div class="alert alert-danger" role="alert">
-                            {{ $message}}
-                        </div>
-                        @enderror
-                    </div>
-
                     <div class="col-md-6 form-group mb-3">
                         <label for="picker1">{{ __('Type depense')}}</label>
                         <select wire:model="selectedType" class="form-control form-control-rounded">
@@ -49,6 +34,31 @@
                         @enderror
                     </div>
                     
+                    <div class="col-md-6 form-group mb-3">
+                        <label for="picker1">{{ __('Utilisation cible')}}</label>
+                        <select wire:model.defer="utilisation_cible" class="form-control form-control-rounded">
+                            @if($choix_cycle)
+                                <option>Selectioner un cycle</option>
+                                @foreach($cycles as $cycle)
+                                <option value="{{ $cycle->description }}">{{ $cycle->description }}</option>
+                                @endforeach
+                            @endif
+
+                            @if($choix_site)
+                            <option>Selectioner un site</option>
+                            @foreach($sites as $site)
+                            <option value="{{ $site->site }}">{{ $site->site }}</option>
+                            @endforeach
+                            @endif
+                        </select>
+
+                        @error('utilisation_cible') 
+                        <div class="alert alert-danger" role="alert">
+                            {{ $message}}
+                        </div>
+                        @enderror
+                    </div>
+
                     <div class="col-md-6 form-group mb-3">
                         <label for="firstName2">{{ __('Montant brut')}}</label>
                         <input type="number" wire:model="montant_brut" readonly class="form-control form-control-rounded" id="firstName2" placeholder="">
