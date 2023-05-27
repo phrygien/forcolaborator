@@ -19,21 +19,21 @@
 			<li class="nav-item" data-item="gentree">
 				<a class="nav-item-hold" href="#">
 					<i class="nav-icon i-Cash-register-2"></i>
-					<span class="nav-text">G.Entrée</span>
+					<span class="nav-text">Gestion Entrée</span>
 				</a>
 				<div class="triangle"></div>
 			</li>
 			<li class="nav-item" data-item="gclient">
 				<a class="nav-item-hold" href="#">
 					<i class="nav-icon i-Business-ManWoman"></i>
-					<span class="nav-text">G.Clients</span>
+					<span class="nav-text">Gestion Clients</span>
 				</a>
 				<div class="triangle"></div>
 			</li>
 			<li class="nav-item" data-item="gsortie">
 				<a class="nav-item-hold" href="#">
 					<i class="nav-icon i-Remove-Cart"></i>
-					<span class="nav-text">G.Sortie</span>
+					<span class="nav-text">Gestion Sortie</span>
 				</a>
 				<div class="triangle"></div>
 			</li>
