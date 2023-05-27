@@ -132,7 +132,7 @@ class LivUtilisationDepense extends Component
                         ->join('libelle_depenses', 'libelle_depenses.id', 'depense_globals.id_libelle_depense')
                         ->join('type_depenses', 'type_depenses.id', 'depense_globals.id_type_depense')
                         ->select('utilisation_depenses.*','libelle_depenses.libelle','type_depenses.type')
-                        ->orderBy('utilisation_depenses.date_utilisation', 'desc')
+                        ->orderByDesc('utilisation_depenses.date_utilisation', 'desc')
                         ->paginate(10);
 
         $depenses = $this->getDepense();
@@ -242,7 +242,7 @@ class LivUtilisationDepense extends Component
                 'qte' => $this->qte,
                 'montant' => $this->montant,
                 'utilisation_cible' => $this->utilisation_cible,
-                'date_entree' => $this->date_entree,
+                //'date_entree' => $this->date_entree,
                 'id_depense_brut' => $this->id_depense_brut,
             ]);
 
