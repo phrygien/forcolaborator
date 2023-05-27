@@ -161,6 +161,7 @@ class LivUtilisationDepense extends Component
         $this->id_depense_brut = '';
         $this->montant = '';
         $this->utilisation_cible = '';
+        $this->selectedType = '';
         $this->creatBtn = false;
         $this->resetValidation();
     }
@@ -173,7 +174,10 @@ class LivUtilisationDepense extends Component
             'qte' => 'required|numeric',
             'montant' => 'required|numeric',
             'utilisation_cible' => 'required',
-            'id_depense_brut' => 'required|integer'
+            'id_depense_brut' => 'required|integer',
+            'selectedType' => 'required',
+            'montant_brut' => 'required|numeric',
+            'qte_brut' => 'required|numeric'
         ]);
 
         try{

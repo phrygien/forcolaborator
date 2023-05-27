@@ -12,7 +12,7 @@
                                 <option value="{{ $typedepense->id }}">{{ $typedepense->type }}</option>
                             @endforeach
                         </select>
-                        @error('selectedSite') 
+                        @error('selectedType') 
                         <div class="alert alert-danger" role="alert">
                             {{ $message}}
                         </div>
