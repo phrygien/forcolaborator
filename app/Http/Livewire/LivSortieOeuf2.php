@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use App\Models\ConstatOeuf;
+use App\Models\SortieOeuf;
 use Livewire\Component;
 use PHPUnit\TextUI\XmlConfiguration\Constant;
 
@@ -73,7 +74,7 @@ class LivSortieOeuf2 extends Component
     //     // Valider les données du formulaire ici
 
     //     // Enregistrer la commande dans la table "commandes"
-    //     $commandeId = \App\Models\Commande::create([
+    //     $commandeId = SortieOeuf::create([
     //         'nom_client' => $this->commande['nom_client'],
     //         'adresse' => $this->commande['adresse'],
     //         'date_commande' => $this->commande['date_commande'],
