@@ -10,7 +10,6 @@ class DonneejourConstantOeuf extends Component
 {
     public $selectedDate;
     public $totalDonneesJournalieres = [];
-
     public function mount()
     {
         $this->selectedDate = today()->toDateString();
