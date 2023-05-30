@@ -20,6 +20,7 @@ class LivUtilisationDepense extends Component
     public $createUtilisation = false, $editUtilisation = false;
 
     public $utilisation_id, $date_utilisation, $qte_brut, $qte, $montant, $utilisation_cible, $id_depense_brut, $montant_brut;
+    public $edit_montant_brut, $edit_qte_brut;
     public $selectedType = '';
     public $depenseglobals;
     public $typeDepenseActif;
@@ -116,7 +117,7 @@ class LivUtilisationDepense extends Component
 
     public function disponibilite()
     {
-        if($this->qte > $this->qte_brut)
+        if(is_numeric($this->qte) > is_numeric($this->qte_brut))
         {
             session()->flash('error', 'La Qte d\'utilisation ne doit pas >  aux Qte brute'.' / '. 'Qte brute du depense est : '.$this->qte_brut);
             $this->btn_disabled = 'disabled';
@@ -212,6 +213,15 @@ class LivUtilisationDepense extends Component
         $this->montant = $utilisation->montant;
         $this->utilisation_cible = $utilisation->utilisation_cible;
         $this->id_depense_brut = $utilisation->id_depense_brut;
+        
+        //avoir depense brute lié
+        $depenseBrutUtilise = DepenseGlobal::where('id', $utilisation->id_depense_brut)->first();
+        $this->montant_brut = $depenseBrutUtilise->montant_total;
+        $this->qte_brut = $depenseBrutUtilise->qte;
+
+        // avoir type de depense du depense brut utilisé
+        $typeDepenseBrut = TypeDepense::where('id', $depenseBrutUtilise->id_type_depense)->first();
+        $this->selectedType = $typeDepenseBrut->id; 
         //if($this->utilisation_cible == '')
         $this->editUtilisation = true;
         $this->createUtilisation = false;

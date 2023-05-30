@@ -114,8 +114,24 @@
                         @enderror
                     </div>
 
-                    <div class="col-md-12">
-                        <button {{ $btn_disabled }} class="btn btn-primary btn-rounded mr-3" wire:click.prevent="saveUtilisation()" wire:loading.attr="disabled" wire:target="saveUtilisation()">
+                    <div class="col-md-12 mt-4">
+                        <button class="float-right btn btn-secondary btn-rounded" wire:click.prevent="cancelCreate()" wire:loading.attr="disabled" wire:target="cancelCreate()">
+                            <span wire:loading.remove wire:target="cancelCreate"><i class="nav-icon i-Arrow-Back font-weight-bold"></i> Retour</span>
+                            <span wire:loading wire:target="cancelCreate">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                annulation...
+                            </span>
+                        </button>
+
+                        <button class="float-right btn btn-danger btn-rounded mr-3" wire:click.prevent="resetFormUtilisation()" wire:loading.attr="disabled" wire:target="resetFormUtilisation()">
+                            <span wire:loading.remove wire:target="resetFormUtilisation"><i class="nav-icon i-Repeat-3 font-weight-bold"></i> Reinitialiser</span>
+                            <span wire:loading wire:target="resetFormUtilisation">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                reinitialisation...
+                            </span>
+                        </button>
+
+                        <button {{ $btn_disabled }} class="float-right btn btn-primary btn-rounded mr-3" wire:click.prevent="saveUtilisation()" wire:loading.attr="disabled" wire:target="saveUtilisation()">
                             <span wire:loading.remove wire:target="saveUtilisation"><i class="nav-icon i-Yes font-weight-bold"></i> Enregistrer</span>
                             <span wire:loading wire:target="saveUtilisation">
                                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
@@ -123,20 +139,6 @@
                             </span>
                         </button>
 
-                        <button class="btn btn-danger btn-rounded mr-3" wire:click.prevent="resetFormUtilisation()" wire:loading.attr="disabled" wire:target="resetFormUtilisation()">
-                            <span wire:loading.remove wire:target="resetFormUtilisation"><i class="nav-icon i-Repeat-3 font-weight-bold"></i> Reinitialiser</span>
-                            <span wire:loading wire:target="resetFormUtilisation">
-                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                reinitialisation...
-                            </span>
-                        </button>
-                        <button class="btn btn-secondary btn-rounded" wire:click.prevent="cancelCreate()" wire:loading.attr="disabled" wire:target="cancelCreate()">
-                            <span wire:loading.remove wire:target="cancelCreate"><i class="nav-icon i-Arrow-Back font-weight-bold"></i> Retour</span>
-                            <span wire:loading wire:target="cancelCreate">
-                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                annulation...
-                            </span>
-                        </button>
                     </div>
                 </div>
             </form>
