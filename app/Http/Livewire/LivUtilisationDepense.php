@@ -109,7 +109,7 @@ class LivUtilisationDepense extends Component
     public function calculateMontant()
     {
         if (is_numeric($this->qte)) {
-        $this->montant = $this->qte * ($this->montant_brut / $this->qte_brut);
+            $this->montant = $this->qte * round( ($this->montant_brut / $this->qte_brut), 2);
         }else{
             $this->montant = 0;
         }
@@ -117,7 +117,7 @@ class LivUtilisationDepense extends Component
 
     public function disponibilite()
     {
-        if(is_numeric($this->qte) > is_numeric($this->qte_brut))
+        if($this->qte > $this->qte_brut)
         {
             session()->flash('error', 'La Qte d\'utilisation ne doit pas >  aux Qte brute'.' / '. 'Qte brute du depense est : '.$this->qte_brut);
             $this->btn_disabled = 'disabled';
