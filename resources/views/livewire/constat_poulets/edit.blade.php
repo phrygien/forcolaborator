@@ -20,9 +20,36 @@
                     </div>
 
                     <div class="col-md-6 form-group mb-3">
-                        <label for="firstName2">{{ __('Poids moyene')}}</label>
-                        <input type="number" wire:model.defer="poids_moyen" class="form-control form-control-rounded" id="firstName2" placeholder="">
-                        @error('poids_moyen') 
+                        <label for="firstName2">{{ __('Nombre poulets actuele')}}</label>
+                        <input type="number" readonly wire:model="nb" class="form-control form-control-rounded" id="firstName2" placeholder="">
+                        @error('nb') 
+                        <div class="alert alert-danger" role="alert">
+                            {{ $message}}
+                        </div>
+                        @enderror
+                    </div>
+
+                    <div class="col-md-6 form-group mb-3">
+                        <label for="firstName2">{{ __('Nouvelle valeur des nombre poulets')}}</label>
+                        <input type="number"  wire:model="new_nb" class="form-control form-control-rounded" id="firstName2" placeholder="">
+                        @error('new_nb') 
+                        <div class="alert alert-danger" role="alert">
+                            {{ $message}}
+                        </div>
+                        @enderror
+
+                        @if (session()->has('error'))
+                        <div class="alert alert-warning border-info" role="alert">
+                            {{ session('error')}}
+                        </div>
+                        @endif
+                    </div>
+
+
+                    <div class="col-md-6 form-group mb-3">
+                        <label for="firstName2">{{ __('Nombre disponible')}}</label>
+                        <input type="number" readonly wire:model="nb_disponible" class="form-control form-control-rounded" id="firstName2" placeholder="">
+                        @error('nb_disponible') 
                         <div class="alert alert-danger" role="alert">
                             {{ $message}}
                         </div>

@@ -37,9 +37,9 @@
                     </div> --}}
 
                     <div class="col-md-6 form-group mb-3">
-                        <label for="firstName2">{{ __('Poids moyene')}}</label>
-                        <input type="number" wire:model.defer="poids_moyen" class="form-control form-control-rounded" id="firstName2" placeholder="">
-                        @error('poids_moyen') 
+                        <label for="firstName2">{{ __('Nombre poulets')}}</label>
+                        <input type="number" wire:model.defer="nb" class="form-control form-control-rounded" id="firstName2" placeholder="">
+                        @error('nb') 
                         <div class="alert alert-danger" role="alert">
                             {{ $message}}
                         </div>

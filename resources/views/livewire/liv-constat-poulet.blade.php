@@ -100,7 +100,8 @@
                                     <tr>
                                         <th scope="col">{{ __('Cycle')}}</th>
                                         <th scope="col">{{ __('Type poulet')}}</th>
-                                        <th scope="col">{{ __('Poids moyen')}}</th>
+                                        <th scope="col">{{ __('Nombre poulets')}}</th>
+                                        <th scope="col">{{ __('Nombre disponible')}}</th>
                                         <th scope="col">{{ __('Date constat')}}</th>
                                         <th scope="col">{{ __('Utilisateur')}}</th>
                                         <th scope="col">{{ __('Derniere modification')}}</th>
@@ -112,7 +113,8 @@
                                     <tr>
                                         <td>{{ $constat->description }}</td>
                                         <td>{{ $constat->type }}</td>
-                                        <td>{{ $constat->poids_moyen }} Kg</td>
+                                        <td>{{ $constat->nb }} </td>
+                                        <td>{{ $constat->nb_disponible }} </td>
                                         <td>{{  get_formatted_date($constat->date_constat, 'd/M/Y') }}</td>
                                         <td>{{ $constat->name }}</td>
                                         <td>{{  get_formatted_date($constat->updated_at, 'd/ M/ Y - H:s') }}</td>

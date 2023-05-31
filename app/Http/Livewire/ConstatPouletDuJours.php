@@ -19,7 +19,7 @@ class ConstatPouletDuJours extends Component
         $constatsDuJour = ConstatPoulet::select(
             'cycles.description','type_poulets.type',
             DB::raw('count(*) as total_constats'),
-            DB::raw('sum(poids_moyen) as total_nb')
+            DB::raw('sum(nb) as total_nb')
         )
             ->join('cycles', 'constat_poulets.id_cycle', '=', 'cycles.id')
             ->join('type_poulets', 'cycles.id_type_poulet', '=', 'type_poulets.id')

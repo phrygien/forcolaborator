@@ -22,7 +22,7 @@ class LivConstatPoulet extends Component
 
     public $createConstat = false, $editConstat= false;
 
-    public $constat_id, $poids_moyen, $id_cycle, $date_constat, $date_action, $id_utilisateur;
+    public $constat_id, $nb, $new_nb, $nb_disponible, $id_cycle, $date_constat, $date_action, $id_utilisateur;
 
     public $confirmUpdate;
     public $typePouletActifs;
@@ -46,6 +46,33 @@ class LivConstatPoulet extends Component
         $this->typePouletActifs = TypePoulet::where('actif', 1)->get();
         $this->cycleActifs = Cycle::where('actif', 1)->get();
         $this->id_utilisateur = Auth::user()->id;
+    }
+
+    public function updatedNewNb()
+    {
+        $this->calculeNewDisponible();
+    }
+
+    public function calculeNewDisponible()
+    {
+        if(is_numeric($this->new_nb)){
+            if($this->nb < $this->new_nb)
+            {
+                if (is_numeric($this->new_nb)) {
+                    $this->nb_disponible = $this->nb_disponible +($this->new_nb - $this->nb);
+                }else{
+                    $this->nb_disponible = $this->nb_disponible;
+                }
+            }elseif($this->nb >= $this->new_nb)
+            {   
+                if($this->nb - $this->new_nb > $this->nb_disponible){
+                    session()->flash('error', 'operation impossible');
+                }elseif($this->nb - $this->new_nb <= $this->nb_disponible){
+                    $this->nb_disponible = $this->nb_disponible - ($this->nb - $this->new_nb);
+                }
+            }
+        }
+
     }
 
     public function render()
@@ -73,7 +100,8 @@ class LivConstatPoulet extends Component
 
     public function resetFormConstat()
     {
-        $this->poids_moyen = '';
+        $this->nb = '';
+        $this->nb_disponible = '';
         $this->id_cycle = '';
         $this->date_constat = date('Y-m-d');
         $this->creatBtn = false;
@@ -84,20 +112,20 @@ class LivConstatPoulet extends Component
     {
         $this->isLoading = true;
         $data = $this->validate([
-            'poids_moyen' => 'required',
+            'nb' => 'required|integer',
             'id_cycle' => 'required|integer',
             'date_constat' => 'required|date',
             'id_utilisateur' => 'nullable',
             'date_action' => 'nullable'
         ]);
 
-        DB::beginTransaction();
-        $cycleSelected = Cycle::find($this->id_cycle);
-        $stockActuale = $cycleSelected->nb_poulet;
+        //DB::beginTransaction();
+        // $cycleSelected = Cycle::find($this->id_cycle);
+        // $stockActuale = $cycleSelected->nb_poulet;
 
         try{
+        $data['nb_disponible'] = $this->nb;
         ConstatPoulet::create($data);
-
         //update stock cyle selected
         // $cycleSelected = Cycle::find($this->id_cycle);
         // $stockActuale = $cycleSelected->nb_poulet;
@@ -105,14 +133,14 @@ class LivConstatPoulet extends Component
         //     'nb_poulet' => ($stockActuale + $this->nb),
         // ]);
 
-        $cycleSelected->save();
+        // $cycleSelected->save();
         
         $this->resetFormConstat();
         $this->resetValidation();
         $this->isLoading = false;
         $this->notification = true;
         session()->flash('message', 'Constat poulet bien enregistré!');
-        DB::commit();
+        //DB::commit();
 
         }catch(\Exception $e){
             //return $e->getMessage();
@@ -136,8 +164,9 @@ class LivConstatPoulet extends Component
     {
         $constat = ConstatPoulet::findOrFail($id);
         $this->constat_id = $id;
-        //$this->id_type_poulet = $constat->id_type_poulet;
-        $this->poids_moyen = $constat->poids_moyen;
+        $this->nb = $constat->nb;
+        $this->new_nb = $constat->nb;
+        $this->nb_disponible = $constat->nb_disponible;
         $this->id_cycle = $constat->id_cycle;
         $this->date_constat = $constat->date_constat;
         $this->id_utilisateur = $constat->id_utilisateur;
@@ -156,21 +185,23 @@ class LivConstatPoulet extends Component
     public function updateConstat()
     {
         $this->validate([
-            'poids_moyen' => 'required',
+            'nb' => 'required',
             'id_cycle' => 'required|integer',
             'date_constat' => 'required|date',
             'date_action' => 'nullable',
-            'id_utilisateur' => 'nullable'
+            'id_utilisateur' => 'nullable',
+            'new_nb' => 'nullable',
         ]);
 
         try{
             
             $constat = ConstatPoulet::findOrFail($this->constat_id);
             $constat->update([
-                'poids_moyen' => $this->poids_moyen,
+                'nb' => $this->new_nb,
                 'id_cycle' => $this->id_cycle,
                 'date_constat' => $this->date_constat,
                 'date_action' => $this->date_action,
+                'nb_disponible' => $this->nb_disponible,
                 'id_utilisateur' => $this->id_utilisateur,
             ]);
 
