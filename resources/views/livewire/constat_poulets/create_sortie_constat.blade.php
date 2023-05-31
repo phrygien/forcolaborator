@@ -1,8 +1,9 @@
+<form>
 <div class="col-md-12">
     <div class="card mb-4">
         <div class="card-body">
             <div class="card-title mb-3">{{ __('Création sortie poulet')}}</div>
-            <form>
+
                 <div class="row">
                     <div class="col-md-6 form-group mb-3">
                     <label class="radio radio-outline-success">
@@ -57,7 +58,7 @@
                     </div>
 
                     <div class="col-md-6 form-group mb-3">
-                        <label for="firstName2">{{ __('Prix unitaire')}}</label>
+                        <label for="firstName2">{{ __('Prix unitaire / Kg')}}</label>
                         <input type="number" wire:model="prix_unite" class="form-control form-control-rounded" id="firstName2" placeholder="">
                         @error('prix_unite') 
                         <div class="alert alert-danger" role="alert">
@@ -68,8 +69,18 @@
 
                     <div class="col-md-6 form-group mb-3">
                         <label for="firstName2">{{ __('Montant total')}}</label>
-                        <input type="number" disabled wire:model="montant" class="form-control form-control-rounded" id="firstName2" placeholder="">
+                        <input type="number" wire:model="montant" class="form-control form-control-rounded" id="firstName2" placeholder="">
                         @error('montant') 
+                        <div class="alert alert-danger" role="alert">
+                            {{ $message}}
+                        </div>
+                        @enderror
+                    </div>
+
+                    <div class="col-md-6 form-group mb-3">
+                        <label for="firstName2">{{ __('Prix poulet')}}</label>
+                        <input type="number" wire:model="pu_poulet" class="form-control form-control-rounded" id="firstName2" placeholder="">
+                        @error('pu_poulet') 
                         <div class="alert alert-danger" role="alert">
                             {{ $message}}
                         </div>
@@ -140,7 +151,6 @@
                         <input type="text" wire:model="id_utilisateur" class="form-control form-control-rounded">
                     </div>
                 </div>
-            </form>
         </div>
     </div>
 </div>
@@ -153,35 +163,67 @@
                     <div class="col-md-6 form-group mb-3">
                         <label for="id_dernier_constat">ID du constat</label>
                         <input type="text" readonly class="form-control form-control-rounded" wire:model="id_dernier_constat">
+                        @error('id_dernier_constat') 
+                        <div class="alert alert-danger" role="alert">
+                            {{ $message}}
+                        </div>
+                        @enderror
                     </div>
 
                     <div class="col-md-6 form-group mb-3">
                         <label for="date_constat">Date de constat</label>
                         <input type="text" readonly class="form-control form-control-rounded" id="lastName2" wire:model="date_constat_sortie">
+                        @error('date_constat_sortie') 
+                        <div class="alert alert-danger" role="alert">
+                            {{ $message}}
+                        </div>
+                        @enderror
                     </div>
 
                     <div class="col-md-6 form-group mb-3">
                         <label for="nb_disponible">Nombre disponible</label>
                         <input type="text" readonly class="form-control form-control-rounded" id="exampleInputEmail2" wire:model="nb_disponible_constat">
+                        @error('nb_disponible_constat') 
+                        <div class="alert alert-danger" role="alert">
+                            {{ $message}}
+                        </div>
+                        @enderror
                     </div>
 
                     <div class="col-md-6 form-group mb-3">
                         <label for="picker1">ID du produit</label>
-                        <select class="form-control form-control-rounded">
+                        <select class="form-control form-control-rounded" wire:model="id_produit">
                             <option value="poulet_de_chaire">Poulet de chaire</option>
                             <option value="oeuf">Oeuf</option>
                             <option value="poulard">Poulard</option>
                         </select>
+                        @error('id_produit') 
+                        <div class="alert alert-danger" role="alert">
+                            {{ $message}}
+                        </div>
+                        @enderror
                     </div>
 
                     <div class="col-md-6 form-group mb-3">
                         <label for="picker3">Prix unitaire en (Ar)</label>
                         <input type="number" class="form-control form-control-rounded" wire:model="prix_unitaire_sortie">
+                        @error('prix_unitaire_sortie') 
+                        <div class="alert alert-danger" role="alert">
+                            {{ $message}}
+                        </div>
+                        @enderror
+    
                     </div>
 
                     <div class="col-md-6 form-group mb-3">
                         <label for="credit2">Quantité poulet à sortir</label>
                         <input type="number" class="form-control form-control-rounded" wire:model="qte_sortie">
+                        @error('qte_sortie') 
+                        <div class="alert alert-danger" role="alert">
+                            {{ $message}}
+                        </div>
+                        @enderror
+
                         @if (session()->has('error'))
                         <div class="alert alert-warning border-info" role="alert">
                             {{ session('error')}}
@@ -192,7 +234,13 @@
                     <div class="col-md-6 form-group mb-3">
                         <label for="website2">Montant en (Ar)</label>
                         <input type="number" readonly class="form-control form-control-rounded" wire:model="valeur">
+                        @error('valeur') 
+                        <div class="alert alert-danger" role="alert">
+                            {{ $message}}
+                        </div>
+                        @enderror
                     </div>
+
                     <div class="col-md-12 mt-3 mb-3">
                         <button class="btn btn-secondary btn-rounded" wire:click.prevent="cancelCreate()" wire:loading.attr="disabled" wire:target="cancelCreate()">
                             <span wire:loading.remove wire:target="cancelCreate"><i class="nav-icon i-Arrow-Back font-weight-bold"></i> Retour</span>
@@ -219,9 +267,9 @@
                         @endif
 
                         @if ($selectedOption == 'nouvele')
-                        <button {{ $btn_disabled }} class="float-right btn btn-primary btn-rounded mr-3" wire:click.prevent="saveNewSortie()" wire:loading.attr="disabled" wire:target="saveNewSortie()">
-                            <span wire:loading.remove wire:target="saveNewSortie"><i class="nav-icon i-Yes font-weight-bold"></i> Enregistrer</span>
-                            <span wire:loading wire:target="saveNewSortie">
+                        <button {{ $btn_disabled }} class="float-right btn btn-primary btn-rounded mr-3" wire:click.prevent="saveSortieAndDetailForNewClient()" wire:loading.attr="disabled" wire:target="saveSortieAndDetailForNewClient()">
+                            <span wire:loading.remove wire:target="saveSortieAndDetailForNewClient"><i class="nav-icon i-Yes font-weight-bold"></i> Enregistrer</span>
+                            <span wire:loading wire:target="saveSortieAndDetailForNewClient">
                                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                 enregistrement...
                             </span>
@@ -232,3 +280,4 @@
         </div>
     </div>
 </div>
+</form>
