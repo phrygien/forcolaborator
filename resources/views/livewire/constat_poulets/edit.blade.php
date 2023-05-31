@@ -56,6 +56,16 @@
                         @enderror
                     </div>
 
+                    <div class="col-md-6 form-group mb-3">
+                        <label for="firstName2">{{ __('Nouvelle nombre disponible')}}</label>
+                        <input type="number" readonly wire:model="new_nb_disponible" class="form-control form-control-rounded" id="firstName2" placeholder="">
+                        @error('new_nb_disponible') 
+                        <div class="alert alert-danger" role="alert">
+                            {{ $message}}
+                        </div>
+                        @enderror
+                    </div>
+
 
                     <div class="col-md-6 form-group mb-3">
                         <label for="firstName2">{{ __('Date constat')}}</label>

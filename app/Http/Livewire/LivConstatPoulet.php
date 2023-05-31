@@ -22,7 +22,7 @@ class LivConstatPoulet extends Component
 
     public $createConstat = false, $editConstat= false;
 
-    public $constat_id, $nb, $new_nb, $nb_disponible, $id_cycle, $date_constat, $date_action, $id_utilisateur;
+    public $constat_id, $nb, $new_nb, $nb_disponible, $new_nb_disponible, $id_cycle, $date_constat, $date_action, $id_utilisateur;
 
     public $confirmUpdate;
     public $typePouletActifs;
@@ -59,18 +59,20 @@ class LivConstatPoulet extends Component
             if($this->nb < $this->new_nb)
             {
                 if (is_numeric($this->new_nb)) {
-                    $this->nb_disponible = $this->nb_disponible +($this->new_nb - $this->nb);
+                    $this->new_nb_disponible = $this->nb_disponible +($this->new_nb - $this->nb);
                 }else{
-                    $this->nb_disponible = $this->nb_disponible;
+                    $this->new_nb_disponible= '';
                 }
             }elseif($this->nb >= $this->new_nb)
             {   
                 if($this->nb - $this->new_nb > $this->nb_disponible){
                     session()->flash('error', 'operation impossible');
                 }elseif($this->nb - $this->new_nb <= $this->nb_disponible){
-                    $this->nb_disponible = $this->nb_disponible - ($this->nb - $this->new_nb);
+                    $this->new_nb_disponible = $this->nb_disponible - ($this->nb - $this->new_nb);
                 }
             }
+        }else{
+            $this->new_nb_disponible = '';
         }
 
     }
@@ -165,7 +167,7 @@ class LivConstatPoulet extends Component
         $constat = ConstatPoulet::findOrFail($id);
         $this->constat_id = $id;
         $this->nb = $constat->nb;
-        $this->new_nb = $constat->nb;
+        $this->new_nb = '';
         $this->nb_disponible = $constat->nb_disponible;
         $this->id_cycle = $constat->id_cycle;
         $this->date_constat = $constat->date_constat;
@@ -196,15 +198,26 @@ class LivConstatPoulet extends Component
         try{
             
             $constat = ConstatPoulet::findOrFail($this->constat_id);
-            $constat->update([
-                'nb' => $this->new_nb,
-                'id_cycle' => $this->id_cycle,
-                'date_constat' => $this->date_constat,
-                'date_action' => $this->date_action,
-                'nb_disponible' => $this->nb_disponible,
-                'id_utilisateur' => $this->id_utilisateur,
-            ]);
-
+            //verifier si le nombre de poulet sont modifier
+            if($this->new_nb !=null || $this->new_nb_disponible !=null){
+                $constat->update([
+                    'nb' => $this->new_nb,
+                    'id_cycle' => $this->id_cycle,
+                    'date_constat' => $this->date_constat,
+                    'date_action' => $this->date_action,
+                    'nb_disponible' => $this->new_nb_disponible,
+                    'id_utilisateur' => $this->id_utilisateur,
+                ]);
+            }else{
+                $constat->update([
+                    'nb' => $this->nb,
+                    'id_cycle' => $this->id_cycle,
+                    'date_constat' => $this->date_constat,
+                    'date_action' => $this->date_action,
+                    'nb_disponible' => $this->nb_disponible,
+                    'id_utilisateur' => $this->id_utilisateur,
+                ]); 
+            }
             $this->editConstat = false;
             $this->resetFormConstat();
             $this->resetValidation();
