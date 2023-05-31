@@ -4,7 +4,7 @@
             <tr>
                 <th scope="col">{{ __('Cycle')}}</th>
                 <th scope="col">{{ __('Type poulet')}}</th>
-                <th scope="col">{{ __('Poids moyen')}}</th>
+                <th scope="col">{{ __('Nombre poulets')}}</th>
                 <th scope="col" width="149px">{{ __('Nb constat')}}</th>
             </tr>
         </thead>
@@ -13,7 +13,7 @@
             <tr>
                 <th scope="row">{{ $constat->description }}</th>
                 <th scope="row">{{ $constat->type }}</th>
-                <th><span class="badge bg-success text-white text-14">{{ $constat->total_nb }} Kg</span></th>
+                <th><span class="badge bg-success text-white text-14">{{ $constat->total_nb }} poulets</span></th>
                 <td><span class="badge bg-info text-white text-14">{{ $constat->total_constats }} constat(s)</span></td>
             </tr>
             @empty

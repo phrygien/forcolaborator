@@ -32,6 +32,7 @@
                     <div class="col-md-6 form-group mb-3">
                         <label for="firstName2">{{ __('Nouvelle valeur des nombre poulets')}}</label>
                         <input type="number"  wire:model="new_nb" class="form-control form-control-rounded" id="firstName2" placeholder="">
+                        <small class="text-info"><b>{{ __('Entrer la nouvelle valeur si vous-voulez modifier le nombre actuele')}}</b></small>
                         @error('new_nb') 
                         <div class="alert alert-danger" role="alert">
                             {{ $message}}

@@ -18,6 +18,11 @@
         @include('livewire.constat_poulets.create')
     @endif
 
+    @if($createSortieConstant)
+    @include('livewire.constat_poulets.create_sortie_constat')
+    @endif
+
+
     @if($editConstat)
         @include('livewire.constat_poulets.edit')
     @endif
