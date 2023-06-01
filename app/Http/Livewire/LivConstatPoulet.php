@@ -7,6 +7,7 @@ use App\Models\ConstatOeuf;
 use App\Models\ConstatPoulet;
 use App\Models\Cycle;
 use App\Models\DetailSortie;
+use App\Models\ProduitCycle;
 use App\Models\SortiePoulet;
 use App\Models\TypeOeuf;
 use App\Models\TypePoulet;
@@ -431,6 +432,7 @@ class LivConstatPoulet extends Component
 
     public function resetFormSortieConstat()
     {
+        $this->isLoading = true;
         $this->id_type_sortie = '';
         $this->poids_total = '';
         $this->nombre = '';
@@ -445,6 +447,9 @@ class LivConstatPoulet extends Component
         $this->prix_unitaire_sortie = '';
         $this->nb_disponible_constat = '';
         $this->valeur = '';
+        $this->id_produit = '';
+        $this->resetValidation();
+        $this->isLoading = false;
     }
 
     public function saveSortieAndDetailForNewClient()
@@ -461,6 +466,7 @@ class LivConstatPoulet extends Component
                 'id_utilisateur' => 'nullable',
                 'date_action' => 'nullable',
                 'montant' => 'nullable',
+                'id_produit' => 'required',
             ]);
         }else{
             $this->validate([
@@ -478,7 +484,8 @@ class LivConstatPoulet extends Component
                 'valeur' => 'required',
                 'qte_sortie' => 'required|numeric',
                 'prix_unitaire_sortie' => 'required|numeric',
-                'nb_disponible_constat' => 'required|numeric'
+                'nb_disponible_constat' => 'required|numeric',
+                'id_produit' => 'required',
             ]);   
         }
         // verifier disponibilite
@@ -528,6 +535,16 @@ class LivConstatPoulet extends Component
                             'nb_disponible' => $constat->nb_disponible - $this->qte_sortie,
                         ]); 
 
+                        // enregistrement produit cycle
+                        $produitCycle = new ProduitCycle();
+                        $produitCycle->id_cycle = $constat->id_cycle;
+                        $produitCycle->id_produit = $this->id_produit;
+                        $produitCycle->id_sortie = $sortiePoulet->id;
+                        $produitCycle->qte = $this->qte_sortie;
+                        $produitCycle->pu = $this->prix_unitaire_sortie;
+                        $produitCycle->valeur = $this->valeur;
+                        $produitCycle->save();
+
                         $this->resetFormSortieConstat();
                         $this->resetValidation();
                         $this->isLoading = false;
@@ -544,6 +561,94 @@ class LivConstatPoulet extends Component
             }
         }
     }
+
+    //pour enregistrer sortie pour client existe
+    public function saveSortieAndDetailForExisteClient()
+    {
+        $this->isLoading = true;
+            $this->validate([
+                'id_type_sortie' => 'required|integer',
+                'poids_total' => 'required',
+                'nombre' => 'required|integer',
+                'id_client' => 'required',
+                'prix_unite' => 'required',
+                'date_sortie' => 'required|date',
+                'id_utilisateur' => 'nullable',
+                'date_action' => 'nullable',
+                'montant' => 'nullable|numeric',
+                'valeur' => 'required',
+                'qte_sortie' => 'required|numeric',
+                'prix_unitaire_sortie' => 'required|numeric',
+                'nb_disponible_constat' => 'required|numeric',
+                'id_produit' => 'required',
+            ]);
+        // verifier disponibilite
+        $constat = ConstatPoulet::where('id', $this->id_dernier_constat)->first();
+        
+        if($constat !=null)
+        {
+            if($this->nombre > $constat->nb_disponible){
+                session()->flash('stock_not_ok', 'Opération impossible, stock insuffisant');
+            }else{
+            DB::beginTransaction();
+                    try{
+                        //création sortie poulet
+                        $sortiePoulet = new SortiePoulet();
+                        $sortiePoulet->id_type_sortie = $this->id_type_sortie;
+                        $sortiePoulet->poids_total = $this->poids_total;
+                        $sortiePoulet->nombre = $this->nombre;
+                        $sortiePoulet->prix_unite = $this->prix_unite;
+                        $sortiePoulet->date_sortie = $this->date_sortie;
+                        $sortiePoulet->date_action = now();
+                        $sortiePoulet->id_client = $this->id_client;
+                        $sortiePoulet->id_utilisateur = $this->id_utilisateur;
+                        $sortiePoulet->montant = ($this->prix_unite * $this->poids_total);
+                        $sortiePoulet->pu_poulet = round($sortiePoulet->montant / $this->nombre, 2);
+                
+                        $sortiePoulet->save();
+                    
+                        // enregistrer detail sortie
+                        $detailSortie = new DetailSortie();
+                        $detailSortie->id_sortie = $sortiePoulet->id;
+                        $detailSortie->id_constat = $this->id_dernier_constat;
+                        $detailSortie->id_produit = $this->id_produit;
+                        $detailSortie->qte = $this->qte_sortie;
+                        $detailSortie->valeur = $this->valeur;
+                        $detailSortie->pu = $this->prix_unitaire_sortie;
+                        $detailSortie->save();
+
+                        // mmettre à jour nombre disponible constat utilisé
+                        $constat->update([
+                            'nb_disponible' => $constat->nb_disponible - $this->qte_sortie,
+                        ]); 
+
+                        // enregistrement produit cycle
+                        $produitCycle = new ProduitCycle();
+                        $produitCycle->id_cycle = $constat->id_cycle;
+                        $produitCycle->id_produit = $this->id_produit;
+                        $produitCycle->id_sortie = $sortiePoulet->id;
+                        $produitCycle->qte = $this->qte_sortie;
+                        $produitCycle->pu = $this->prix_unitaire_sortie;
+                        $produitCycle->valeur = $this->valeur;
+                        $produitCycle->save();
+
+                        $this->resetFormSortieConstat();
+                        $this->resetValidation();
+                        $this->isLoading = false;
+                        $this->notification = true;
+                        session()->flash('message', 'Sortie poulet bien enregistré!');
+                        DB::commit();
+                        $this->resetPage();
+                    }catch(\Exception $e){
+                        DB::rollback();
+                        //return $e->getMessage();
+                        session()->flash('message', $e->getMessage());
+                        
+                    }
+            }
+        }
+    }
+
     /*
     * fin sortie constat
     */

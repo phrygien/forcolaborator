@@ -2,7 +2,7 @@
     <form>
     <div class="card mb-4">
         <div class="card-body">
-            <div class="card-title mb-3">{{ __('Création sortie poulet')}}</div>
+            <div class="card-title mb-3"><i class="nav-icon i-File-Edit"></i> {{ __('Création sortie poulet')}}</div>
 
                 <div class="row">
                     <div class="col-md-6 form-group mb-3">
@@ -156,7 +156,7 @@
 
     <div class="card mb-4" style="border: solid 3px #663399;">
         <div class="card-body">
-            <div class="card-title mb-3">{{ __('Détails sortie poulet')}}</div>
+            <div class="card-title mb-3"><i class="nav-icon i-Remove-Cart"></i> {{ __('Détails sortie poulet')}}</div>
                 <div class="row">
                     <div class="col-md-6 form-group mb-3">
                         <label for="id_dernier_constat">ID du constat</label>
@@ -248,17 +248,17 @@
                                 annulation...
                             </span>
                         </button>
-                        <button class="float-right btn btn-danger btn-rounded mr-3" wire:click.prevent="resetFormSortie()" wire:loading.attr="disabled" wire:target="resetFormSortie()">
-                            <span wire:loading.remove wire:target="resetFormSortie"><i class="nav-icon i-Repeat-3 font-weight-bold"></i> Reinitialiser</span>
-                            <span wire:loading wire:target="resetFormSortie">
+                        <button class="float-right btn btn-danger btn-rounded mr-3" wire:click.prevent="resetFormSortieConstat()" wire:loading.attr="disabled" wire:target="resetFormSortieConstat()">
+                            <span wire:loading.remove wire:target="resetFormSortieConstat"><i class="nav-icon i-Repeat-3 font-weight-bold"></i> Reinitialiser</span>
+                            <span wire:loading wire:target="resetFormSortieConstat">
                                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                 reinitialisation...
                             </span>
                         </button>
                         @if ($selectedOption == 'existe')
-                        <button {{ $btn_disabled }} class="float-right btn btn-primary btn-rounded mr-3" wire:click.prevent="saveSortieAndDetailForNewClient()" wire:loading.attr="disabled" wire:target="saveSortieAndDetailForNewClient()">
-                            <span wire:loading.remove wire:target="saveSortieAndDetailForNewClient"><i class="nav-icon i-Yes font-weight-bold"></i> Enregistrer</span>
-                            <span wire:loading wire:target="saveSortieAndDetailForNewClient">
+                        <button {{ $btn_disabled }} class="float-right btn btn-primary btn-rounded mr-3" wire:click.prevent="saveSortieAndDetailForExisteClient()" wire:loading.attr="disabled" wire:target="saveSortieAndDetailForExisteClient()">
+                            <span wire:loading.remove wire:target="saveSortieAndDetailForExisteClient"><i class="nav-icon i-Yes font-weight-bold"></i> Enregistrer</span>
+                            <span wire:loading wire:target="saveSortieAndDetailForExisteClient">
                                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                 enregistrement...
                             </span>
