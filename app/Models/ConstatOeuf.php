@@ -18,5 +18,6 @@ class ConstatOeuf extends Model
         'date_entree',
         'id_utilisateur',
         'date_action',
+        'nb_disponible'
     ];
 }

@@ -65,26 +65,33 @@
                         <input type="text" wire:model.defer="id_utilisateur" class="form-control form-control-rounded">
                     </div>
 
-                    <div class="col-md-12">
-                        <button class="btn btn-primary btn-rounded mr-3" wire:click.prevent="saveConstat()" wire:loading.attr="disabled" wire:target="saveConstat()">
-                            <span wire:loading.remove wire:target="saveConstat"><i class="nav-icon i-Yes font-weight-bold"></i> Enregistrer</span>
-                            <span wire:loading wire:target="saveConstat">
-                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                enregistrement...
-                            </span>
-                        </button>
-                        <button class="btn btn-danger btn-rounded mr-3" wire:click.prevent="resetFormConstat()" wire:loading.attr="disabled" wire:target="resetFormConstat()">
-                            <span wire:loading.remove wire:target="resetFormConstat"><i class="nav-icon i-Repeat-3 font-weight-bold"></i> Reset</span>
-                            <span wire:loading wire:target="resetFormConstat">
-                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                reinitialisation...
-                            </span>
-                        </button>
+                    <div class="col-md-12 mt-3">
                         <button class="btn btn-secondary btn-rounded" wire:click.prevent="cancelCreate()" wire:loading.attr="disabled" wire:target="cancelCreate()">
                             <span wire:loading.remove wire:target="cancelCreate"><i class="nav-icon i-Arrow-Back font-weight-bold"></i> Retour</span>
                             <span wire:loading wire:target="cancelCreate">
                                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                 annulation...
+                            </span>
+                        </button>
+                        <button class="float-right btn btn-danger btn-rounded mr-3" wire:click.prevent="resetFormConstat()" wire:loading.attr="disabled" wire:target="resetFormConstat()">
+                            <span wire:loading.remove wire:target="resetFormConstat"><i class="nav-icon i-Repeat-3 font-weight-bold"></i> Réinitialiser</span>
+                            <span wire:loading wire:target="resetFormConstat">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                reinitialisation...
+                            </span>
+                        </button>
+                        <button class="float-right btn btn-info btn-rounded mr-3" wire:click.prevent="createSortieConstat()" wire:loading.attr="disabled" wire:target="createSortieConstat()">
+                            <span wire:loading.remove wire:target="createSortieConstat"><i class="nav-icon i-Yes font-weight-bold"></i> Enregistrer avec une sortie</span>
+                            <span wire:loading wire:target="createSortieConstat">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                enregistrement...
+                            </span>
+                        </button>
+                        <button class="float-right btn btn-primary btn-rounded mr-3" wire:click.prevent="saveConstat()" wire:loading.attr="disabled" wire:target="saveConstat()">
+                            <span wire:loading.remove wire:target="saveConstat"><i class="nav-icon i-Yes font-weight-bold"></i> Enregistrer</span>
+                            <span wire:loading wire:target="saveConstat">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                enregistrement...
                             </span>
                         </button>
                     </div>

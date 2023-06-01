@@ -18,6 +18,10 @@
         @include('livewire.constat_oeufs.create')
     @endif
 
+    {{-- @if($createSortieConstant) --}}
+        @include('livewire.constat_oeufs.create_sortie_constat')
+    {{-- @endif --}}
+
     @if($editConstat)
         @include('livewire.constat_oeufs.edit')
     @endif
@@ -98,7 +102,8 @@
                                 <thead>
                                     <tr>
                                         <th scope="col">{{ __('Type oeufs')}}</th>
-                                        <th scope="col">{{ __("Nombre d’oeufs")}}</th>
+                                        <th scope="col">{{ __("Nombre d’oeufs initiale")}}</th>
+                                        <th scope="col">{{ __("Nombre d’oeufs disponible")}}</th>
                                         <th scope="col">{{ __('Cycle')}}</th>
                                         <th scope="col">{{ __('Date entrée')}}</th>
                                         <th scope="col">{{ __('Utilisateur')}}</th>
@@ -111,6 +116,7 @@
                                     <tr>
                                         <td>{{ $constat->type }}</td>
                                         <td>{{  number_format($constat->nb, 0, ',', ' ') }}</td>
+                                        <td>{{  number_format($constat->nb_disponible, 0, ',', ' ') }}</td>
                                         <td>{{ $constat->description }}</td>
                                         <td>{{ $constat->date_entree }}</td>
                                         <td>{{ $constat->name }}</td>

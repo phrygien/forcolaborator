@@ -3,9 +3,11 @@
 namespace App\Http\Livewire;
 
 use App\Models\Batiment;
+use App\Models\Client;
 use App\Models\ConstatOeuf;
 use App\Models\Cycle;
 use App\Models\TypeOeuf;
+use App\Models\TypeSortie;
 use DateTime;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -21,8 +23,8 @@ class LivConstatOeuf extends Component
 
     public $createConstat = false, $editConstat= false;
 
-    public $constat_id, $nb, $id_type_oeuf, $id_cycle, $date_entree, $date_action, $id_utilisateur;
-
+    public $constat_id, $nb, $id_type_oeuf, $id_cycle, $date_entree, $date_action, $id_utilisateur, $nb_disponible;
+    public $id_dernier_constat, $id_cycle_sortie, $date_constat_sortie, $nb_disponible_constat;
     public $selectedSite;
     public $selectedBatiment;
 
@@ -35,14 +37,30 @@ class LivConstatOeuf extends Component
     public $creatBtn = true;
     protected $paginationTheme = 'bootstrap';
     public $notification;
-    //public $;
-    // public $data = [];
-    // public $labels = [];
 
+    public $createSortieConstant;
+    
     public $data = [];
     public $labels = [];
     public $selectedDate;
 
+    public $dernierConstatOeuf;
+
+    /*
+    * debut proprieté sortie oeuf en meme temps que constat oeuf
+    */
+    public $clients;
+    public $typesorties;
+    public $selectedOption;
+
+    public $sortie_id, $id_type_oeuf_sortie, $id_type_sortie_sortie, $qte_sortie, $pu_sortie,$montant_sortie,
+    $date_sortie, $id_client, $nom, $raison_sociale, $adresse, $id_produit;
+
+    public $date_constat_detail, $prix_unitaire_detail, $valeur, $qte_sortie_detail;
+    public $btn_disabled;
+    /*
+    * fin proprieté sortie oeuf
+    */
 
     public function mount()
     {
@@ -51,9 +69,19 @@ class LivConstatOeuf extends Component
         $this->typeOeufActifs = TypeOeuf::where('actif', 1)->get();
         $this->cycleActifs = Cycle::where('actif', 1)->get();
         $this->id_utilisateur = Auth::user()->id;
+        $this->clients = Client::all();
+        $this->typesorties = TypeSortie::where('actif', 1)->get();
         //$this->chargerDonneesChart();
         $this->selectedDate = Date::today()->format('Y-m-d');
         $this->chargerDonneesChart();
+
+        $this->dernierConstatOeuf = ConstatOeuf::latest()->first();
+        if ($this->dernierConstatOeuf) {
+            $this->id_dernier_constat = $this->dernierConstatOeuf->id;
+            $this->id_cycle_sortie = $this->dernierConstatOeuf->id_cycle;
+            $this->date_constat_detail = $this->dernierConstatOeuf->date_entree;
+            $this->nb_disponible_constat = $this->dernierConstatOeuf->nb_disponible;
+        }
     }
 
     public function afficherTotalDonneesJournalieres()
@@ -94,6 +122,45 @@ class LivConstatOeuf extends Component
         $this->creatBtn = false;
     }
 
+    public function createSortieConstat()
+    {
+        $this->isLoading = true;
+        $data = $this->validate([
+            'id_type_oeuf' => 'required|integer',
+            'nb' => 'required|integer',
+            'id_cycle' => 'required|integer',
+            'date_entree' => 'required|date',
+            'id_utilisateur' => 'nullable',
+            'date_action' => 'nullable',
+        ]);
+
+        try{
+            $data['nb_disponible'] = $this->nb;
+            ConstatOeuf::create($data);
+            $this->resetFormConstat();
+            $this->resetValidation();
+            $this->isLoading = false;
+            $this->notification = true;
+            session()->flash('message', 'Constat oeuf bien enregistré!');
+            $this->createSortieConstant = true;
+            $this->createConstat = false;
+
+            //recuper dernier constat oeuf
+            $this->dernierConstatOeuf = ConstatOeuf::latest()->first();
+            if($this->dernierConstatOeuf)
+            {
+                $this->id_dernier_constat = $this->dernierConstatOeuf->id;
+                $this->id_cycle_sortie = $this->dernierConstatOeuf->id_cycle;
+                $this->date_constat_sortie = $this->dernierConstatOeuf->date_entree;
+                $this->nb_disponible_constat = $this->dernierConstatOeuf->nb_disponible;
+            }
+        }catch(\Exception $e)
+        {
+            session()->flash('message', $e->getMessage());
+        }
+        $this->isLoading = false;
+    }
+
     public function resetFormConstat()
     {
         $this->id_type_oeuf = '';
@@ -113,7 +180,7 @@ class LivConstatOeuf extends Component
             'id_cycle' => 'required|integer',
             'date_entree' => 'required|date',
             'id_utilisateur' => 'nullable',
-            'date_action' => 'nullable'
+            'date_action' => 'nullable',
         ]);
 
         DB::beginTransaction();
@@ -121,14 +188,15 @@ class LivConstatOeuf extends Component
         $stockActuale = $cycleSelected->nb_poulet;
 
         try{
+        $data['nb_disponible'] = $this->nb;
         ConstatOeuf::create($data);
         //update stock cyle selected
-        $cycleSelected = Cycle::find($this->id_cycle);
-        $stockActuale = $cycleSelected->nb_poulet;
-        $cycleSelected->update([
-            'nb_poulet' => ($stockActuale + $this->nb),
-        ]);
-        $cycleSelected->save();
+        // $cycleSelected = Cycle::find($this->id_cycle);
+        // $stockActuale = $cycleSelected->nb_poulet;
+        // $cycleSelected->update([
+        //     'nb_poulet' => ($stockActuale + $this->nb),
+        // ]);
+        // $cycleSelected->save();
 
         $this->resetFormConstat();
         $this->resetValidation();
@@ -272,4 +340,65 @@ class LivConstatOeuf extends Component
 
         $this->emit('chartUpdated');
     }
+
+    /*
+    * debut sortie oeuf
+    */
+        public function updatedMontantSortie($value)
+        {
+            if (is_numeric($value) && is_numeric($this->qte_sortie) && $this->qte_sortie != 0) {
+                $this->qte_sortie = $value / $this->qte_sortie;
+            }
+        }
+
+        public function updatedPuSortie($value)
+        {
+            if (is_numeric($value) && is_numeric($this->qte_sortie) && $this->qte_sortie != 0) {
+                $this->montant_sortie = $value * $this->qte_sortie;
+            }
+        }
+
+        public function updatedQteSortie($value)
+        {
+            if (is_numeric($value) && is_numeric($this->pu_sortie) && $value != 0) {
+                $this->montant_sortie = $this->pu_sortie * $value;
+            }
+        }
+
+        public function updatedPrixUnitaireDetail()
+        {
+            if(is_numeric($this->prix_unitaire_detail) && is_numeric($this->qte_sortie_detail))
+            {
+                $this->valeur = $this->prix_unitaire_detail * $this->qte_sortie_detail;
+            }else{
+                $this->valeur = '';
+            }
+        }
+
+        public function updatedQteSortieDetail()
+        {
+            if(is_numeric($this->prix_unitaire_detail) && is_numeric($this->qte_sortie_detail))
+            {
+                $this->valeur = $this->prix_unitaire_detail * $this->qte_sortie_detail;
+            }else{
+                $this->valeur = '';
+            }
+            
+            $this->verifierDisponibilite();
+        }
+
+        public function verifierDisponibilite()
+        {
+            if($this->qte_sortie_detail > $this->nb_disponible_constat)
+            {
+                session()->flash('error', 'La Qte à sortir ne doit pas >  aux nombre disponible'.' / '. 'Qte disponible du constat est : '.$this->nb_disponible_constat);
+                $this->btn_disabled = 'disabled';
+            }else{
+                $this->btn_disabled = '';
+            }
+        }
+    /*
+    * fin sortie oeuf
+    */
+
 }
