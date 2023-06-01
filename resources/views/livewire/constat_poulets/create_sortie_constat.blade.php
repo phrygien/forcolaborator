@@ -1,5 +1,5 @@
-<form>
 <div class="col-md-12">
+    <form>
     <div class="card mb-4">
         <div class="card-body">
             <div class="card-title mb-3">{{ __('Création sortie poulet')}}</div>
@@ -38,7 +38,7 @@
                     
                     <div class="col-md-6 form-group mb-3">
                         <label for="firstName2">{{ __('Nombre des poulet')}}</label>
-                        <input type="number" wire:model="nombre" class="form-control form-control-rounded" id="firstName2" placeholder="">
+                        <input type="number" wire:model.defer="nombre" class="form-control form-control-rounded" id="firstName2" placeholder="">
                         @error('nombre') 
                         <div class="alert alert-danger" role="alert">
                             {{ $message}}
@@ -49,7 +49,7 @@
                                         
                     <div class="col-md-6 form-group mb-3">
                         <label for="firstName2">{{ __('Poids total')}}</label>
-                        <input type="number" wire:model="poids_total" class="form-control form-control-rounded" id="firstName2" placeholder="">
+                        <input type="number" wire:model="poids_total" class="form-control form-control-rounded" placeholder="">
                         @error('poids_total') 
                         <div class="alert alert-danger" role="alert">
                             {{ $message}}
@@ -59,7 +59,7 @@
 
                     <div class="col-md-6 form-group mb-3">
                         <label for="firstName2">{{ __('Prix unitaire / Kg')}}</label>
-                        <input type="number" wire:model="prix_unite" class="form-control form-control-rounded" id="firstName2" placeholder="">
+                        <input type="number" wire:model="prix_unite" class="form-control form-control-rounded" placeholder="">
                         @error('prix_unite') 
                         <div class="alert alert-danger" role="alert">
                             {{ $message}}
@@ -69,7 +69,7 @@
 
                     <div class="col-md-6 form-group mb-3">
                         <label for="firstName2">{{ __('Montant total')}}</label>
-                        <input type="number" wire:model="montant" class="form-control form-control-rounded" id="firstName2" placeholder="">
+                        <input type="number" wire:model="montant" class="form-control form-control-rounded" placeholder="">
                         @error('montant') 
                         <div class="alert alert-danger" role="alert">
                             {{ $message}}
@@ -79,7 +79,7 @@
 
                     <div class="col-md-6 form-group mb-3">
                         <label for="firstName2">{{ __('Prix poulet')}}</label>
-                        <input type="number" wire:model="pu_poulet" class="form-control form-control-rounded" id="firstName2" placeholder="">
+                        <input type="number" wire:model="pu_poulet" class="form-control form-control-rounded" placeholder="">
                         @error('pu_poulet') 
                         <div class="alert alert-danger" role="alert">
                             {{ $message}}
@@ -118,7 +118,7 @@
                     @if ($selectedOption == 'nouvele')
                     <div class="col-md-6 form-group mb-3">
                         <label for="firstName2">{{ __('Nom client')}}</label>
-                        <input type="text" wire:model="nom" class="form-control form-control-rounded" id="firstName2" placeholder="">
+                        <input type="text" wire:model="nom" class="form-control form-control-rounded" placeholder="">
                         @error('nom') 
                         <div class="alert alert-danger" role="alert">
                             {{ $message}}
@@ -127,7 +127,7 @@
                     </div>
                     <div class="col-md-6 form-group mb-3">
                         <label for="firstName2">{{ __('Raison sociale client')}}</label>
-                        <input type="text" wire:model="raison_sociale" class="form-control form-control-rounded" id="firstName2" placeholder="">
+                        <input type="text" wire:model="raison_sociale" class="form-control form-control-rounded" placeholder="">
                         @error('raison_sociale') 
                         <div class="alert alert-danger" role="alert">
                             {{ $message}}
@@ -136,7 +136,7 @@
                     </div>
                     <div class="col-md-6 form-group mb-3">
                         <label for="firstName2">{{ __('Adresse client')}}</label>
-                        <input type="text" wire:model="adresse" class="form-control form-control-rounded" id="firstName2" placeholder="">
+                        <input type="text" wire:model="adresse" class="form-control form-control-rounded" placeholder="">
                         @error('adresse') 
                         <div class="alert alert-danger" role="alert">
                             {{ $message}}
@@ -153,9 +153,7 @@
                 </div>
         </div>
     </div>
-</div>
 
-<div class="col-md-12">
     <div class="card mb-4" style="border: solid 3px #663399;">
         <div class="card-body">
             <div class="card-title mb-3">{{ __('Détails sortie poulet')}}</div>
@@ -193,6 +191,7 @@
                     <div class="col-md-6 form-group mb-3">
                         <label for="picker1">ID du produit</label>
                         <select class="form-control form-control-rounded" wire:model="id_produit">
+                            <option>Sellectioner un ID produit</option>
                             <option value="poulet_de_chaire">Poulet de chaire</option>
                             <option value="oeuf">Oeuf</option>
                             <option value="poulard">Poulard</option>
@@ -257,9 +256,9 @@
                             </span>
                         </button>
                         @if ($selectedOption == 'existe')
-                        <button {{ $btn_disabled }} class="float-right btn btn-primary btn-rounded mr-3" wire:click.prevent="saveExistSortie()" wire:loading.attr="disabled" wire:target="saveExistSortie()">
-                            <span wire:loading.remove wire:target="saveExistSortie"><i class="nav-icon i-Yes font-weight-bold"></i> Enregistrer</span>
-                            <span wire:loading wire:target="saveExistSortie">
+                        <button {{ $btn_disabled }} class="float-right btn btn-primary btn-rounded mr-3" wire:click.prevent="saveSortieAndDetailForNewClient()" wire:loading.attr="disabled" wire:target="saveSortieAndDetailForNewClient()">
+                            <span wire:loading.remove wire:target="saveSortieAndDetailForNewClient"><i class="nav-icon i-Yes font-weight-bold"></i> Enregistrer</span>
+                            <span wire:loading wire:target="saveSortieAndDetailForNewClient">
                                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                 enregistrement...
                             </span>
@@ -279,5 +278,5 @@
                 </div>
         </div>
     </div>
-</div>
 </form>
+</div>

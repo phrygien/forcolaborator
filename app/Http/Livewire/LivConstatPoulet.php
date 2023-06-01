@@ -30,7 +30,7 @@ class LivConstatPoulet extends Component
 
     //pour le sortie du constat
     public $qte_sortie, $id_dernier_constat, $id_cycle_sortie, $date_constat_sortie, $nb_disponible_constat, $prix_unitaire_sortie, $valeur;
-    public $montant, $poids_total, $prix_unite, $pu_poulet, $nombre, $id_type_sortie, $id_client, $raison_sociale, $adresse, $nom;
+    public $montant, $poids_total, $prix_unite, $pu_poulet, $nombre, $id_type_sortie, $id_client, $raison_sociale, $adresse, $nom, $id_produit;
 
     public $confirmUpdate;
     public $typePouletActifs;
@@ -429,6 +429,24 @@ class LivConstatPoulet extends Component
         }
     }
 
+    public function resetFormSortieConstat()
+    {
+        $this->id_type_sortie = '';
+        $this->poids_total = '';
+        $this->nombre = '';
+        $this->prix_unite = '';
+        $this->date_sortie = date('Y-m-d');
+        $this->id_client = '';
+        $this->montant = '';
+        $this->nom = '';
+        $this->raison_sociale = '';
+        $this->adresse = '';
+        $this->qte_sortie = '';
+        $this->prix_unitaire_sortie = '';
+        $this->nb_disponible_constat = '';
+        $this->valeur = '';
+    }
+
     public function saveSortieAndDetailForNewClient()
     {
         $this->isLoading = true;
@@ -464,59 +482,65 @@ class LivConstatPoulet extends Component
             ]);   
         }
         // verifier disponibilite
-        $constat = ConstatOeuf::where('id', $this->dernierConstatPoulet->id)->first();
-        if($constat)
+        $constat = ConstatPoulet::where('id', $this->id_dernier_constat)->first();
+        
+        if($constat !=null)
         {
-            if($this->nombre > $this->constant->nb_disponible){
+            if($this->nombre > $constat->nb_disponible){
                 session()->flash('stock_not_ok', 'Opération impossible, stock insuffisant');
             }else{
             DB::beginTransaction();
-            try{
-                //creation de nouvele client
-                $client = new Client();
-                $client->nom = $this->nom;
-                $client->raison_sociale = $this->raison_sociale;
-                $client->adresse = $this->adresse;
-                $client->save();
+                    try{
+                        //creation de nouvele client
+                        $client = new Client();
+                        $client->nom = $this->nom;
+                        $client->raison_sociale = $this->raison_sociale;
+                        $client->adresse = $this->adresse;
+                        $client->save();
+                        
+                        //création sortie poulet
+                        $sortiePoulet = new SortiePoulet();
+                        $sortiePoulet->id_type_sortie = $this->id_type_sortie;
+                        $sortiePoulet->poids_total = $this->poids_total;
+                        $sortiePoulet->nombre = $this->nombre;
+                        $sortiePoulet->prix_unite = $this->prix_unite;
+                        $sortiePoulet->date_sortie = $this->date_sortie;
+                        $sortiePoulet->date_action = now();
+                        $sortiePoulet->id_client = $client->id;
+                        $sortiePoulet->id_utilisateur = $this->id_utilisateur;
+                        $sortiePoulet->montant = ($this->prix_unite * $this->poids_total);
+                        $sortiePoulet->pu_poulet = round($sortiePoulet->montant / $this->nombre, 2);
                 
-                //création sortie poulet
-                $sortiePoulet = new SortiePoulet();
-                $sortiePoulet->id_type_sortie = $this->id_type_sortie;
-                $sortiePoulet->poids_total = $this->poids_total;
-                $sortiePoulet->nombre = $this->nombre;
-                $sortiePoulet->prix_unite = $this->prix_unite;
-                $sortiePoulet->date_sortie = $this->date_sortie;
-                $sortiePoulet->date_action = now();
-                $sortiePoulet->id_client = $client->id;
-                $sortiePoulet->id_utilisateur = $this->id_utilisateur;
-                $sortiePoulet->montant = ($this->prix_unite * $this->poids_total);
-                $sortiePoulet->pu_poulet = round($sortiePoulet->montant / $this->nombre, 2);
-        
-                $sortiePoulet->save();
-            
-                // enregistrer detail sortie
-                $detailSortie = new DetailSortie();
-                $detailSortie->id_sortie = $sortiePoulet->id;
-                $detailSortie->id_constat = $this->id_dernier_constat;
-                $detailSortie->id_produit = $this->id_produit;
-                $detailSortie->qte = $this->qte_sortie;
-                $detailSortie->valeur = $this->valeur;
-                $detailSortie->pu = $this->prix_unitaire_sortie;
-                $detailSortie->save();
+                        $sortiePoulet->save();
+                    
+                        // enregistrer detail sortie
+                        $detailSortie = new DetailSortie();
+                        $detailSortie->id_sortie = $sortiePoulet->id;
+                        $detailSortie->id_constat = $this->id_dernier_constat;
+                        $detailSortie->id_produit = $this->id_produit;
+                        $detailSortie->qte = $this->qte_sortie;
+                        $detailSortie->valeur = $this->valeur;
+                        $detailSortie->pu = $this->prix_unitaire_sortie;
+                        $detailSortie->save();
 
-                $this->resetFormSortie();
-                $this->resetValidation();
-                $this->isLoading = false;
-                $this->notification = true;
-                session()->flash('message', 'Sortie poulet bien enregistré!');
-                DB::commit();
-                $this->resetPage();
-            }catch(\Exception $e){
-                DB::rollback();
-                //return $e->getMessage();
-                session()->flash('message', $e->getMessage());
-                
-            }
+                        // mmettre à jour nombre disponible constat utilisé
+                        $constat->update([
+                            'nb_disponible' => $constat->nb_disponible - $this->qte_sortie,
+                        ]); 
+
+                        $this->resetFormSortieConstat();
+                        $this->resetValidation();
+                        $this->isLoading = false;
+                        $this->notification = true;
+                        session()->flash('message', 'Sortie poulet bien enregistré!');
+                        DB::commit();
+                        $this->resetPage();
+                    }catch(\Exception $e){
+                        DB::rollback();
+                        //return $e->getMessage();
+                        session()->flash('message', $e->getMessage());
+                        
+                    }
             }
         }
     }
