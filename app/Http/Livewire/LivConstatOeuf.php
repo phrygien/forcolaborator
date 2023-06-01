@@ -6,6 +6,9 @@ use App\Models\Batiment;
 use App\Models\Client;
 use App\Models\ConstatOeuf;
 use App\Models\Cycle;
+use App\Models\DetailSortie;
+use App\Models\ProduitCycle;
+use App\Models\SortieOeuf;
 use App\Models\TypeOeuf;
 use App\Models\TypeSortie;
 use DateTime;
@@ -65,6 +68,7 @@ class LivConstatOeuf extends Component
     public function mount()
     {
         $this->date_entree = date('Y-m-d');
+        $this->date_sortie = date('Y-m-d');
         $this->date_action = date('Y-m-d');
         $this->typeOeufActifs = TypeOeuf::where('actif', 1)->get();
         $this->cycleActifs = Cycle::where('actif', 1)->get();
@@ -99,6 +103,7 @@ class LivConstatOeuf extends Component
             ->join('cycles', 'cycles.id', 'constat_oeufs.id_cycle')
             ->join('users', 'users.id', 'constat_oeufs.id_utilisateur')
             ->select('constat_oeufs.*', 'type_oeufs.type', 'cycles.description', 'users.name')
+            ->orderBy('date_entree', 'DESC')
             ->paginate(10);
 
             $totalDonneesJournalieres = ConstatOeuf::join('type_oeufs', 'constat_oeufs.id_type_oeuf', '=', 'type_oeufs.id')
@@ -371,7 +376,7 @@ class LivConstatOeuf extends Component
             {
                 $this->valeur = $this->prix_unitaire_detail * $this->qte_sortie_detail;
             }else{
-                $this->valeur = '';
+                $this->valeur = 0;
             }
         }
 
@@ -396,6 +401,199 @@ class LivConstatOeuf extends Component
             }else{
                 $this->btn_disabled = '';
             }
+        }
+
+        public function resetFormConstatSortie()
+        {
+            $this->id_type_oeuf = '';
+            $this->id_type_oeuf_sortie = '';
+            $this->id_client = '';
+            $this->nom = '';
+            $this->raison_sociale = '';
+            $this->adresse = '';
+            $this->qte_sortie = '';
+            $this->pu_sortie = '';
+            $this->date_sortie = date('Y-m-d');
+            $this->date_action = '';
+            $this->montant_sortie = '';
+            $this->qte_sortie_detail = '';
+            $this->valeur = '';
+            $this->prix_unitaire_detail = '';
+            $this->creatBtn = false;
+            $this->resetValidation();
+        }
+
+        public function saveNewSortie()
+        {
+            $this->isLoading = true;
+            $this->validate([
+                'id_type_oeuf' => 'required|integer',
+                'id_type_sortie_sortie' => 'required|integer',
+                'nom' => 'required',
+                'qte_sortie' => 'required|integer',
+                'pu_sortie' => 'required|numeric',
+                'montant_sortie' => 'required|numeric',
+                'date_sortie' => 'required|date',
+                'id_client' => 'nullable|integer',
+                'id_utilisateur' => 'nullable',
+                'date_action' => 'nullable',
+                'prix_unitaire_detail' => 'required|numeric',
+                'valeur' => 'required|numeric',
+                'qte_sortie_detail' => 'required',
+                'id_produit' => 'required'
+            ]);
+    
+            DB::beginTransaction();
+                try{
+                    $constat = ConstatOeuf::where('id', $this->id_dernier_constat)->first();
+
+                    //creation de nouvele client
+                    $client = new Client();
+                    $client->nom = $this->nom;
+                    $client->raison_sociale = $this->raison_sociale;
+                    $client->adresse = $this->adresse;
+                    $client->save();
+
+                    //création sortie oeuf
+                    $sortieOeuf = new SortieOeuf();
+                    $sortieOeuf->id_type_oeuf = $this->id_type_oeuf;
+                    $sortieOeuf->id_type_sortie = $this->id_type_sortie_sortie;
+                    $sortieOeuf->qte = $this->qte_sortie;
+                    $sortieOeuf->pu = $this->pu_sortie;
+                    $sortieOeuf->date_sortie = $this->date_sortie;
+                    $sortieOeuf->date_action = now();
+                    $sortieOeuf->id_client = $client->id;
+                    $sortieOeuf->id_utilisateur = $this->id_utilisateur;
+                    $sortieOeuf->montant = ($this->pu_sortie * $this->qte_sortie);
+            
+                    $sortieOeuf->save();
+            
+                    // enregistrer detail sortie
+                    $detailSortie = new DetailSortie();
+                    $detailSortie->id_sortie = $sortieOeuf->id;
+                    $detailSortie->id_constat = $this->id_dernier_constat;
+                    $detailSortie->id_produit = $this->id_produit;
+                    $detailSortie->qte = $this->qte_sortie_detail;
+                    $detailSortie->valeur = $this->valeur;
+                    $detailSortie->pu = $this->prix_unitaire_detail;
+                    $detailSortie->save();
+
+                    // mmettre à jour nombre disponible constat utilisé
+                    $constat->update([
+                        'nb_disponible' => $constat->nb_disponible - $this->qte_sortie_detail,
+                    ]); 
+
+                    // enregistrement produit cycle
+                    $produitCycle = new ProduitCycle();
+                    $produitCycle->id_cycle = $constat->id_cycle;
+                    $produitCycle->id_produit = $this->id_produit;
+                    $produitCycle->id_sortie = $sortieOeuf->id;
+                    $produitCycle->qte = $this->qte_sortie_detail;
+                    $produitCycle->pu = $this->prix_unitaire_detail;
+                    $produitCycle->valeur = $this->valeur;
+                    $produitCycle->save();
+
+                    $this->resetFormConstatSortie();
+                    $this->resetValidation();
+                    $this->isLoading = false;
+                    $this->notification = true;
+                    session()->flash('message', 'Sortie oeuf bien enregistré!');
+                    DB::commit();
+                    $this->resetPage();
+                    }catch(\Exception $e){
+                        DB::rollback();
+                        //return $e->getMessage();
+                        session()->flash('message', $e->getMessage());
+                        
+                    }
+        }
+
+        public function saveExistSortie()
+        {
+            $this->isLoading = true;
+            $this->validate([
+                'id_type_oeuf' => 'required|integer',
+                'id_type_sortie_sortie' => 'required|integer',
+                'qte_sortie' => 'required|integer',
+                'pu_sortie' => 'required|numeric',
+                'montant_sortie' => 'required|numeric',
+                'date_sortie' => 'required|date',
+                'id_client' => 'required|integer',
+                'id_utilisateur' => 'nullable',
+                'date_action' => 'nullable',
+                'prix_unitaire_detail' => 'required|numeric',
+                'valeur' => 'required|numeric',
+                'qte_sortie_detail' => 'required',
+                'id_produit' => 'required'
+            ]);
+    
+            DB::beginTransaction();
+                try{
+                    $constat = ConstatOeuf::where('id', $this->id_dernier_constat)->first();
+                    //création sortie oeuf
+                    $sortieOeuf = new SortieOeuf();
+                    $sortieOeuf->id_type_oeuf = $this->id_type_oeuf;
+                    $sortieOeuf->id_type_sortie = $this->id_type_sortie_sortie;
+                    $sortieOeuf->qte = $this->qte_sortie;
+                    $sortieOeuf->pu = $this->pu_sortie;
+                    $sortieOeuf->date_sortie = $this->date_sortie;
+                    $sortieOeuf->date_action = now();
+                    $sortieOeuf->id_client = $this->id_client;
+                    $sortieOeuf->id_utilisateur = $this->id_utilisateur;
+                    $sortieOeuf->montant = ($this->pu_sortie * $this->qte_sortie);
+            
+                    $sortieOeuf->save();
+            
+                    // enregistrer detail sortie
+                    $detailSortie = new DetailSortie();
+                    $detailSortie->id_sortie = $sortieOeuf->id;
+                    $detailSortie->id_constat = $this->id_dernier_constat;
+                    $detailSortie->id_produit = $this->id_produit;
+                    $detailSortie->qte = $this->qte_sortie_detail;
+                    $detailSortie->valeur = $this->valeur;
+                    $detailSortie->pu = $this->prix_unitaire_detail;
+                    $detailSortie->save();
+
+                    // mmettre à jour nombre disponible constat utilisé
+                    $constat->update([
+                        'nb_disponible' => $constat->nb_disponible - $this->qte_sortie_detail,
+                    ]); 
+
+                    // enregistrement produit cycle
+                    $produitCycle = new ProduitCycle();
+                    $produitCycle->id_cycle = $constat->id_cycle;
+                    $produitCycle->id_produit = $this->id_produit;
+                    $produitCycle->id_sortie = $sortieOeuf->id;
+                    $produitCycle->qte = $this->qte_sortie_detail;
+                    $produitCycle->pu = $this->prix_unitaire_detail;
+                    $produitCycle->valeur = $this->valeur;
+                    $produitCycle->save();
+
+                    $this->resetFormConstatSortie();
+                    $this->resetValidation();
+                    $this->isLoading = false;
+                    $this->notification = true;
+                    session()->flash('message', 'Sortie oeuf bien enregistré!');
+                    DB::commit();
+                    $this->resetPage();
+                    }catch(\Exception $e){
+                        DB::rollback();
+                        //return $e->getMessage();
+                        session()->flash('message', $e->getMessage());
+                        
+                    }
+        }
+
+        public function cancelCreationSortie()
+        {
+            $this->isLoading = true;
+            $this->createSortieConstant = false;
+            $this->createConstat = false;
+            $this->afficherListe = true;
+            $this->resetFormConstat();
+            $this->resetValidation();
+            $this->isLoading = false;
+            $this->creatBtn = true;
         }
     /*
     * fin sortie oeuf

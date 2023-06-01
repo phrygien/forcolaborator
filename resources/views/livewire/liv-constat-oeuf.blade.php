@@ -18,9 +18,9 @@
         @include('livewire.constat_oeufs.create')
     @endif
 
-    {{-- @if($createSortieConstant) --}}
+    @if($createSortieConstant)
         @include('livewire.constat_oeufs.create_sortie_constat')
-    {{-- @endif --}}
+    @endif
 
     @if($editConstat)
         @include('livewire.constat_oeufs.edit')

@@ -237,9 +237,9 @@
                     </div>
 
                     <div class="col-md-12 mt-3 mb-3">
-                        <button class="btn btn-secondary btn-rounded" wire:click.prevent="cancelCreate()" wire:loading.attr="disabled" wire:target="cancelCreate()">
-                            <span wire:loading.remove wire:target="cancelCreate"><i class="nav-icon i-Arrow-Back font-weight-bold"></i> Retour</span>
-                            <span wire:loading wire:target="cancelCreate">
+                        <button class="btn btn-secondary btn-rounded" wire:click.prevent="cancelCreationSortie()" wire:loading.attr="disabled" wire:target="cancelCreationSortie()">
+                            <span wire:loading.remove wire:target="cancelCreationSortie"><i class="nav-icon i-Arrow-Back font-weight-bold"></i> Retour</span>
+                            <span wire:loading wire:target="cancelCreationSortie">
                                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                 annulation...
                             </span>
@@ -252,9 +252,9 @@
                             </span>
                         </button>
                         @if ($selectedOption == 'existe')
-                        <button {{ $btn_disabled }} class="float-right btn btn-primary btn-rounded mr-3" wire:click.prevent="saveSortieAndDetailForExisteClient()" wire:loading.attr="disabled" wire:target="saveSortieAndDetailForExisteClient()">
-                            <span wire:loading.remove wire:target="saveSortieAndDetailForExisteClient"><i class="nav-icon i-Yes font-weight-bold"></i> Enregistrer</span>
-                            <span wire:loading wire:target="saveSortieAndDetailForExisteClient">
+                        <button {{ $btn_disabled }} class="float-right btn btn-primary btn-rounded mr-3" wire:click.prevent="saveExistSortie()" wire:loading.attr="disabled" wire:target="saveExistSortie()">
+                            <span wire:loading.remove wire:target="saveExistSortie"><i class="nav-icon i-Yes font-weight-bold"></i> Enregistrer</span>
+                            <span wire:loading wire:target="saveExistSortie">
                                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                 enregistrement...
                             </span>
@@ -262,9 +262,9 @@
                         @endif
 
                         @if ($selectedOption == 'nouvele')
-                        <button {{ $btn_disabled }} class="float-right btn btn-primary btn-rounded mr-3" wire:click.prevent="saveSortieAndDetailForNewClient()" wire:loading.attr="disabled" wire:target="saveSortieAndDetailForNewClient()">
-                            <span wire:loading.remove wire:target="saveSortieAndDetailForNewClient"><i class="nav-icon i-Yes font-weight-bold"></i> Enregistrer</span>
-                            <span wire:loading wire:target="saveSortieAndDetailForNewClient">
+                        <button {{ $btn_disabled }} class="float-right btn btn-primary btn-rounded mr-3" wire:click.prevent="saveNewSortie()" wire:loading.attr="disabled" wire:target="saveNewSortie()">
+                            <span wire:loading.remove wire:target="saveNewSortie"><i class="nav-icon i-Yes font-weight-bold"></i> Enregistrer</span>
+                            <span wire:loading wire:target="saveNewSortie">
                                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                 enregistrement...
                             </span>
