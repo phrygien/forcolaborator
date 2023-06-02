@@ -15,10 +15,12 @@
                 <td><span class="badge bg-info text-white text-14">{{ $constat->total_constats }} constat(s)</span></td>
             </tr>
             @empty
-                <div class="text-center">
-                    <h2>Pas de constat!</h2>
-                </div>
-            @endforelse ()
+            <tr>
+                <td colspan="3" class="text-center">
+                    <span class="text-20 text-center text-secondary">pas de constat pour le moment !</span>
+                </td>
+            </tr>                                
+            @endforelse
 
         </tbody>
     </table>

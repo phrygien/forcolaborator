@@ -1,6 +1,6 @@
 <div class="col-md-12">
     <form>
-        <div class="card mb-4">
+        <div class="card mb-4" style="border-bottom: solid 3px purple;">
             <div class="card-body">
                 <div class="card-title mb-3">{{ __('Création sortie oeuf')}}</div>
                 <form>
@@ -152,7 +152,7 @@
                 </form>
             </div>
         </div>
-    <div class="card mb-4" style="border: solid 3px #ececec;">
+    <div class="card mb-4"  style="border-bottom: solid 3px rgb(12, 161, 92);">
         <div class="card-body">
             <div class="card-title mb-3">{{ __('Détails sortie oeuf')}}</div>
                 <div class="row">
@@ -244,9 +244,9 @@
                                 annulation...
                             </span>
                         </button>
-                        <button class="float-right btn btn-danger btn-rounded mr-3" wire:click.prevent="resetFormSortieConstat()" wire:loading.attr="disabled" wire:target="resetFormSortieConstat()">
-                            <span wire:loading.remove wire:target="resetFormSortieConstat"><i class="nav-icon i-Repeat-3 font-weight-bold"></i> Reinitialiser</span>
-                            <span wire:loading wire:target="resetFormSortieConstat">
+                        <button class="float-right btn btn-danger btn-rounded mr-3" wire:click.prevent="resetFormConstatSortie()" wire:loading.attr="disabled" wire:target="resetFormConstatSortie()">
+                            <span wire:loading.remove wire:target="resetFormConstatSortie"><i class="nav-icon i-Repeat-3 font-weight-bold"></i> Reinitialiser</span>
+                            <span wire:loading wire:target="resetFormConstatSortie">
                                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                 reinitialisation...
                             </span>
