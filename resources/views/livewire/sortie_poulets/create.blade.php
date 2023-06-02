@@ -20,7 +20,7 @@
                     </label>
                     </div>
 
-                    <div class="col-md-6 form-group mb-3">
+                    {{-- <div class="col-md-6 form-group mb-3">
                         <label for="picker1">{{ __('Type poulets')}}</label>
                         <select wire:model="id_type_poulet" class="form-control form-control-rounded">
                             <option value="">Choisir un type de poulet</option>
@@ -33,9 +33,9 @@
                             {{ $message}}
                         </div>
                         @enderror
-                    </div>
+                    </div> --}}
 
-                    <div class="col-md-6 form-group mb-3">
+                    {{-- <div class="col-md-6 form-group mb-3">
                         <label for="picker1">{{ __('Cycle')}}</label>
                         <select wire:model="id_cycle" class="form-control form-control-rounded">
                             <option value="">Choisir un cycle</option>
@@ -48,7 +48,7 @@
                             {{ $message}}
                         </div>
                         @enderror
-                    </div>
+                    </div> --}}
                     
                     <hr>
                     <div class="col-md-6 form-group mb-3">
@@ -190,28 +190,83 @@
                     @endif
 
 
-                    <div class="col-md-6 form-group mb-3">
-                        <label for="picker1">{{ __('Status sortie')}}</label>
-                        <select wire:model="actif" class="form-control form-control-rounded">
-                            <option>Select status</option>
-                            <option value="1">Actif</option>
-                            <option value="2">Inactif</option>
-                        </select>
-                        @error('actif') 
-                        <div class="alert alert-danger" role="alert">
-                            {{ $message}}
-                        </div>
-                        @enderror
-                    </div>
-
                     <div class="col-md-6 form-group mb-3" hidden>
                         <label for="firstName2">{{ __('Utilisateur ID')}}</label>
                         <input type="text" wire:model="id_utilisateur" class="form-control form-control-rounded">
                     </div>
 
+                    
+                    <div class="col-md-12 col-lg-12">
+                        <div class="alert alert-card alert-info" role="alert">
+                            <strong class="text-capitalize">Details sortie</strong> - veiller ajouter les élement pour la sortie.
+                        </div>
+                        <p>
+                            <button type="button" class="btn btn-instagram btn-icon m-1">
+                                <span class="ul-btn__icon"><i class="i-Add-Cart"></i></span>
+                                <span class="ul-btn__text">Ajouter detail</span>
+                            </button>
+                        </p>
+                        <p>
+                            <div class="table-responsive">
+                                <table id="user_table" class="table  text-center">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Constat ID</th>
+                                            <th scope="col">Nombre disponible</th>
+                                            <th scope="col">Qte</th>
+                                            <th scope="col">Prix unitaire</th>
+                                            <th scope="col">Montant total</th>
+                                            <th scope="col">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">
+                                                <input type="text" class="form-control form-control-rounded" id="firstName2" placeholder="Constat ID">
+                                            </th>
+                                            <td>
+                                                <input type="text" class="form-control form-control-rounded" id="firstName2" placeholder="">
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control form-control-rounded" id="firstName2" placeholder="Enter your first name">
+                                            </td>
+
+                                            <td>
+                                                <input type="text" class="form-control form-control-rounded" id="firstName2" placeholder="Constat ID">
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control form-control-rounded" id="firstName2" placeholder="Constat ID">
+                                            </td>
+                                            <td>
+                                                <a href="#" class="text-danger mr-2">
+                                                    <i class="nav-icon i-Close-Window font-weight-bold"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </p>
+                    </div>
+
                     <div class="col-md-12">
+                        <button class="btn btn-secondary btn-rounded" wire:click.prevent="cancelCreate()" wire:loading.attr="disabled" wire:target="cancelCreate()">
+                            <span wire:loading.remove wire:target="cancelCreate"><i class="nav-icon i-Arrow-Back font-weight-bold"></i> Retour</span>
+                            <span wire:loading wire:target="cancelCreate">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                annulation...
+                            </span>
+                        </button>
+                        <button class="float-right btn btn-danger btn-rounded mr-3" wire:click.prevent="resetFormSortie()" wire:loading.attr="disabled" wire:target="resetFormSortie()">
+                            <span wire:loading.remove wire:target="resetFormSortie"><i class="nav-icon i-Repeat-3 font-weight-bold"></i> Reinitialiser</span>
+                            <span wire:loading wire:target="resetFormSortie">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                reinitialisation...
+                            </span>
+                        </button>
                         @if ($selectedOption == 'existe')
-                        <button class="btn btn-primary btn-rounded mr-3" wire:click.prevent="saveExistSortie()" wire:loading.attr="disabled" wire:target="saveExistSortie()">
+                        <button class="float-right btn btn-primary btn-rounded mr-3" wire:click.prevent="saveExistSortie()" wire:loading.attr="disabled" wire:target="saveExistSortie()">
                             <span wire:loading.remove wire:target="saveExistSortie"><i class="nav-icon i-Yes font-weight-bold"></i> Enregistrer</span>
                             <span wire:loading wire:target="saveExistSortie">
                                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
@@ -221,7 +276,7 @@
                         @endif
 
                         @if ($selectedOption == 'nouvele')
-                        <button class="btn btn-primary btn-rounded mr-3" wire:click.prevent="saveNewSortie()" wire:loading.attr="disabled" wire:target="saveNewSortie()">
+                        <button class="float-right btn btn-primary btn-rounded mr-3" wire:click.prevent="saveNewSortie()" wire:loading.attr="disabled" wire:target="saveNewSortie()">
                             <span wire:loading.remove wire:target="saveNewSortie"><i class="nav-icon i-Yes font-weight-bold"></i> Enregistrer</span>
                             <span wire:loading wire:target="saveNewSortie">
                                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
@@ -230,20 +285,6 @@
                         </button>
                         @endif
 
-                        <button class="btn btn-danger btn-rounded mr-3" wire:click.prevent="resetFormSortie()" wire:loading.attr="disabled" wire:target="resetFormSortie()">
-                            <span wire:loading.remove wire:target="resetFormSortie"><i class="nav-icon i-Repeat-3 font-weight-bold"></i> Reinitialiser</span>
-                            <span wire:loading wire:target="resetFormSortie">
-                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                reinitialisation...
-                            </span>
-                        </button>
-                        <button class="btn btn-secondary btn-rounded" wire:click.prevent="cancelCreate()" wire:loading.attr="disabled" wire:target="cancelCreate()">
-                            <span wire:loading.remove wire:target="cancelCreate"><i class="nav-icon i-Arrow-Back font-weight-bold"></i> Retour</span>
-                            <span wire:loading wire:target="cancelCreate">
-                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                annulation...
-                            </span>
-                        </button>
                     </div>
                 </div>
             </form>

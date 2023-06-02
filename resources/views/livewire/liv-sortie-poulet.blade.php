@@ -94,12 +94,13 @@
                     <table class="table table-striped table-hover">
                         <thead>
                             <tr>
-                                <th scope="col">{{ __('Type poulet')}}</th>
                                 <th scope="col">{{ __('Type sortie')}}</th>
                                 <th scope="col">{{ __('Client')}}</th>
                                 <th scope="col">{{ __('Date sortie')}}</th>
                                 <th scope="col">{{ __('Poid total')}}</th>
                                 <th scope="col">{{ __('Nombre')}}</th>
+                                <th scope="col">{{ __('Prix unitaire')}}</th>
+                                <th scope="col">{{ __('Pu poulet')}}</th>
                                 <th scope="col">{{ __('Montant total')}}</th>
                                 <th scope="col">{{ __('Utilisateur')}}</th>
                                 <th scope="col">{{ __('Status')}}</th>
@@ -108,20 +109,21 @@
                         </thead>
                         <tbody>
                             @forelse ($sorties as $sortie)
-                            <tr>
-                                <td>{{ $sortie->type }}</td>
+                            <tr @if($sortie->retour != 0) class="text-danger" @endif>
                                 <td>{{ $sortie->libelle }}</td>
                                 <td>{{ $sortie->nom }}</td>
-                                <td>{{ $sortie->date_sortie }}</td>
+                                <td>{{  get_formatted_date($sortie->date_sortie, 'd - M - Y') }}</td>
                                 <td>{{ $sortie->poids_total }}</td>
                                 <td>{{ $sortie->nombre }}</td>
+                                <td>{{ $sortie->prix_unite }} Ar</td>
+                                <td>{{ $sortie->pu_poulet }} Ar</td>
                                 <td><span class="badge bg-info text-white">Ar {{ $sortie->montant }}</span></td>
                                 <td>{{ $sortie->name }}</td>
                                 <td>
-                                    @if($sortie->actif == 1)
-                                        <span class="badge badge-success">Actif</span>
+                                    @if($sortie->retour == 0)
+                                        <span class="text-primary">pas de retour</span>
                                     @else
-                                        <span class="badge badge-danger">Inactif</span>
+                                        <span class="text-danger">annuler</span>
                                     @endif
                                 </td>
                                 <td>
@@ -139,7 +141,7 @@
                             </tr>                                  
                             @empty
                             <tr>
-                                <td colspan="9" class="text-center">
+                                <td colspan="11" class="text-center">
                                     <span class="text-25 text-center text-warning">Aucune donnée disponible</span>
                                 </td>
                             </tr>                                

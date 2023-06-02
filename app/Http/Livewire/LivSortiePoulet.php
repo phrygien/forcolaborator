@@ -121,12 +121,11 @@ class LivSortiePoulet extends Component
     public function render()
     {
         $sorties = DB::table('sortie_poulets')
-        ->join('type_poulets', 'type_poulets.id', 'sortie_poulets.id_type_poulet')
         ->join('clients', 'clients.id', 'sortie_poulets.id_client')
         ->join('type_sorties', 'type_sorties.id', 'sortie_poulets.id_type_sortie')
         ->join('users', 'users.id', 'sortie_poulets.id_utilisateur')
-        ->select('sortie_poulets.*', 'clients.nom', 'type_poulets.type', 'users.name', 'type_sorties.libelle')
-        ->where('sortie_poulets.actif', 1)
+        ->select('sortie_poulets.*', 'clients.nom', 'users.name', 'type_sorties.libelle')
+        ->orderBy('date_sortie', 'DESC')
         ->paginate(7);
         $prixs = $this->getPrix();
         return view('livewire.liv-sortie-poulet', [
