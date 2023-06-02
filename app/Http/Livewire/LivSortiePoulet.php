@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use App\Models\Client;
+use App\Models\ConstatPoulet;
 use App\Models\Cycle;
 use App\Models\PrixPoulet;
 use App\Models\SortiePoulet;
@@ -41,7 +42,9 @@ class LivSortiePoulet extends Component
     public $creatBtn = true;
     protected $paginationTheme = 'bootstrap';
     public $notification;
+    public $addLigne = true;
 
+    public $constatDisponibles;
     /*
     * debut utils sortie poulet
     */
@@ -57,9 +60,10 @@ class LivSortiePoulet extends Component
         $this->sortie['details'][] = [
             'id_constat' => null,
             'id_produit' => null,
-            'qte' => 0,
-            'pu' => 0,
-            'valeur' => 0,
+            'nb_disponible' => null,
+            'qte_detail' => 0,
+            'prix_unitaire_detail' => 0,
+            'montant_total_detail' => 0,
         ];
     }
 
@@ -73,6 +77,63 @@ class LivSortiePoulet extends Component
     {
         $this->creatBtn = false;
     }
+
+    private function getDetailsSelectionnes()
+    {
+        return collect($this->sortie['details'])->pluck('id_constat')->filter()->all();
+    }
+
+    public function getNombreDisponible($id_constat)
+    {
+        $constat = ConstatPoulet::find($id_constat);
+    
+        if ($constat) {
+            return $constat->nb_disponible;
+        }
+    
+        return 0;
+    }
+    
+
+    public function updateNombreDisponible($id_constat, $index)
+    {
+        $nombreDisponible = $this->getNombreDisponible($id_constat);
+
+        $this->sortie['details'][$index]['nb_disponible'] = $nombreDisponible;
+    }
+
+
+    // public function updatedSortieDetails($index)
+    // {
+    //     $qte = $this->sortie['details'][$index]['qte_detail'];
+    //     $prixUnitaire = $this->sortie['details'][$index]['prix_unitaire_detail'];
+
+    //     $this->sortie['details'][$index]['montant_total_detail'] = $qte * $prixUnitaire;
+    // }
+
+    public function calculateMontantTotal($index)
+    {
+        $qte = $this->sortie['details'][$index]['qte_detail'];
+        $prixUnitaire = $this->sortie['details'][$index]['prix_unitaire_detail'];
+        $nbDisponible = $this->sortie['details'][$index]['nb_disponible'];
+
+        if(is_numeric($qte) && is_numeric($prixUnitaire)){
+            $this->sortie['details'][$index]['montant_total_detail'] = $qte * $prixUnitaire;
+        }else{
+            $this->sortie['details'][$index]['montant_total_detail'] = '';
+        }
+
+        if(is_numeric($qte) || is_numeric($prixUnitaire)){
+            if ($qte > $nbDisponible) {
+                session()->flash("error.{$index}", 'La quantité saisie est supérieure au nombre disponible.');
+                $this->addLigne = false;
+            }else
+            {
+                $this->addLigne = true;
+            }
+        }
+    }
+
     /*
     * fin utils sortie poulet
     */
@@ -87,6 +148,8 @@ class LivSortiePoulet extends Component
         $this->id_utilisateur = Auth::user()->id;
         //$this->montant = ($this->prix_unite * $this->nombre);
         $this->actif = 1;
+
+        $this->constatDisponibles = ConstatPoulet::whereNotIn('id', $this->getDetailsSelectionnes())->get();
     }
 
     public $selectedType = '';
