@@ -11,4 +11,9 @@ class SortieoeufController extends Controller
     {
         return view('sortie/oeuf/page');
     }
+
+    public function page2()
+    {
+        return view('sortie/oeuf/page2');
+    }
 }
