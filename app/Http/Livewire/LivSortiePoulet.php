@@ -42,6 +42,40 @@ class LivSortiePoulet extends Component
     protected $paginationTheme = 'bootstrap';
     public $notification;
 
+    /*
+    * debut utils sortie poulet
+    */
+    public $sortie = [
+        'nom_client' => '',
+        'adresse' => '',
+        'date_commande' => '',
+        'details' => [],
+    ];
+
+    public function addDetail()
+    {
+        $this->sortie['details'][] = [
+            'id_constat' => null,
+            'id_produit' => null,
+            'qte' => 0,
+            'pu' => 0,
+            'valeur' => 0,
+        ];
+    }
+
+    public function removeDetail($index)
+    {
+        unset($this->sortie['details'][$index]);
+        $this->sortie['details'] = array_values($this->sortie['details']);
+    }
+
+    public function actualiserDetail()
+    {
+        $this->creatBtn = false;
+    }
+    /*
+    * fin utils sortie poulet
+    */
     public function mount()
     {
         $this->date_action = date('Y-m-d');

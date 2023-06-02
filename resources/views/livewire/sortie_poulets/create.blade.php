@@ -201,7 +201,7 @@
                             <strong class="text-capitalize">Details sortie</strong> - veiller ajouter les élement pour la sortie.
                         </div>
                         <p>
-                            <button type="button" class="btn btn-instagram btn-icon m-1">
+                            <button type="button" wire:click="addDetail" class="btn btn-instagram btn-icon m-1">
                                 <span class="ul-btn__icon"><i class="i-Add-Cart"></i></span>
                                 <span class="ul-btn__text">Ajouter detail</span>
                             </button>
@@ -220,6 +220,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @foreach ($sortie['details'] as $index => $produit)
                                         <tr>
                                             <th scope="row">
                                                 <input type="text" class="form-control form-control-rounded" id="firstName2" placeholder="Constat ID">
@@ -238,12 +239,12 @@
                                                 <input type="text" class="form-control form-control-rounded" id="firstName2" placeholder="Constat ID">
                                             </td>
                                             <td>
-                                                <a href="#" class="text-danger mr-2">
+                                                <a wire:click="removeDetail({{ $index }})" href="#" class="text-danger mr-2">
                                                     <i class="nav-icon i-Close-Window font-weight-bold"></i>
                                                 </a>
                                             </td>
                                         </tr>
-
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
