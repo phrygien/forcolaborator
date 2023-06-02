@@ -1,6 +1,6 @@
 <div class="col-md-12">
-    <form>
-    <div class="card mb-4">
+    <form> 
+    <div class="card mb-4" style="border-bottom: solid 3px purple;">
         <div class="card-body">
             <div class="card-title mb-3"><i class="nav-icon i-File-Edit"></i> {{ __('Création sortie poulet')}}</div>
 
@@ -154,7 +154,7 @@
         </div>
     </div>
 
-    <div class="card mb-4" style="border: solid 3px #663399;">
+    <div class="card mb-4" style="border-bottom: solid 3px rgb(12, 161, 92);">
         <div class="card-body">
             <div class="card-title mb-3"><i class="nav-icon i-Remove-Cart"></i> {{ __('Détails sortie poulet')}}</div>
                 <div class="row">
@@ -241,9 +241,9 @@
                     </div>
 
                     <div class="col-md-12 mt-3 mb-3">
-                        <button class="btn btn-secondary btn-rounded" wire:click.prevent="cancelCreate()" wire:loading.attr="disabled" wire:target="cancelCreate()">
-                            <span wire:loading.remove wire:target="cancelCreate"><i class="nav-icon i-Arrow-Back font-weight-bold"></i> Retour</span>
-                            <span wire:loading wire:target="cancelCreate">
+                        <button class="btn btn-secondary btn-rounded" wire:click.prevent="cancelCreateSortie()" wire:loading.attr="disabled" wire:target="cancelCreateSortie()">
+                            <span wire:loading.remove wire:target="cancelCreateSortie"><i class="nav-icon i-Arrow-Back font-weight-bold"></i> Retour</span>
+                            <span wire:loading wire:target="cancelCreateSortie">
                                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                 annulation...
                             </span>

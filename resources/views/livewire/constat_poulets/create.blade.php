@@ -67,7 +67,7 @@
                     </div>
 
                     <div class="col-md-12 mt-4">
-                        <button class="float-right btn btn-secondary btn-rounded" wire:click.prevent="cancelCreate()" wire:loading.attr="disabled" wire:target="cancelCreate()">
+                        <button class="btn btn-secondary btn-rounded" wire:click.prevent="cancelCreate()" wire:loading.attr="disabled" wire:target="cancelCreate()">
                             <span wire:loading.remove wire:target="cancelCreate"><i class="nav-icon i-Arrow-Back font-weight-bold"></i> Retour</span>
                             <span wire:loading wire:target="cancelCreate">
                                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
@@ -81,11 +81,11 @@
                                 reinitialisation...
                             </span>
                         </button>
-                        <button class="float-right btn btn-warning btn-rounded mr-3" wire:click.prevent="createSortieConstant()" wire:loading.attr="disabled" wire:target="createSortieConstant()">
+                        <button class="float-right btn btn-instagram btn-rounded mr-3" wire:click.prevent="createSortieConstant()" wire:loading.attr="disabled" wire:target="createSortieConstant()">
                             <span wire:loading.remove wire:target="createSortieConstant"><i class="nav-icon i-Checkout font-weight-bold"></i> Enregistrer avec une sortie</span>
                             <span wire:loading wire:target="createSortieConstant">
                                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                enregistrement...
+                                chargement...
                             </span>
                         </button>
                         <button class="float-right btn btn-primary btn-rounded mr-3" wire:click.prevent="saveConstat()" wire:loading.attr="disabled" wire:target="saveConstat()">

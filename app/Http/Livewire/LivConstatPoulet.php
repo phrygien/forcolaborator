@@ -250,6 +250,18 @@ class LivConstatPoulet extends Component
         $this->creatBtn = true;
     }
 
+    public function cancelCreateSortie()
+    {
+        $this->isLoading = true;
+        $this->createSortieConstant = false;
+        $this->createConstat = false;
+        $this->afficherListe = true;
+        $this->resetFormConstat();
+        $this->resetValidation();
+        $this->isLoading = false;
+        $this->creatBtn = true;
+    }
+
     public function editConstat($id)
     {
         $constat = ConstatPoulet::findOrFail($id);
