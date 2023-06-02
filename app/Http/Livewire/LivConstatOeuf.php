@@ -26,7 +26,7 @@ class LivConstatOeuf extends Component
 
     public $createConstat = false, $editConstat= false;
 
-    public $constat_id, $nb, $id_type_oeuf, $id_cycle, $date_entree, $date_action, $id_utilisateur, $nb_disponible;
+    public $constat_id, $nb,$new_nb, $new_nb_disponible,$id_type_oeuf, $id_cycle, $date_entree, $date_action, $id_utilisateur, $nb_disponible;
     public $id_dernier_constat, $id_cycle_sortie, $date_constat_sortie, $nb_disponible_constat;
     public $selectedSite;
     public $selectedBatiment;
@@ -171,6 +171,8 @@ class LivConstatOeuf extends Component
         $this->id_type_oeuf = '';
         $this->nb = '';
         $this->id_cycle = '';
+        $this->new_nb = '';
+        $this->new_nb_disponible = '';
         $this->date_entree = date('Y-m-d');
         $this->creatBtn = false;
         $this->resetValidation();
@@ -236,7 +238,7 @@ class LivConstatOeuf extends Component
         $this->id_cycle = $constat->id_cycle;
         $this->date_entree = $constat->date_entree;
         $this->id_utilisateur = $constat->id_utilisateur;
-
+        $this->nb_disponible = $constat->nb_disponible;
         $this->editConstat = true;
         $this->createConstat = false;
         $this->creatBtn = false;
@@ -262,14 +264,28 @@ class LivConstatOeuf extends Component
         try{
             
             $constat = ConstatOeuf::findOrFail($this->constat_id);
-            $constat->update([
-                'id_type_oeuf' => $this->id_type_oeuf,
-                'nb' => $this->nb,
-                'id_cycle' => $this->id_cycle,
-                'date_entree' => $this->date_entree,
-                'date_action' => $this->date_action,
-                'id_utilisateur' => $this->id_utilisateur,
-            ]);
+            //verifier si le nombre d'oeufs sont modifier
+            if($this->new_nb !=null || $this->new_nb_disponible !=null){
+                $constat->update([
+                    'id_type_oeuf' => $this->id_type_oeuf,
+                    'nb' => $this->new_nb,
+                    'id_cycle' => $this->id_cycle,
+                    'date_entree' => $this->date_entree,
+                    'date_action' => $this->date_action,
+                    'id_utilisateur' => $this->id_utilisateur,
+                    'nb_disponible' => $this->new_nb_disponible,
+                ]);
+            }else{
+                $constat->update([
+                    'id_type_oeuf' => $this->id_type_oeuf,
+                    'nb' => $this->nb,
+                    'nb_disponible' => $this->nb_disponible,
+                    'id_cycle' => $this->id_cycle,
+                    'date_entree' => $this->date_entree,
+                    'date_action' => $this->date_action,
+                    'id_utilisateur' => $this->id_utilisateur,
+                ]);
+            }
 
             $this->editConstat = false;
             $this->resetFormConstat();
@@ -344,6 +360,35 @@ class LivConstatOeuf extends Component
         $this->labels = $totalDonneesJournalieres->pluck('nom_type_oeuf')->toArray();
 
         $this->emit('chartUpdated');
+    }
+
+    public function updatedNewNb()
+    {
+        $this->calculeNewDisponible();
+    }
+
+    public function calculeNewDisponible()
+    {
+        if(is_numeric($this->new_nb)){
+            if($this->nb < $this->new_nb)
+            {
+                if (is_numeric($this->new_nb)) {
+                    $this->new_nb_disponible = $this->nb_disponible +($this->new_nb - $this->nb);
+                }else{
+                    $this->new_nb_disponible= '';
+                }
+            }elseif($this->nb >= $this->new_nb)
+            {   
+                if($this->nb - $this->new_nb > $this->nb_disponible){
+                    session()->flash('error', 'operation impossible');
+                }elseif($this->nb - $this->new_nb <= $this->nb_disponible){
+                    $this->new_nb_disponible = $this->nb_disponible - ($this->nb - $this->new_nb);
+                }
+            }
+        }else{
+            $this->new_nb_disponible = '';
+        }
+
     }
 
     /*
