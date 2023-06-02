@@ -67,7 +67,7 @@
 
                     <div class="col-md-12 mt-3">
                         <button class="btn btn-secondary btn-rounded" wire:click.prevent="cancelCreate()" wire:loading.attr="disabled" wire:target="cancelCreate()">
-                            <span wire:loading.remove wire:target="cancelCreate"><i class="nav-icon i-Arrow-Back font-weight-bold"></i> Retour</span>
+                            <span wire:loading.remove wire:target="cancelCreate"><i class="nav-icon i-Arrow-Back"></i> Retour</span>
                             <span wire:loading wire:target="cancelCreate">
                                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                 annulation...
@@ -80,11 +80,11 @@
                                 reinitialisation...
                             </span>
                         </button>
-                        <button class="float-right btn btn-info btn-rounded mr-3" wire:click.prevent="createSortieConstat()" wire:loading.attr="disabled" wire:target="createSortieConstat()">
-                            <span wire:loading.remove wire:target="createSortieConstat"><i class="nav-icon i-Yes font-weight-bold"></i> Enregistrer avec une sortie</span>
+                        <button class="float-right btn btn-instagram  btn-rounded mr-3" wire:click.prevent="createSortieConstat()" wire:loading.attr="disabled" wire:target="createSortieConstat()">
+                            <span wire:loading.remove wire:target="createSortieConstat"><i class="nav-icon i-Checkout-Basket"></i> Enregistrer avec une sortie</span>
                             <span wire:loading wire:target="createSortieConstat">
                                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                enregistrement...
+                                chargement...
                             </span>
                         </button>
                         <button class="float-right btn btn-primary btn-rounded mr-3" wire:click.prevent="saveConstat()" wire:loading.attr="disabled" wire:target="saveConstat()">
