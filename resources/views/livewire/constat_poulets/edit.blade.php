@@ -88,8 +88,8 @@
                         <input type="text" wire:model.defer="id_utilisateur" class="form-control form-control-rounded">
                     </div>
 
-                    <div class="col-md-12">
-                        <button class="btn btn-primary btn-rounded mr-3" wire:click.prevent="confirmerUpdate()">
+                    <div class="col-md-12 m-3">
+                        <button class="float-right btn btn-primary btn-rounded mr-3" wire:click.prevent="confirmerUpdate()">
                             <i class="nav-icon i-Yes font-weight-bold"></i> Enregistrer
                         </button>
                         <button class="btn btn-secondary btn-rounded" wire:click.prevent="cancelUpdate()">
