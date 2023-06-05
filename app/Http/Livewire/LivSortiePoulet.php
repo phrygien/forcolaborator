@@ -363,7 +363,7 @@ class LivSortiePoulet extends Component
                 $this->notification = true;
                 session()->flash('message', 'Sortie poulet bien enregistré!');
                 DB::commit();
-                return redirect('gestion_sortie/sortie_poulet');
+                //return redirect('gestion_sortie/sortie_poulet');
                 $this->resetPage();
                 }catch(\Exception $e){
                     DB::rollback();
