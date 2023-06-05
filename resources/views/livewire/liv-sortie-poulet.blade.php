@@ -127,13 +127,14 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <button wire:click="editSortie({{$sortie->id }})" wire:loading.attr="disabled" wire:target="editSortie({{$sortie->id }})" class="btn btn-raised btn-rounded btn-raised-primary">
-                                        <span wire:loading.remove wire:target="editSortie({{$sortie->id }})"><i class="nav-icon i-Pen-2 font-weight-bold"></i></span>
-                                        <span wire:loading wire:target="editSortie({{$sortie->id }})">
+                                    <button wire:click="retourSortie({{$sortie->id }})" wire:loading.attr="disabled" wire:target="retourSortie({{$sortie->id }})" class="btn btn-raised btn-rounded btn-raised-warning">
+                                        <span wire:loading.remove wire:target="retourSortie({{$sortie->id }})"><i class="nav-icon i-Data-Refresh"></i></span>
+                                        <span wire:loading wire:target="retourSortie({{$sortie->id }})">
                                             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                            modification...
+                                            retour produit...
                                         </span>
                                     </button>
+                                    
                                     {{-- <button class="btn btn-raised btn-rounded btn-raised-danger"  wire:click="comfirmerDelete({{$sortie->id }})">
                                         <i class="nav-icon i-Close-Window font-weight-bold"></i>
                                     </button> --}}
@@ -154,6 +155,15 @@
     </div>
 </div>
 @endif
+
+@if ($selectedConstatId)
+<div class="col-lg-12">
+<button class="btn btn-raised mb-3 btn-raised-primary btn-rounded" wire:click="afficherSortie">Afficher liste sortie poulet</button>
+<button class="btn btn-raised mb-3 float-right btn-raised-warning btn-rounded">Retourner cette sortie</button>
+</div>
+<livewire:details-sortie :idConstat="$selectedConstatId" />
+@endif
+
 </div>
 
 @push('scripts')
