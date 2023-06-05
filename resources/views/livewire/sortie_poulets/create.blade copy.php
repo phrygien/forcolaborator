@@ -124,7 +124,7 @@
 
                     <div class="col-md-6 form-group mb-3">
                         <label for="firstName2">{{ __('Prix poulet')}}</label>
-                        <input type="number" readonly wire:model="pu_poulet" class="form-control form-control-rounded" id="firstName2" placeholder="">
+                        <input type="number" wire:model="pu_poulet" class="form-control form-control-rounded" id="firstName2" placeholder="">
                         @error('pu_poulet') 
                         <div class="alert alert-danger" role="alert">
                             {{ $message}}

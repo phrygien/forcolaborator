@@ -48,6 +48,7 @@ class LivSortiePoulet extends Component
     public $constatDisponibles;
     public $qteTotal;
     public $pu_poulet;
+    public $sommeQteDetail;
     /*
     * debut utils sortie poulet
     */
@@ -145,7 +146,7 @@ class LivSortiePoulet extends Component
         //$this->montant = ($this->prix_unite * $this->nombre);
         $this->actif = 1;
 
-        $this->constatDisponibles = ConstatPoulet::whereNotIn('id', $this->getDetailsSelectionnes())->get();
+        $this->constatDisponibles = ConstatPoulet::whereNotIn('id', $this->getDetailsSelectionnes())->where('nb_disponible', '>', 0)->get();
     }
 
     public $selectedType = '';
@@ -201,6 +202,7 @@ class LivSortiePoulet extends Component
     {
         if (is_numeric($value) && is_numeric($this->poids_total) && $this->poids_total != 0) {
             $this->montant = $value * $this->poids_total;
+            $this->pu_poulet = round($this->montant / $this->nombre, 2);
         }
     }
 
@@ -349,6 +351,7 @@ class LivSortiePoulet extends Component
 
                 $this->resetFormSortie();
                 $this->resetValidation();
+                $this->sortie['details'] = [];
                 $this->isLoading = false;
                 $this->notification = true;
                 session()->flash('message', 'Sortie poulet bien enregistré!');
