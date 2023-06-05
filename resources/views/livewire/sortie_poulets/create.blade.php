@@ -259,7 +259,7 @@
                                                         @endif
                                                     @endforeach
                                                     @if (!$constatDejaAffiche)
-                                                        <option value="{{ $constatDisponible->id }}">Constat le : {{ $constatDisponible->date_constat }}</option>
+                                                        <option value="{{ $constatDisponible->id }}">ID  constat: {{ $constatDisponible->id }} - Date constat : {{ $constatDisponible->date_constat }}</option>
                                                     @endif
                                                 @endforeach
                                                 </select>
