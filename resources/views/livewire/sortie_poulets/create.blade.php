@@ -123,6 +123,16 @@
                     </div>
 
                     <div class="col-md-6 form-group mb-3">
+                        <label for="firstName2">{{ __('Prix poulet')}}</label>
+                        <input type="number" wire:model="pu_poulet" class="form-control form-control-rounded" id="firstName2" placeholder="">
+                        @error('pu_poulet') 
+                        <div class="alert alert-danger" role="alert">
+                            {{ $message}}
+                        </div>
+                        @enderror
+                    </div>
+
+                    <div class="col-md-6 form-group mb-3">
                         <label for="firstName2">{{ __('Date sortie')}}</label>
                         <input type="date" wire:model="date_sortie" disabled class="disable form-control form-control-rounded">
                         @error('date_sortie') 
@@ -209,6 +219,12 @@
                             @endif
                         </p>
                         <p>
+                            <div>
+                                <label for="qteTotal">Quantité totale:</label>
+                                <label id="qteTotal">{{ $qteTotal }}</label>
+                            </div>
+                            
+                            
                             <div class="table-responsive">
                                 <table id="user_table" class="table  text-center">
                                     <thead>
@@ -218,6 +234,7 @@
                                             <th scope="col">Qte</th>
                                             <th scope="col">Prix unitaire</th>
                                             <th scope="col">Montant total</th>
+                                            <th scope="col">ID Produit</th>
                                             <th scope="col">Action</th>
                                         </tr>
                                     </thead>
@@ -262,6 +279,9 @@
                                             </td>
                                             <td>
                                                 <input type="text" readonly class="form-control form-control-rounded"  wire:model="sortie.details.{{ $index }}.montant_total_detail" placeholder="">
+                                            </td>
+                                            <td>
+                                                <input type="text" readonly class="form-control form-control-rounded"  wire:model="sortie.details.{{ $index }}.id_produit" placeholder="">
                                             </td>
                                             <td>
                                                 <a wire:click="removeDetail({{ $index }})" href="#" class="text-danger mr-2">

@@ -5,6 +5,7 @@ namespace App\Http\Livewire;
 use App\Models\Client;
 use App\Models\ConstatPoulet;
 use App\Models\Cycle;
+use App\Models\DetailSortie;
 use App\Models\PrixPoulet;
 use App\Models\SortiePoulet;
 use App\Models\TypePoulet;
@@ -45,6 +46,8 @@ class LivSortiePoulet extends Component
     public $addLigne = true;
 
     public $constatDisponibles;
+    public $qteTotal;
+    public $pu_poulet;
     /*
     * debut utils sortie poulet
     */
@@ -59,7 +62,7 @@ class LivSortiePoulet extends Component
     {
         $this->sortie['details'][] = [
             'id_constat' => null,
-            'id_produit' => null,
+            'id_produit' => 'poulet',
             'nb_disponible' => null,
             'qte_detail' => 0,
             'prix_unitaire_detail' => 0,
@@ -132,8 +135,22 @@ class LivSortiePoulet extends Component
                 $this->addLigne = true;
             }
         }
+        //$this->getQteTotal();
     }
 
+    public function getQteTotal()
+    {
+        $this->qteTotal = 0;
+
+        foreach ($this->sortie['details'] as $detail) {
+            $this->qteTotal += $detail['qte_detail'];
+        }
+
+        return $this->qteTotal;
+    }
+
+
+    // enregistrer sortie avec details sortie
     /*
     * fin utils sortie poulet
     */
@@ -275,7 +292,6 @@ class LivSortiePoulet extends Component
         $this->isLoading = true;
         if($this->selectedOption == "existe"){
         $this->validate([
-            'id_type_poulet' => 'required|integer',
             'id_type_sortie' => 'required|integer',
             'poids_total' => 'required',
             'nombre' => 'required|integer',
@@ -284,12 +300,10 @@ class LivSortiePoulet extends Component
             'id_client' => 'nullable|integer',
             'id_utilisateur' => 'nullable',
             'date_action' => 'nullable',
-            'actif' => 'required|integer',
             'montant' => 'nullable',
         ]);
         }else{
             $this->validate([
-                'id_type_poulet' => 'required|integer',
                 'id_type_sortie' => 'required|integer',
                 'poids_total' => 'required',
                 'nombre' => 'required|integer',
@@ -299,86 +313,52 @@ class LivSortiePoulet extends Component
                 'id_client' => 'nullable|integer',
                 'id_utilisateur' => 'nullable',
                 'date_action' => 'nullable',
-                'actif' => 'required|integer',
                 'montant' => 'nullable',
             ]);     
         }
-        if($this->id_cycle !=null){
-                $cycleSelected = Cycle::find($this->id_cycle);
-                $stockActuale = $cycleSelected->nb_poulet;
-                if($stockActuale >= $this->nombre){
-                    DB::beginTransaction();
-                    try{
-                        //creation de nouvele client
-                        $client = new Client();
-                        $client->nom = $this->nom;
-                        $client->raison_sociale = $this->raison_sociale;
-                        $client->adresse = $this->adresse;
-                        $client->save();
-                        //création sortie poulet
-                        $sortiePoulet = new SortiePoulet();
-                        $sortiePoulet->id_type_poulet = $this->id_type_poulet;
-                        $sortiePoulet->id_type_sortie = $this->id_type_sortie;
-                        $sortiePoulet->id_cycle = $this->id_cycle;
-                        $sortiePoulet->poids_total = $this->poids_total;
-                        $sortiePoulet->nombre = $this->nombre;
-                        $sortiePoulet->prix_unite = $this->prix_unite;
-                        $sortiePoulet->date_sortie = $this->date_sortie;
-                        $sortiePoulet->date_action = now();
-                        $sortiePoulet->actif = $this->actif;
-                        $sortiePoulet->id_client = $client->id;
-                        $sortiePoulet->id_utilisateur = $this->id_utilisateur;
-                        $sortiePoulet->montant = ($this->prix_unite * $this->poids_total);
-                
-                        $sortiePoulet->save();
-                        //update stock cyle selected
-                        $cycleSelected = Cycle::find($this->id_cycle);
-                        $stockActuale = $cycleSelected->nb_poulet;
-                        $cycleSelected->update([
-                            'nb_poulet' => ($stockActuale - $this->poids_total),
-                        ]);
-                        $cycleSelected->save();
-                
-                        $this->resetFormSortie();
-                        $this->resetValidation();
-                        $this->isLoading = false;
-                        $this->notification = true;
-                        session()->flash('message', 'Sortie poulet bien enregistré!');
-                        DB::commit();
-                        $this->resetPage();
-                        }catch(\Exception $e){
-                            DB::rollback();
-                            //return $e->getMessage();
-                            session()->flash('message', $e->getMessage());
-                            
-                        }
-                }else{
-                    $this->notification = true;
-                    session()->flash('error', 'Operation impossible, stock du cycle insufusant!');
-                }
-        }else{
-            DB::beginTransaction();
-            try{
+
+        DB::beginTransaction();
+        try{
+            //creation de nouvele client
             $client = new Client();
             $client->nom = $this->nom;
             $client->raison_sociale = $this->raison_sociale;
             $client->adresse = $this->adresse;
             $client->save();
-            
+            //création sortie poulet
             $sortiePoulet = new SortiePoulet();
-            $sortiePoulet->id_type_poulet = $this->id_type_poulet;
             $sortiePoulet->id_type_sortie = $this->id_type_sortie;
-            $sortiePoulet->id_cycle = NULL;
             $sortiePoulet->poids_total = $this->poids_total;
             $sortiePoulet->nombre = $this->nombre;
             $sortiePoulet->prix_unite = $this->prix_unite;
             $sortiePoulet->date_sortie = $this->date_sortie;
             $sortiePoulet->date_action = now();
-            $sortiePoulet->actif = $this->actif;
             $sortiePoulet->id_client = $client->id;
             $sortiePoulet->id_utilisateur = $this->id_utilisateur;
             $sortiePoulet->montant = ($this->prix_unite * $this->poids_total);
+            $sortiePoulet->pu_poulet = round($this->montant / $this->nombre, 2);
             $sortiePoulet->save();
+
+            // Enregistrer les détails de la commande dans la table "details_commande"
+            foreach ($this->sortie['details'] as $detail) {
+                DetailSortie::create([
+                    'id_sortie' => $sortiePoulet->id,
+                    'id_constat' => $detail['id_constat'],
+                    'id_produit' => $detail['id_produit'],
+                    'qte' => $detail['qte_detail'],
+                    'pu' => $detail['prix_unitaire_detail'],
+                    'valeur' => $detail['montant_total_detail'],
+                ]);
+
+                // Modifier la quantité de stock du constat utilisé dans le sortie
+                $constatUsed = ConstatPoulet::where('id', $detail['id_constat'])->first();
+                if ($constatUsed) {
+                    $constatUsed->nb_disponible -= $detail['qte_detail'];
+                    $constatUsed->save();
+                }
+                
+            }
+
             $this->resetFormSortie();
             $this->resetValidation();
             $this->isLoading = false;
@@ -386,14 +366,13 @@ class LivSortiePoulet extends Component
             session()->flash('message', 'Sortie poulet bien enregistré!');
             DB::commit();
             $this->resetPage();
-
             }catch(\Exception $e){
                 DB::rollback();
                 //return $e->getMessage();
                 session()->flash('message', $e->getMessage());
                 
             }
-        }
+
     }
 
     public function saveExistSortie()
