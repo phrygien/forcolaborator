@@ -7,6 +7,7 @@ use App\Models\ConstatPoulet;
 use App\Models\Cycle;
 use App\Models\DetailSortie;
 use App\Models\PrixPoulet;
+use App\Models\ProduitCycle;
 use App\Models\SortiePoulet;
 use App\Models\TypePoulet;
 use App\Models\TypeSortie;
@@ -346,6 +347,17 @@ class LivSortiePoulet extends Component
                         $constatUsed->nb_disponible -= $detail['qte_detail'];
                         $constatUsed->save();
                     }
+
+                    //$constatData = ConstatPoulet::where('id', $detail['id_constat'])->first();
+                    // enregistrement produit cycle
+                    $produitCycle = new ProduitCycle();
+                    $produitCycle->id_cycle = $constatUsed->id_cycle;
+                    $produitCycle->id_produit = $detail['id_produit'];
+                    $produitCycle->id_sortie = $sortiePoulet->id;
+                    $produitCycle->qte = $detail['qte_detail'];
+                    $produitCycle->pu = $detail['prix_unitaire_detail'];
+                    $produitCycle->valeur = $detail['montant_total_detail'];
+                    $produitCycle->save();
                     
                 }
 
@@ -472,6 +484,7 @@ class LivSortiePoulet extends Component
         $this->createSortie = false;
         $this->afficherListe = true;
         $this->resetFormSortie();
+        $this->sortie['details'] = [];
         $this->resetValidation();
         $this->isLoading = false;
         $this->creatBtn = true;
