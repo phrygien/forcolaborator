@@ -208,7 +208,7 @@
                     
                     <div class="col-md-12 col-lg-12">
                         <div class="alert alert-card alert-info" role="alert">
-                            <strong class="text-capitalize">Details sortie</strong> - veiller ajouter les élement pour la sortie.
+                            <strong class="text-capitalize">Détails de la sortie</strong> - veuillez ajouter les éléments pour la sortie.
                         </div>
                         <p>
                             @if($addLigne)
@@ -219,13 +219,15 @@
                             @endif
                         </p>
                         <p>
-                            <div>
-                                <label for="qteTotal">Quantité totale:</label>
-                                <label id="qteTotal">{{ $qteTotal }}</label>
-                            </div>
-                            
+                          
                             
                             <div class="table-responsive">
+                                @if (session()->has('impossible'))
+                                <div class="alert alert-danger border-info" role="alert">
+                                    <i class="icon-info1"></i>{{ session('impossible')}}
+                                </div>
+                                @endif
+
                                 <table id="user_table" class="table  text-center">
                                     <thead>
                                         <tr>
@@ -290,6 +292,7 @@
                                             </td>
                                         </tr>
                                         @endforeach
+
                                     </tbody>
                                 </table>
                             </div>

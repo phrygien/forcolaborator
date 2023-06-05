@@ -113,11 +113,11 @@
                                 <td>{{ $sortie->libelle }}</td>
                                 <td>{{ $sortie->nom }}</td>
                                 <td>{{  get_formatted_date($sortie->date_sortie, 'd - M - Y') }}</td>
-                                <td>{{ $sortie->poids_total }}</td>
-                                <td>{{ $sortie->nombre }}</td>
+                                <td>{{ number_format($sortie->poids_total, 2, '.', '') }} kg</td>
+                                <td>{{ $sortie->nombre }} ( poulets )</td>
                                 <td>{{ $sortie->prix_unite }} Ar</td>
                                 <td>{{ $sortie->pu_poulet }} Ar</td>
-                                <td><span class="badge bg-info text-white">Ar {{ $sortie->montant }}</span></td>
+                                <td><span class="text-info"> {{ number_format($sortie->montant, 2, '.', '') }} Ar</span></td>
                                 <td>{{ $sortie->name }}</td>
                                 <td>
                                     @if($sortie->retour == 0)
@@ -134,9 +134,9 @@
                                             modification...
                                         </span>
                                     </button>
-                                    <button class="btn btn-raised btn-rounded btn-raised-danger"  wire:click="comfirmerDelete({{$sortie->id }})">
+                                    {{-- <button class="btn btn-raised btn-rounded btn-raised-danger"  wire:click="comfirmerDelete({{$sortie->id }})">
                                         <i class="nav-icon i-Close-Window font-weight-bold"></i>
-                                    </button>
+                                    </button> --}}
                                 </td>
                             </tr>                                  
                             @empty
