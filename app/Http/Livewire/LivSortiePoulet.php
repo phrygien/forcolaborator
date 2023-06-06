@@ -58,7 +58,7 @@ class LivSortiePoulet extends Component
     * propriete retour sortie poulet
     */
     public $retourSortie;
-    public $id_detail, $retour_id_constat, $retour_id_produit, $retour_qte, $retour_valeur, $retour_pu, $retour;
+    public $id_detail, $retour_id_constat, $retour_id_produit, $retour_qte, $retour_valeur, $retour_pu, $retour, $qte_retour;
     public $selectedConstatId;
     public $validerRetour = false;
     /*
@@ -683,6 +683,74 @@ class LivSortiePoulet extends Component
         $this->afficherListe = true;
         $this->retourSortie = false;
     }
+
+    public function resetQteRetour()
+    {
+        $this->qte_retour = '';
+    }
+
+    public function saveRetour()
+    {
+        $this->validate([
+            'qte_retour' => 'required|integer',
+        ]);
+
+        DB::beginTransaction();
+
+        try{
+
+            $sortie = SortiePoulet::findOrFail($this->sortie_id);
+            $sortie->update([
+                'retour' => 1,
+            ]);
+
+            // recuperation details sortie concernee
+            $detailSortie = DetailSortie::where('id_sortie', $this->sortie_id)->get();
+            foreach($detailSortie as $details)
+            {
+                // trouver constat du detail sortie
+                $constat = ConstatPoulet::where('id', $details->id_constat)->first();
+
+                $produitCycle = new ProduitCycle();
+                $produitCycle->id_cycle = $constat->id_cycle;
+                $produitCycle->id_produit = $details['id_produit'];
+                $produitCycle->id_sortie = $this->sortie_id;
+                $produitCycle->qte = -$details->qte;
+                $produitCycle->pu = -$details->pu;
+                $produitCycle->valeur = -$details->valeur;
+                $produitCycle->save();
+
+                // creation nouveau constat
+                $constatPoulet = new ConstatPoulet();
+                $constatPoulet->nb = $details->qte;
+                $constatPoulet->id_cycle = $constat->id_cycle;
+                $constatPoulet->date_constat = now();
+                $constatPoulet->date_action = now();
+                $constatPoulet->nb_disponible = $details->qte;
+                $constatPoulet->id_utilisateur = Auth::user()->id;
+                $constatPoulet->retour = 0;
+                $constatPoulet->save();
+
+            }
+            // $this->editSortie = false;
+            $this->resetQteRetour();
+            $this->resetValidation();
+            $this->confirmRetour = false;
+            $this->creatBtn = true;
+            $this->notification = true;
+            session()->flash('message', 'Retour produit bien enregistré!');
+            $this->afficherListe = true;
+            $this->retourSortie = false;
+
+            DB::commit();
+
+        }catch(\Exception $e){
+            return $e->getMessage();
+            DB::rollback();
+        }
+        
+    }
+
     /*
     * fin action sortie poulet
     */

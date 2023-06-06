@@ -97,7 +97,7 @@
 
                     <div class="col-md-6 form-group mb-3">
                         <label for="firstName2">{{ __('Quantite retour')}}</label>
-                        <input type="number" wire:model="qte_retour" class="disable form-control form-control-rounded" style="border-bottom: solid 3px purple;">
+                        <input type="number" wire:model="qte_retour" class="disable form-control form-control-rounded" style="border-bottom: solid 2px rgb(51, 202, 119);">
                         @error('qte_retour') 
                         <div class="alert alert-danger" role="alert">
                             {{ $message}}
@@ -188,7 +188,7 @@
         <p class="text-black">Pouvez-vous confirmer retour sortie poulet ?</p>
         <p class="text-center">
             <button class="btn btn-secondary btn-rounded" wire:click="cancelRetour()">{{ __('Annuler') }}</button>
-            <button class="btn btn-danger btn-rounded" wire:click.prevent="updateSortie()">{{ __('Confirmer') }}</button>
+            <button class="btn btn-danger btn-rounded" wire:click.prevent="saveRetour()">{{ __('Confirmer') }}</button>
         </p>
     </div>
     </div>
