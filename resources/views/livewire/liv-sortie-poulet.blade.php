@@ -158,8 +158,7 @@
 
 @if ($selectedConstatId)
 <div class="col-lg-12">
-<button class="btn btn-raised mb-3 btn-raised-primary btn-rounded" wire:click="afficherSortie">Afficher liste sortie poulet</button>
-<button class="btn btn-raised mb-3 float-right btn-raised-warning btn-rounded">Retourner cette sortie</button>
+<button class="btn btn-raised mb-3 btn-raised-primary btn-rounded" wire:click="afficherSortie"><i class="nav-icon i-Arrow-Left-in-Circle"></i> Afficher liste sortie poulet</button>
 </div>
 <livewire:details-sortie :idConstat="$selectedConstatId" />
 @endif
