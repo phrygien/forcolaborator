@@ -108,7 +108,7 @@
                     <div class="col-md-12 mt-4">
                         <button class="btn btn-raised mb-3 btn-raised-primary btn-rounded" wire:click.prevent="afficherSortie()"><i class="nav-icon i-Arrow-Left-in-Circle"></i> Afficher liste sortie poulet</button>
 
-                        <button class="btn btn-raised btn-raised-warning float-right btn-rounded mr-3" wire:click.prevent="confirmerUpdate()">
+                        <button class="btn btn-raised btn-raised-warning float-right btn-rounded mr-3" wire:click.prevent="confirmerRetour()">
                             <i class="nav-icon i-Yes font-weight-bold"></i> Valider retour
                         </button>
                     </div>
@@ -159,7 +159,7 @@
 </div>
 @endif
 
-@if($confirmUpdate)
+@if($confirmRetour)
 <!-- CSS -->
 <style>
     .overlay {
@@ -185,9 +185,9 @@
     <div class="centered">
     <div class="alert alert-warning text-center">
         <strong class="text-black">{{ __('Modification sortie poulet')}} !</strong>
-        <p class="text-black">Pouvez-vous confirmer cette modification ?</p>
+        <p class="text-black">Pouvez-vous confirmer retour sortie poulet ?</p>
         <p class="text-center">
-            <button class="btn btn-secondary btn-rounded" wire:click="cancelModal()">{{ __('Annuler') }}</button>
+            <button class="btn btn-secondary btn-rounded" wire:click="cancelRetour()">{{ __('Annuler') }}</button>
             <button class="btn btn-danger btn-rounded" wire:click.prevent="updateSortie()">{{ __('Confirmer') }}</button>
         </p>
     </div>

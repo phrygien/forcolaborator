@@ -27,6 +27,8 @@ class LivSortiePoulet extends Component
     $prix_unite, $date_sortie, $id_client, $id_cycle, $actif, $date_action, $nom, $raison_sociale, $adresse, $montant;
 
     public $confirmUpdate;
+    public $confirmRetour;
+
     public $typePouletActifs;
     public $typeSortieActifs;
     public $clientActifs;
@@ -662,6 +664,18 @@ class LivSortiePoulet extends Component
 
         $this->isLoading = false;
 
+    }
+
+    public function confirmerRetour()
+    {
+        $this->confirmRetour = true;
+    }
+
+    public function cancelRetour()
+    {
+        $this->confirmRetour = false;
+        $this->retourSortie = true;
+        $this->afficherListe = false;
     }
 
     public function afficherSortie()
