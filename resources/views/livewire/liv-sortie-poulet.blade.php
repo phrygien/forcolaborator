@@ -156,12 +156,16 @@
 </div>
 @endif
 
-@if ($selectedConstatId)
+@if($retourSortie)
+@include('livewire.sortie_poulets.retour')
+@endif
+{{-- @if ($selectedConstatId)
 <div class="col-lg-12">
 <button class="btn btn-raised mb-3 btn-raised-primary btn-rounded" wire:click="afficherSortie"><i class="nav-icon i-Arrow-Left-in-Circle"></i> Afficher liste sortie poulet</button>
 </div>
 <livewire:details-sortie :idConstat="$selectedConstatId" />
-@endif
+
+@endif --}}
 
 </div>
 

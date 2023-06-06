@@ -116,56 +116,100 @@
     <div class="card mb-4">
         @foreach ($selectedSortie as $sortie)
         <div class="card-body">
-            <div class="card-title mb-3">Details sortie poulet du : {{ $sortie->date_sortie }}</div>
+            <div class="card-title mb-3">Information sortie poulet</div>
             <form>
                 <div class="row">
                     <div class="col-md-6 form-group mb-3">
-                        <label for="firstName2">First name</label>
-                        <input type="text" class="form-control form-control-rounded" id="firstName2" placeholder="Enter your first name">
-                    </div>
-
-                    <div class="col-md-6 form-group mb-3">
-                        <label for="lastName2">Last name</label>
-                        <input type="text" class="form-control form-control-rounded" id="lastName2" placeholder="Enter your last name">
-                    </div>
-
-                    <div class="col-md-6 form-group mb-3">
-                        <label for="exampleInputEmail2">Email address</label>
-                        <input type="email" class="form-control form-control-rounded" id="exampleInputEmail2" placeholder="Enter email">
-                    </div>
-
-                    <div class="col-md-6 form-group mb-3">
-                        <label for="phone1">Phone</label>
-                        <input class="form-control form-control-rounded" id="phone1" placeholder="Enter phone">
-                    </div>
-
-                    <div class="col-md-6 form-group mb-3">
-                        <label for="credit2">Cradit card number</label>
-                        <input class="form-control form-control-rounded" id="credit2" placeholder="Card">
-                    </div>
-
-                    <div class="col-md-6 form-group mb-3">
-                        <label for="website2">Website</label>
-                        <input class="form-control form-control-rounded" id="website2" placeholder="Web address">
-                    </div>
-
-                    <div class="col-md-6 form-group mb-3">
-                        <label for="picker3">Birth date</label>
-                        <input id="picker3" class="form-control form-control-rounded" placeholder="yyyy-mm-dd" name="dp">
-                    </div>
-
-                    <div class="col-md-6 form-group mb-3">
-                        <label for="picker1">Select</label>
-                        <select class="form-control form-control-rounded">
-                            <option>Option 1</option>
-                            <option>Option 1</option>
-                            <option>Option 1</option>
+                        <label for="picker1">{{ __('Type sortie')}}</label>
+                        <select readonly disabled wire:model="id_type_sortie" class="form-control form-control-rounded">
+                            <option>Choisir un type sortie</option>
+                            @foreach ($typesorties as $typesortie)
+                                <option value="{{ $typesortie->id }}">{{ $typesortie->libelle }}</option>
+                            @endforeach
                         </select>
+                        @error('id_type_sortie') 
+                        <div class="alert alert-danger" role="alert">
+                            {{ $message}}
+                        </div>
+                        @enderror
                     </div>
 
-                    <div class="col-md-12">
-                        <button class="btn btn-instagram float-right btn-raised btn-rounded"><i class="nav-icon i-Start1"></i> Valider retour produit</button>
+                    <div class="col-md-6 form-group mb-3">
+                        <label for="firstName2">{{ __('Nombre des poulet')}}</label>
+                        <input type="number" readonly wire:model="nombre" class="form-control form-control-rounded" id="firstName2" placeholder="">
+                        @error('nombre') 
+                        <div class="alert alert-danger" role="alert">
+                            {{ $message}}
+                        </div>
+                        @enderror
                     </div>
+
+                                        
+                    <div class="col-md-6 form-group mb-3">
+                        <label for="firstName2">{{ __('Poids total')}}</label>
+                        <input type="number" readonly wire:model="poids_total" class="form-control form-control-rounded" id="firstName2" placeholder="">
+                        @error('poids_total') 
+                        <div class="alert alert-danger" role="alert">
+                            {{ $message}}
+                        </div>
+                        @enderror
+                    </div>
+
+                    <div class="col-md-6 form-group mb-3">
+                        <label for="firstName2">{{ __('Prix unitaire')}}</label>
+                        <input type="number" readonly wire:model="prix_unite" class="form-control form-control-rounded" id="firstName2" placeholder="">
+                        @error('prix_unite') 
+                        <div class="alert alert-danger" role="alert">
+                            {{ $message}}
+                        </div>
+                        @enderror
+                    </div>
+
+                    <div class="col-md-6 form-group mb-3">
+                        <label for="firstName2">{{ __('Montant total')}}</label>
+                        <input type="number" readonly disabled wire:model="montant" class="form-control form-control-rounded" id="firstName2" placeholder="">
+                        @error('montant') 
+                        <div class="alert alert-danger" role="alert">
+                            {{ $message}}
+                        </div>
+                        @enderror
+                    </div>
+
+                    <div class="col-md-6 form-group mb-3">
+                        <label for="firstName2">{{ __('Prix poulet')}}</label>
+                        <input type="number" readonly wire:model="pu_poulet" class="form-control form-control-rounded" id="firstName2" placeholder="">
+                        @error('pu_poulet') 
+                        <div class="alert alert-danger" role="alert">
+                            {{ $message}}
+                        </div>
+                        @enderror
+                    </div>
+
+                    <div class="col-md-6 form-group mb-3">
+                        <label for="firstName2">{{ __('Date sortie')}}</label>
+                        <input type="date" readonly wire:model="date_sortie" disabled class="disable form-control form-control-rounded">
+                        @error('date_sortie') 
+                        <div class="alert alert-danger" role="alert">
+                            {{ $message}}
+                        </div>
+                        @enderror
+                    </div>
+
+                    <div class="col-md-6 form-group mb-3">
+                        <label for="picker1">{{ __('Client')}}</label>
+                        <select readonly disabled wire:model="id_client" class="form-control form-control-rounded">
+                            <option value="">Choisir un client</option>
+                            @foreach ($clients as $client)
+                                <option value="{{ $client->id }}">{{ $client->nom }}</option>
+                            @endforeach
+                        </select>
+                        @error('id_client') 
+                        <div class="alert alert-danger" role="alert">
+                            {{ $message}}
+                        </div>
+                        @enderror
+                    </div>
+
                 </div>
             </form>
         </div>
@@ -210,4 +254,7 @@
 
         </div>
     </div>
+</div>
+<div class="col-md-12">
+    <button class="btn btn-instagram float-right btn-raised btn-rounded" wire:click="validerRetour"><i class="nav-icon i-Start1"></i> Valider retour produit</button>
 </div>

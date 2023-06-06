@@ -50,14 +50,15 @@ class LivSortiePoulet extends Component
     public $qteTotal;
     public $pu_poulet;
     public $sommeQteDetail;
+    public $detailSortie;
 
     /*
     * propriete retour sortie poulet
     */
     public $retourSortie;
-    public $id_detail, $retour_id_constat, $retour_id_produit, $retour_qte, $retour_valeur, $retour_pu;
+    public $id_detail, $retour_id_constat, $retour_id_produit, $retour_qte, $retour_valeur, $retour_pu, $retour;
     public $selectedConstatId;
-
+    public $validerRetour = false;
     /*
     * fin propriete retour produit
     */
@@ -629,49 +630,44 @@ class LivSortiePoulet extends Component
     */
     public function retourSortie($id)
     {
+        $this->retourSortie = true;
         $this->afficherListe = false;
-        $this->selectedConstatId = $id;
-        // $this->isLoading = true;
-        // $this->retourSortie= true;
-        // $sortie = SortiePoulet::findOrFail($id);
-        // $this->sortie_id = $id;
-        // $this->id_type_poulet = $sortie->id_type_poulet;
-        // $this->id_type_sortie = $sortie->id_type_sortie;
-        // $this->poids_total = $sortie->poids_total;
-        // $this->date_action = $sortie->date_constat;
-        // $this->nombre = $sortie->nombre;
-        // $this->prix_unite = $sortie->prix_unite;
-        // $this->date_sortie = $sortie->date_sortie;
-        // $this->id_client = $sortie->id_client;
-        // $this->id_cycle = $sortie->id_cycle;
-        // $this->actif = $sortie->actif;
-        // $this->date_action = $sortie->date_action;
-        // $this->id_utilisateur = $sortie->id_utilisateur;
-        // $this->montant = $sortie->montant;
+        $this->isLoading = true;
 
-        // // trouver les details du sortie
-        // $detailSortie = DetailSortie::where('id_sortie', $sortie->id)->get();
-        // foreach($detailSortie as $detail)
-        // {
-        //     $this->id_detail = $detail->id;
-        //     $this->retour_id_constat = $detail->id_constat;
-        //     $this->retour_id_produit = $detail->id_produit;
-        //     $this->retour_qte = $detail->qte;
-        //     $this->retour_valeur = $detail->valeur;
-        //     $this->retour_pu = $detail->pu;
-        // }
+        $sortie = SortiePoulet::findOrFail($id);
 
-        // $this->editSortie = true;
-        // $this->createSortie = false;
-        // $this->creatBtn = false;
-        // $this->afficherListe = false;
-        // $this->isLoading = false;
+        $this->sortie_id = $id;
+        $this->id_type_sortie = $sortie->id_type_sortie;
+        $this->poids_total = $sortie->poids_total;
+        $this->nombre = $sortie->nombre;
+        $this->prix_unite = $sortie->prix_unite;
+        $this->date_sortie = $sortie->date_sortie;
+        $this->id_client = $sortie->id_client;
+        $this->pu_poulet = $sortie->pu_poulet;
+        $this->montant = $sortie->montant;
+        $this->retour = $sortie->retour;
+
+        // trouver les details du sortie
+        $this->detailSortie = DetailSortie::where('id_sortie', $sortie->id)->get();
+        
+        foreach($this->detailSortie as $detail)
+        {
+            $this->id_detail = $detail->id;
+            $this->retour_id_constat = $detail->id_constat;
+            $this->retour_id_produit = $detail->id_produit;
+            $this->retour_qte = $detail->qte;
+            $this->retour_valeur = $detail->valeur;
+            $this->retour_pu = $detail->pu;
+        }
+
+        $this->isLoading = false;
+
     }
 
     public function afficherSortie()
     {
         $this->afficherListe = true;
-        $this->selectedConstatId = null;
+        $this->retourSortie = false;
     }
     /*
     * fin action sortie poulet
