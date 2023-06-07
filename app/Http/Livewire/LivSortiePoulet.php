@@ -787,6 +787,10 @@ class LivSortiePoulet extends Component
 
     public function updatedQteRetour()
     {
+        $this->validate([
+            'qte_retour' => 'required|integer',
+        ]);
+        
         if($this->qte_retour > $this->nombre){
             session()->flash('retour_impossible', 'Impossible de retourner cette quantite, le quanite à reourner doit inferieur a la qte sortie!');
             $this->disableBtnValider = 'disabled';
