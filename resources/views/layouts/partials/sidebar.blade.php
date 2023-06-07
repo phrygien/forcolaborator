@@ -363,6 +363,12 @@
 		{{-- debut gestion depense --}}
 		<ul class="childNav" data-parent="gdepense">
 			<li class="nav-item">
+				<a href="{{ route('gestion_depense.unites')}}">
+					<i class="nav-icon i-Money-2"></i>
+					<span class="item-name">Unité depense</span>
+				</a>
+			</li>
+			<li class="nav-item">
 				<a href="{{ route('gestion_depense.depense_globales')}}">
 					<i class="nav-icon i-Money-Bag"></i>
 					<span class="item-name">Depense globale</span>
