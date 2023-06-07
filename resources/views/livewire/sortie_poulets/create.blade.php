@@ -213,7 +213,7 @@
                         <p>
                             @if($addLigne)
                             <button type="button" wire:click="addDetail" class="btn btn-instagram btn-rounded btn-icon m-1">
-                                <span class="ul-btn__icon"><i class="i-Add-Cart"></i></span>
+                                <span class="ul-btn__icon"><i class="i-Add"></i></span>
                                 <span class="ul-btn__text">Ajouter detail</span>
                             </button>
                             @endif

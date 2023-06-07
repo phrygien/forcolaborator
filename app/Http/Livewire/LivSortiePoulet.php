@@ -82,7 +82,7 @@ class LivSortiePoulet extends Component
             'id_produit' => 'poulet',
             'nb_disponible' => null,
             'qte_detail' => 0,
-            'prix_unitaire_detail' => 0,
+            'prix_unitaire_detail' => $this->prix_unite,
             'montant_total_detail' => 0,
         ];
     }
@@ -402,7 +402,6 @@ class LivSortiePoulet extends Component
     {
         $this->isLoading = true;
         $data = $this->validate([
-            'id_type_poulet' => 'required|integer',
             'id_type_sortie' => 'required|integer',
             'poids_total' => 'required',
             'nombre' => 'required|integer',
@@ -411,85 +410,89 @@ class LivSortiePoulet extends Component
             'id_client' => 'nullable|integer',
             'id_utilisateur' => 'nullable',
             'date_action' => 'nullable',
-            'actif' => 'required|integer',
         ]);
 
-        if($this->id_cycle !=null){
-        $cycleSelected = Cycle::find($this->id_cycle);
-        $stockActuale = $cycleSelected->nb_poulet;
-        if($stockActuale >= $this->nombre){
+                        
+            $total = 0;
 
-            try{
-
-                //création sortie poulet
-                $sortiePoulet = new SortiePoulet();
-                $sortiePoulet->id_type_poulet = $this->id_type_poulet;
-                $sortiePoulet->id_type_sortie = $this->id_type_sortie;
-                $sortiePoulet->id_cycle = $this->id_cycle;
-                $sortiePoulet->poids_total = $this->poids_total;
-                $sortiePoulet->nombre = $this->nombre;
-                $sortiePoulet->prix_unite = $this->prix_unite;
-                $sortiePoulet->date_sortie = $this->date_sortie;
-                $sortiePoulet->date_action = now();
-                $sortiePoulet->actif = $this->actif;
-                $sortiePoulet->id_client = $this->id_client;
-                $sortiePoulet->id_utilisateur = $this->id_utilisateur;
-                $sortiePoulet->montant = ($this->prix_unite * $this->nombre);
-        
-                $sortiePoulet->save();
-        
-                $cycleSelected = Cycle::find($this->id_cycle);
-                $stockActuale = $cycleSelected->nb_poulet;
-                $cycleSelected->update([
-                    'nb_poulet' => ($stockActuale - $this->nombre),
-                ]);
-                $cycleSelected->save();
-        
-                $this->resetFormSortie();
-                $this->resetValidation();
-                $this->isLoading = false;
-                $this->notification = true;
-                session()->flash('message', 'Sortie poulet bien enregistré!');
-                $this->createSortie = false;
-                $this->afficherListe = true;
-                $this->resetPage();
-                }catch(\Exception $e){
-        
-                    return $e->getMessage();
-                    //session()->flash('message', $e->getMessage());
-                    
+            if($this->sortie['details']){
+                foreach ($this->sortie['details'] as $detail) {
+                    $total += $detail['qte_detail'];
                 }
-        }else{
-            $this->notification = true;
-            session()->flash('error', 'Operation impossible, stock du cycle insufusant!');
-        }
-        }else{
-            //création sortie poulet
-            $sortiePoulet = new SortiePoulet();
-            $sortiePoulet->id_type_poulet = $this->id_type_poulet;
-            $sortiePoulet->id_type_sortie = $this->id_type_sortie;
-            //$sortiePoulet->id_cycle = $this->id_cycle;
-            $sortiePoulet->poids_total = $this->poids_total;
-            $sortiePoulet->nombre = $this->nombre;
-            $sortiePoulet->prix_unite = $this->prix_unite;
-            $sortiePoulet->date_sortie = $this->date_sortie;
-            $sortiePoulet->date_action = now();
-            $sortiePoulet->actif = $this->actif;
-            $sortiePoulet->id_client = $this->id_client;
-            $sortiePoulet->id_utilisateur = $this->id_utilisateur;
-            $sortiePoulet->montant = ($this->prix_unite * $this->nombre);
-    
-            $sortiePoulet->save();
+            }
+
+            if($total == $this->nombre){
             
-            $this->resetFormSortie();
-            $this->resetValidation();
-            $this->isLoading = false;
-            $this->notification = true;
-            session()->flash('message', 'Sortie poulet bien enregistré!');
-            $this->createSortie = false;
-            $this->afficherListe = true;
-            $this->resetPage();
-        }
+                    try{
+                        DB::beginTransaction();
+
+                        //création sortie poulet
+                        $sortiePoulet = new SortiePoulet();
+                        $sortiePoulet->id_type_sortie = $this->id_type_sortie;
+                        $sortiePoulet->poids_total = $this->poids_total;
+                        $sortiePoulet->nombre = $this->nombre;
+                        $sortiePoulet->prix_unite = $this->prix_unite;
+                        $sortiePoulet->date_sortie = $this->date_sortie;
+                        $sortiePoulet->date_action = now();
+                        $sortiePoulet->id_client = $this->id_client;
+                        $sortiePoulet->id_utilisateur = $this->id_utilisateur;
+                        $sortiePoulet->montant = ($this->prix_unite * $this->poids_total);
+                        $sortiePoulet->pu_poulet = round($this->montant / $this->nombre, 2);
+                        $sortiePoulet->save();
+            
+                        // Enregistrer les détails de la commande dans la table "details_commande"
+                        foreach ($this->sortie['details'] as $detail) {
+                            DetailSortie::create([
+                                'id_sortie' => $sortiePoulet->id,
+                                'id_constat' => $detail['id_constat'],
+                                'id_produit' => $detail['id_produit'],
+                                'qte' => $detail['qte_detail'],
+                                'pu' => $detail['prix_unitaire_detail'],
+                                'valeur' => $detail['montant_total_detail'],
+                            ]);
+
+                            // Modifier la quantité de stock du constat utilisé dans le sortie
+                            $constatUsed = ConstatPoulet::where('id', $detail['id_constat'])->first();
+                            if ($constatUsed) {
+                                $constatUsed->nb_disponible -= $detail['qte_detail'];
+                                $constatUsed->save();
+                            }
+
+                            //$constatData = ConstatPoulet::where('id', $detail['id_constat'])->first();
+                            // enregistrement produit cycle
+                            $produitCycle = new ProduitCycle();
+                            $produitCycle->id_cycle = $constatUsed->id_cycle;
+                            $produitCycle->id_produit = $detail['id_produit'];
+                            $produitCycle->id_sortie = $sortiePoulet->id;
+                            $produitCycle->qte = $detail['qte_detail'];
+                            $produitCycle->pu = $detail['prix_unitaire_detail'];
+                            $produitCycle->valeur = $detail['montant_total_detail'];
+                            $produitCycle->save();
+                            
+                        }
+                
+                        $this->resetFormSortie();
+                        $this->resetValidation();
+                        $this->isLoading = false;
+                        $this->notification = true;
+                        session()->flash('message', 'Sortie poulet bien enregistré!');
+                        DB::commit();
+
+                        $this->createSortie = false;
+                        $this->afficherListe = true;
+                        $this->resetPage();
+
+                        }catch(\Exception $e){
+                
+                            return $e->getMessage();
+                            //session()->flash('message', $e->getMessage());
+                            DB::rollBack();
+                        }
+                    
+            }else{
+                //$this->notification = true;
+                session()->flash('impossible', 'Opération impossible. La somme des quantités de détail doit être égale au nombre de poulets à sortir !');
+            }
     }
 
 

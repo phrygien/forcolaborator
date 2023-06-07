@@ -128,19 +128,19 @@
                                 </td>
                                 <td>
                                     @if($sortie->retour ==0)
-                                    <button wire:click="retourSortie({{$sortie->id }})" wire:loading.attr="disabled" wire:target="retourSortie({{$sortie->id }})" class="btn btn-raised btn-rounded btn-raised-warning">
-                                        <span wire:loading.remove wire:target="retourSortie({{$sortie->id }})"><i class="nav-icon i-Data-Refresh"></i></span>
+                                    <button wire:click="retourSortie({{$sortie->id }})" wire:loading.attr="disabled" wire:target="retourSortie({{$sortie->id }})" class="btn btn-raised btn-raised-danger">
+                                        <span wire:loading.remove wire:target="retourSortie({{$sortie->id }})"><i class="nav-icon i-Data-Refresh"></i> Effectuer retour</span>
                                         <span wire:loading wire:target="retourSortie({{$sortie->id }})">
                                             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                            retour produit...
+                                            chargement...
                                         </span>
                                     </button>
                                     @else
-                                    <button  disabled wire:click="retourSortie({{$sortie->id }})" wire:loading.attr="disabled" wire:target="retourSortie({{$sortie->id }})" class="btn btn-raised btn-rounded btn-raised-warning">
-                                        <span wire:loading.remove wire:target="retourSortie({{$sortie->id }})"><i class="nav-icon i-Data-Refresh"></i></span>
+                                    <button  disabled wire:click="retourSortie({{$sortie->id }})" wire:loading.attr="disabled" wire:target="retourSortie({{$sortie->id }})" class="btn btn-raised btn-raised-danger">
+                                        <span wire:loading.remove wire:target="retourSortie({{$sortie->id }})"><i class="nav-icon i-Data-Refresh"></i> Effectuer retour</span>
                                         <span wire:loading wire:target="retourSortie({{$sortie->id }})">
                                             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                            retour produit...
+                                            chargement...
                                         </span>
                                     </button>
                                     @endif
