@@ -149,24 +149,103 @@
 
                     @endif
 
-
-                    <div class="col-md-6 form-group mb-3">
-                        <label for="picker1">{{ __('Status sortie')}}</label>
-                        <select wire:model.defer="actif" class="form-control form-control-rounded">
-                            <option>Select status</option>
-                            <option value="1">Actif</option>
-                            <option value="2">Inactif</option>
-                        </select>
-                        @error('actif') 
-                        <div class="alert alert-danger" role="alert">
-                            {{ $message}}
-                        </div>
-                        @enderror
-                    </div>
-
                     <div class="col-md-6 form-group mb-3" hidden>
                         <label for="firstName2">{{ __('Utilisateur ID')}}</label>
                         <input type="text" wire:model.defer="id_utilisateur" class="form-control form-control-rounded">
+                    </div>
+
+                                        
+                    <div class="col-md-12 col-lg-12">
+                        <div class="alert alert-card alert-info" role="alert">
+                            <strong class="text-capitalize">Détails de la sortie oeuf</strong> - veuillez ajouter les éléments pour la sortie.
+                        </div>
+                        <p>
+                            @if($addLigne)
+                            <button type="button" wire:click="addDetail" class="btn btn-instagram btn-rounded btn-icon m-1">
+                                <span class="ul-btn__icon"><i class="i-Add"></i></span>
+                                <span class="ul-btn__text">Ajouter detail</span>
+                            </button>
+                            @endif
+                        </p>
+                        <p>
+                          
+                            
+                            <div class="table-responsive">
+                                @if (session()->has('impossible'))
+                                <div class="alert alert-danger border-info" role="alert">
+                                    <i class="icon-info1"></i>{{ session('impossible')}}
+                                </div>
+                                @endif
+
+                                <table id="user_table" class="table  text-center">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Constat ID</th>
+                                            <th scope="col">Nombre d'eouf disponible</th>
+                                            <th scope="col">Qte utilise</th>
+                                            <th scope="col">Prix unitaire (Ar) </th>
+                                            <th scope="col">Montant total (Ar)</th>
+                                            <th scope="col">ID Produit</th>
+                                            <th scope="col">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($sortie['details'] as $index => $produit)
+                                        <tr>
+                                            <th scope="row">
+                                                <select class="form-control form-control-rounded"  wire:model="sortie.details.{{ $index }}.id_constat" wire:change="updateNombreDisponible($event.target.value, {{ $index }})">
+                                                    <option value="">Sélectionner un constat</option>
+                                                    @foreach ($constatDisponibles as $constatDisponible)
+                                                    @php
+                                                        $constatDejaAffiche = false;
+                                                    @endphp
+                                                    @foreach ($sortie['details'] as $i => $const)
+                                                        @if ($i < $index && $const['id_constat'] == $constatDisponible->id)
+                                                            @php
+                                                                $constatDejaAffiche = true;
+                                                            @endphp
+                                                            @break
+                                                        @endif
+                                                    @endforeach
+                                                    @if (!$constatDejaAffiche)
+                                                        <option value="{{ $constatDisponible->id }}">ID  constat: {{ $constatDisponible->id }} - Date constat : {{ $constatDisponible->date_entree }}</option>
+                                                    @endif
+                                                @endforeach
+                                                </select>
+                                            </th>
+                                            <td>
+                                                <input type="text" readonly class="form-control form-control-rounded" wire:model.defer="sortie.details.{{ $index }}.nb_disponible" id="firstName2" placeholder="">
+                                            </td>
+                                            <td>
+                                                <input type="number" class="form-control form-control-rounded" id="firstName2" wire:keyup="calculateMontantTotal({{ $index }})" wire:model="sortie.details.{{ $index }}.qte_detail" placeholder="">
+                                                @if(session()->has("error.{$index}"))
+                                                <div class="alert alert-warning border-info" role="alert">
+                                                    <p class="text-danger">{{ session("error.{$index}") }}</p>
+                                                </div>
+                                                @endif
+                                            </td>
+
+                                            <td>
+                                                <input type="number" class="form-control form-control-rounded" wire:keydown="calculateMontantTotal({{ $index }})" wire:model.defer="sortie.details.{{ $index }}.prix_unitaire_detail" placeholder="">
+                                            </td>
+                                            <td>
+                                                <input type="text" readonly class="form-control form-control-rounded"  wire:model="sortie.details.{{ $index }}.montant_total_detail" placeholder="">
+                                            </td>
+                                            <td>
+                                                <input type="text" readonly class="form-control form-control-rounded"  wire:model="sortie.details.{{ $index }}.id_produit" placeholder="">
+                                            </td>
+                                            <td>
+                                                <a wire:click="removeDetail({{ $index }})" href="#" class="text-danger mr-2">
+                                                    <i class="nav-icon i-Close-Window font-weight-bold"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        @endforeach
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </p>
                     </div>
 
                     <div class="col-md-12">

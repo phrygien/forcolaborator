@@ -17,10 +17,10 @@ class SortieOeuf extends Model
         'qte',
         'pu',
         'montant',
-        'actif',
         'id_utilisateur',
         'date_action',
         'id_client',
         'date_sortie',
+        'retour',
     ];
 }
