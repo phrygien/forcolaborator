@@ -682,11 +682,13 @@ class LivSortiePoulet extends Component
     {
         $this->afficherListe = true;
         $this->retourSortie = false;
+        $this->resetValidation();
     }
 
     public function resetQteRetour()
     {
         $this->qte_retour = '';
+        $this->resetValidation();
     }
 
     public function saveRetour()
@@ -706,8 +708,25 @@ class LivSortiePoulet extends Component
 
             // recuperation details sortie concernee
             $detailSortie = DetailSortie::where('id_sortie', $this->sortie_id)->get();
+            $totalQteRetour = $this->qte_retour;
+            $selectedDetails = collect();
+        
+            $remainingQte = $totalQteRetour;
+
             foreach($detailSortie as $details)
             {
+                $qte = $details->qte;
+
+                if ($remainingQte >= $qte) {
+                    $selectedDetails->push($details);
+                    $remainingQte -= $qte;
+                    //$details->delete();
+                    //$details->update(['qte' => $qte - $qte]);
+                } else {
+                    // Si la quantité restante est inférieure à la quantité du détail actuel, divisez le détail en deux parties
+                    $selectedDetails->push($details->replicate(['qte']));
+                    //$details->update(['qte' => $qte - $remainingQte]);
+                }
                 // trouver constat du detail sortie
                 $constat = ConstatPoulet::where('id', $details->id_constat)->first();
 
@@ -730,7 +749,7 @@ class LivSortiePoulet extends Component
                 $constatPoulet->id_utilisateur = Auth::user()->id;
                 $constatPoulet->retour = 0;
                 $constatPoulet->save();
-
+                break;
             }
             // $this->editSortie = false;
             $this->resetQteRetour();
