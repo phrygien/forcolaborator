@@ -118,7 +118,7 @@
                                         <span class="badge badge-danger">Inactif</span>
                                     @endif
                                 </td>
-                                <td>{{ get_formatted_date($unite->created_at, "d / M/ Y H:s") }}</td>
+                                <td>{{ get_formatted_date($unite->created_at, "d - M - Y à H:s") }}</td>
                                 <td>
                                     <button wire:click="editUnite({{$unite->id }})" wire:loading.attr="disabled" wire:target="editUnite({{$unite->id }})" class="btn btn-raised btn-rounded btn-raised-primary">
                                         <span wire:loading.remove wire:target="editUnite({{$unite->id }})"><i class="nav-icon i-Pen-2 font-weight-bold"></i></span>
