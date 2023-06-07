@@ -1,5 +1,5 @@
 <div class="col-md-12">
-    <div class="card mb-4">
+    <div class="card mb-4" style="border-top: solid 3px rgb(202, 20, 20);">
         <div class="card-body">
             <div class="card-title mb-3">{{ __('Retour sortie poulet')}}</div>
             <form>
@@ -97,18 +97,23 @@
 
                     <div class="col-md-6 form-group mb-3">
                         <label for="firstName2">{{ __('Quantite retour')}}</label>
-                        <input type="number" wire:model="qte_retour" class="disable form-control form-control-rounded" style="border-bottom: solid 2px rgb(51, 202, 119);">
+                        <input type="number" wire:model="qte_retour" class="disable form-control form-control-rounded" style="border-bottom: solid 3px rgb(151, 129, 141);">
                         @error('qte_retour') 
                         <div class="alert alert-danger" role="alert">
                             {{ $message}}
                         </div>
                         @enderror
+                        @if (session()->has('retour_impossible'))
+                        <div class="alert alert-danger border-info" role="alert">
+                            <i class="icon-info1"></i>{{ session('retour_impossible')}}
+                        </div>
+                        @endif
                     </div>
 
                     <div class="col-md-12 mt-4">
-                        <button class="btn btn-raised mb-3 btn-raised-primary btn-rounded" wire:click.prevent="afficherSortie()"><i class="nav-icon i-Arrow-Left-in-Circle"></i> Afficher liste sortie poulet</button>
+                        <button class="btn btn-raised mb-3 btn-raised-primary btn-rounded" wire:click.prevent="afficherSortie()"><i class="nav-icon i-Arrow-Left-in-Circle"></i> Annuler retour</button>
 
-                        <button class="btn btn-raised btn-raised-warning float-right btn-rounded mr-3" wire:click.prevent="confirmerRetour()">
+                        <button {{ $disableBtnValider }} class="btn btn-raised btn-raised-warning float-right btn-rounded mr-3" wire:click.prevent="confirmerRetour()">
                             <i class="nav-icon i-Yes font-weight-bold"></i> Valider retour
                         </button>
                     </div>
@@ -187,8 +192,8 @@
         <strong class="text-black">{{ __('Retour sortie poulet')}} !</strong>
         <p class="text-black">Pouvez-vous confirmer retour sortie poulet ?</p>
         <p class="text-center">
-            <button class="btn btn-secondary btn-rounded" wire:click="cancelRetour()">{{ __('Annuler') }}</button>
-            <button class="btn btn-danger btn-rounded" wire:click.prevent="saveRetour()">{{ __('Confirmer') }}</button>
+            <button class="btn btn-secondary mr-3 btn-rounded" wire:click="cancelRetour()">{{ __('Fermer') }}</button>
+            <button class="btn btn-danger ml-2 btn-rounded" wire:click.prevent="saveRetour()">{{ __('Confirmer') }}</button>
         </p>
     </div>
     </div>

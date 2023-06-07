@@ -61,6 +61,7 @@ class LivSortiePoulet extends Component
     public $id_detail, $retour_id_constat, $retour_id_produit, $retour_qte, $retour_valeur, $retour_pu, $retour, $qte_retour;
     public $selectedConstatId;
     public $validerRetour = false;
+    public $disableBtnValider = '';
     /*
     * fin propriete retour produit
     */
@@ -162,7 +163,10 @@ class LivSortiePoulet extends Component
         //$this->montant = ($this->prix_unite * $this->nombre);
         $this->actif = 1;
 
-        $this->constatDisponibles = ConstatPoulet::whereNotIn('id', $this->getDetailsSelectionnes())->where('nb_disponible', '>', 0)->get();
+        $this->constatDisponibles = ConstatPoulet::whereNotIn('id', $this->getDetailsSelectionnes())
+                        ->where('nb_disponible', '>', 0)
+                        ->orderBy('date_constat', 'asc')
+                        ->get();
     }
 
     public $selectedType = '';
@@ -282,6 +286,7 @@ class LivSortiePoulet extends Component
         $this->actif = 1;
         $this->creatBtn = false;
         $this->resetValidation();
+        $this->sortie['details'] = [];
     }
 
     public function saveNewSortie()
@@ -473,6 +478,7 @@ class LivSortiePoulet extends Component
                 
                         $this->resetFormSortie();
                         $this->resetValidation();
+                        $this->sortie['details'] = [];
                         $this->isLoading = false;
                         $this->notification = true;
                         session()->flash('message', 'Sortie poulet bien enregistré!');
@@ -686,6 +692,7 @@ class LivSortiePoulet extends Component
         $this->afficherListe = true;
         $this->retourSortie = false;
         $this->resetValidation();
+        $this->resetQteRetour();
     }
 
     public function resetQteRetour()
@@ -778,6 +785,15 @@ class LivSortiePoulet extends Component
         
     }
 
+    public function updatedQteRetour()
+    {
+        if($this->qte_retour > $this->nombre){
+            session()->flash('retour_impossible', 'Impossible de retourner cette quantite, le quanite à reourner doit inferieur a la qte sortie!');
+            $this->disableBtnValider = 'disabled';
+        }else{
+            $this->disableBtnValider = '';
+        }
+    }
     /*
     * fin action sortie poulet
     */
