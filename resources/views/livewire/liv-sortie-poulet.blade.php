@@ -48,7 +48,7 @@
 
             <div class="table-responsive">
                                         
-                @if($recordToDelete)
+                {{-- @if($recordToDelete)
                 <!-- CSS -->
                 <style>
                     .overlay {
@@ -89,7 +89,7 @@
                     e.stopPropagation();
                     });
                 </script>
-                @endif
+                @endif --}}
 
                     <table class="table table-striped table-hover">
                         <thead>

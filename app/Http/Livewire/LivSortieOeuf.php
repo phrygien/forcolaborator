@@ -294,9 +294,17 @@ class LivSortieOeuf extends Component
             'id_client' => 'nullable|integer',
             'id_utilisateur' => 'nullable',
             'date_action' => 'nullable',
-            'actif' => 'required|integer',
         ]);
 
+        $total = 0;
+
+        if($this->sortie['details']){
+            foreach ($this->sortie['details'] as $detail) {
+                $total += $detail['qte_detail'];
+            }
+        }
+
+        if($total == $this->qte){
         DB::beginTransaction();
             try{
                 //creation de nouvele client
@@ -313,13 +321,43 @@ class LivSortieOeuf extends Component
                 $sortieOeuf->pu = $this->pu;
                 $sortieOeuf->date_sortie = $this->date_sortie;
                 $sortieOeuf->date_action = now();
-                $sortieOeuf->actif = $this->actif;
                 $sortieOeuf->id_client = $client->id;
                 $sortieOeuf->id_utilisateur = $this->id_utilisateur;
                 $sortieOeuf->montant = ($this->pu * $this->qte);
         
                 $sortieOeuf->save();
         
+                // Enregistrer les détails de la commande dans la table "details_commande"
+                foreach ($this->sortie['details'] as $detail) {
+                    DetailSortie::create([
+                        'id_sortie' => $sortieOeuf->id,
+                        'id_constat' => $detail['id_constat'],
+                        'id_produit' => $detail['id_produit'],
+                        'qte' => $detail['qte_detail'],
+                        'pu' => $detail['prix_unitaire_detail'],
+                        'valeur' => $detail['montant_total_detail'],
+                    ]);
+
+                    // Modifier la quantité de stock du constat utilisé dans le sortie
+                    $constatUsed = ConstatOeuf::where('id', $detail['id_constat'])->first();
+                    if ($constatUsed) {
+                        $constatUsed->nb_disponible -= $detail['qte_detail'];
+                        $constatUsed->save();
+                    }
+
+                    //$constatData = ConstatPoulet::where('id', $detail['id_constat'])->first();
+                    // enregistrement produit cycle
+                    $produitCycle = new ProduitCycle();
+                    $produitCycle->id_cycle = $constatUsed->id_cycle;
+                    $produitCycle->id_produit = $detail['id_produit'];
+                    $produitCycle->id_sortie = $sortieOeuf->id;
+                    $produitCycle->qte = $detail['qte_detail'];
+                    $produitCycle->pu = $detail['prix_unitaire_detail'];
+                    $produitCycle->valeur = $detail['montant_total_detail'];
+                    $produitCycle->save();
+
+                }
+
                 $this->resetFormSortie();
                 $this->resetValidation();
                 $this->isLoading = false;
@@ -333,6 +371,10 @@ class LivSortieOeuf extends Component
                     session()->flash('message', $e->getMessage());
                     
                 }
+            }else{
+                //$this->notification = true;
+                session()->flash('impossible', 'Opération impossible. La somme des quantités de détail doit être égale au nombre de poulets à sortir !');
+            }
     }
 
     public function saveExistSortie()
