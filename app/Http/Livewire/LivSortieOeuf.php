@@ -49,6 +49,7 @@ class LivSortieOeuf extends Component
 
     public $addLigne = true;
     public $constatDisponibles;
+    public $detailSortie;
 
     public $sortie = [
         'nom_client' => '',
@@ -196,9 +197,10 @@ class LivSortieOeuf extends Component
         ->sum('nb_disponible');
         if($sommenbdisponible > $this->qte)
         {
-            session()->flash('somme_ok', 'opperation possible');
+            $this->addLigne = true;
         }else{
-            session()->flash('somme_non_ok', 'opperation impossible, La quantité a sortir superieur au quantité disponible pour ce type d\'oeuf ');
+            session()->flash('somme_non_ok', 'Opperation impossible. Qte disponible pour ce type d\'oeuf ='.$sommenbdisponible);
+            $this->addLigne = false;
         }
     }
 
@@ -558,4 +560,169 @@ class LivSortieOeuf extends Component
         session()->flash('message', 'Suppression avec succée');
     }
 
+    public $retourSortie;
+    public $retour;
+    public $id_detail, $retour_id_constat, $retour_id_produit, $retour_qte, $retour_valeur, $retour_pu, $qte_retour;
+    public $disableBtnValider = '';
+    public $confirmRetour;
+
+    public function retourSortie($id)
+    {
+        $this->retourSortie = true;
+        $this->afficherListe = false;
+        $this->isLoading = true;
+
+        $sortie = SortieOeuf::findOrFail($id);
+
+        $this->sortie_id = $id;
+        $this->id_type_sortie = $sortie->id_type_sortie;
+        $this->id_type_oeuf = $sortie->id_type_oeuf;
+        $this->qte = $sortie->qte;
+        $this->pu = $sortie->pu;
+        $this->date_sortie = $sortie->date_sortie;
+        $this->id_client = $sortie->id_client;
+        $this->montant = $sortie->montant;
+        $this->retour = $sortie->retour;
+
+        // trouver les details du sortie
+        $this->detailSortie = DetailSortie::where('id_sortie', $sortie->id)->get();
+        
+        foreach($this->detailSortie as $detail)
+        {
+            $this->id_detail = $detail->id;
+            $this->retour_id_constat = $detail->id_constat;
+            $this->retour_id_produit = $detail->id_produit;
+            $this->retour_qte = $detail->qte;
+            $this->retour_valeur = $detail->valeur;
+            $this->retour_pu = $detail->pu;
+        }
+
+        $this->isLoading = false;
+
+    }
+
+    public function confirmerRetour()
+    {
+        $this->confirmRetour = true;
+    }
+
+    public function cancelRetour()
+    {
+        $this->confirmRetour = false;
+        $this->retourSortie = true;
+        $this->afficherListe = false;
+    }
+
+    public function afficherSortie()
+    {
+        $this->afficherListe = true;
+        $this->retourSortie = false;
+        $this->resetValidation();
+        $this->resetQteRetour();
+    }
+
+    public function resetQteRetour()
+    {
+        $this->qte_retour = '';
+        $this->resetValidation();
+    }
+
+    public function saveRetour()
+    {
+        $this->validate([
+            'qte_retour' => 'required|integer',
+        ]);
+
+        DB::beginTransaction();
+
+        try{
+
+            $sortie = SortieOeuf::findOrFail($this->sortie_id);
+            $sortie->update([
+                'retour' => 1,
+            ]);
+
+            // recuperation details sortie concernee
+            $detailSortie = DetailSortie::where('id_sortie', $this->sortie_id)->get();
+            $totalQteRetour = $this->qte_retour;
+            $selectedDetails = collect();
+        
+            $remainingQte = $totalQteRetour;
+
+            foreach($detailSortie as $details)
+            {
+                $qte = $details->qte;
+
+                if ($remainingQte > 0) {
+                    if ($remainingQte >= $qte) {
+                        $selectedDetails->push($details);
+                        $remainingQte -= $qte;
+                        //$details->delete();
+                        //$details->update(['qte' => $qte - $qte]);
+                    } else {
+                        // Si la quantité restante est inférieure à la quantité du détail actuel, divisez le détail en deux parties
+                        $selectedDetails->push($details->replicate(['qte']));
+                        //$details->update(['qte' => $qte - $remainingQte]);
+                        $remainingQte = 0;
+                    }
+                }else{
+                    break;
+                }
+                // trouver constat du detail sortie
+                $constat = ConstatOeuf::where('id', $details->id_constat)->first();
+
+                $produitCycle = new ProduitCycle();
+                $produitCycle->id_cycle = $constat->id_cycle;
+                $produitCycle->id_produit = $details['id_produit'];
+                $produitCycle->id_sortie = $this->sortie_id;
+                $produitCycle->qte = -$details->qte;
+                $produitCycle->pu = -$details->pu;
+                $produitCycle->valeur = -$details->valeur;
+                $produitCycle->save();
+
+                // creation nouveau constat
+                $constatOeuf = new ConstatOeuf();
+                $constatOeuf->id_type_oeuf = $constat->id_type_oeuf;
+                $constatOeuf->nb = $details->qte;
+                $constatOeuf->id_cycle = $constat->id_cycle;
+                $constatOeuf->date_entree = now();
+                $constatOeuf->date_action = now();
+                $constatOeuf->nb_disponible = $details->qte;
+                $constatOeuf->id_utilisateur = Auth::user()->id;
+                $constatOeuf->retour = 0;
+                $constatOeuf->save();
+
+            }
+            // $this->editSortie = false;
+            $this->resetQteRetour();
+            $this->resetValidation();
+            $this->confirmRetour = false;
+            $this->creatBtn = true;
+            $this->notification = true;
+            session()->flash('message', 'Retour produit bien enregistré!');
+            $this->afficherListe = true;
+            $this->retourSortie = false;
+
+            DB::commit();
+
+        }catch(\Exception $e){
+            return $e->getMessage();
+            DB::rollback();
+        }
+        
+    }
+
+    public function updatedQteRetour()
+    {
+        $this->validate([
+            'qte_retour' => 'required|integer',
+        ]);
+        
+        if($this->qte_retour > $this->qte){
+            session()->flash('retour_impossible', 'Impossible de retourner cette quantite, le quanite à reourner doit inferieur a la qte sortie!');
+            $this->disableBtnValider = 'disabled';
+        }else{
+            $this->disableBtnValider = '';
+        }
+    }
 }

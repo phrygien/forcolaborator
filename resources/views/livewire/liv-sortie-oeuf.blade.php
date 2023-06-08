@@ -48,7 +48,7 @@
 
             <div class="table-responsive">
                                         
-                @if($recordToDelete)
+                {{-- @if($recordToDelete)
                 <!-- CSS -->
                 <style>
                     .overlay {
@@ -89,7 +89,7 @@
                     e.stopPropagation();
                     });
                 </script>
-                @endif
+                @endif --}}
 
                     <table class="table table-striped table-hover">
                         <thead>
@@ -123,15 +123,12 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <button wire:click="editSortie({{$sortie->id }})" wire:loading.attr="disabled" wire:target="editSortie({{$sortie->id }})" class="btn btn-raised btn-rounded btn-raised-primary">
-                                        <span wire:loading.remove wire:target="editSortie({{$sortie->id }})"><i class="nav-icon i-Pen-2"></i></span>
-                                        <span wire:loading wire:target="editSortie({{$sortie->id }})">
+                                    <button @if($sortie->retour !=0) disabled @endif wire:click="retourSortie({{$sortie->id }})" wire:loading.attr="disabled" wire:target="retourSortie({{$sortie->id }})" class="btn btn-rounded btn-raised btn-raised-danger">
+                                        <span wire:loading.remove wire:target="retourSortie({{$sortie->id }})">effectuer une retour </span>
+                                        <span wire:loading wire:target="retourSortie({{$sortie->id }})">
                                             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                            modification...
+                                            chargement...
                                         </span>
-                                    </button>
-                                    <button class="btn btn-raised btn-rounded btn-raised-danger"  wire:click="comfirmerDelete({{$sortie->id }})">
-                                        <i class="nav-icon i-Close-Window font-weight-bold"></i>
                                     </button>
                                 </td>
                             </tr>                                  
@@ -150,8 +147,11 @@
     </div>
 </div>
 @endif
-</div>
+@if($retourSortie)
+@include('livewire.sortie_oeufs.retour')
+@endif
 
+</div>
 @push('scripts')
     <script>
         document.addEventListener("DOMContentLoaded", function(event) {
