@@ -29,9 +29,9 @@ class LivSortieOeuf extends Component
     $date_sortie, $id_client, $actif, $date_action, $nom, $raison_sociale, $adresse;
 
     public $confirmUpdate;
-    public $typeOeufActifs;
-    public $typeSortieActifs;
-    public $clientActifs;
+    public $typeOeufActifs = [];
+    public $typeSortieActifs = [];
+    public $clientActifs = [];
     public $newClient;
     public $cycleActifs;
     public $existClient;
@@ -48,13 +48,10 @@ class LivSortieOeuf extends Component
     public $notification;
 
     public $addLigne = true;
-    public $constatDisponibles;
+    public $constatDisponibles = [];
     public $detailSortie;
 
     public $sortie = [
-        'nom_client' => '',
-        'adresse' => '',
-        'date_commande' => '',
         'details' => [],
     ];
 
@@ -235,7 +232,7 @@ class LivSortieOeuf extends Component
         ->join('type_sorties', 'type_sorties.id', 'sortie_oeufs.id_type_sortie')
         ->join('users', 'users.id', 'sortie_oeufs.id_utilisateur')
         ->select('sortie_oeufs.*', 'clients.nom', 'type_oeufs.type', 'users.name', 'type_sorties.libelle')
-        ->paginate(7);
+        ->paginate(15);
 
         $prixs = $this->getPrix();
         return view('livewire.liv-sortie-oeuf', [
