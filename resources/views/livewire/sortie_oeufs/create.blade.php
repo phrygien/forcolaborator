@@ -59,6 +59,11 @@
                             {{ $message}}
                         </div>
                         @enderror
+                        @if (session()->has('somme_non_ok'))
+                        <div class="alert alert-danger border-info" role="alert">
+                            <i class="icon-info1"></i>{{ session('somme_non_ok')}}
+                        </div>
+                        @endif
                     </div>
 
 

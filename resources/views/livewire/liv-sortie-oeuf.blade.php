@@ -107,24 +107,24 @@
                         </thead>
                         <tbody>
                             @forelse ($sorties as $sortie)
-                            <tr>
+                            <tr @if($sortie->retour != 0) class="text-danger" @endif>
                                 <td>{{ $sortie->type }}</td>
                                 <td>{{ $sortie->libelle }}</td>
                                 <td>{{ $sortie->nom }}</td>
-                                <td>{{ get_formatted_date($sortie->date_sortie, "d / M/ Y") }}</td>
+                                <td>{{ get_formatted_date($sortie->date_sortie, "d - M - Y") }}</td>
                                 <td>{{ $sortie->qte }}</td>
-                                <td><span class="badge bg-info text-white">Ar {{ number_format($sortie->montant, 0, ',', ' ') }}</span></td>
+                                <td>{{ number_format($sortie->montant, 0, ',', ' ') }} Ar</td>
                                 <td>{{ $sortie->name }}</td>
                                 <td>
-                                    @if($sortie->actif == 1)
-                                        <span class="badge badge-success">Actif</span>
+                                    @if($sortie->retour == 0)
+                                        <span class="text-success"> <i class="nav-icon i-Yes font-weight-bold"></i> aucun retour</span>
                                     @else
-                                        <span class="badge badge-danger">Inactif</span>
+                                        <span class="text-danger"> <i class="nav-icon i-Reload font-weight-bold"></i> deja retourner</span>
                                     @endif
                                 </td>
                                 <td>
                                     <button wire:click="editSortie({{$sortie->id }})" wire:loading.attr="disabled" wire:target="editSortie({{$sortie->id }})" class="btn btn-raised btn-rounded btn-raised-primary">
-                                        <span wire:loading.remove wire:target="editSortie({{$sortie->id }})"><i class="nav-icon i-Pen-2 font-weight-bold"></i></span>
+                                        <span wire:loading.remove wire:target="editSortie({{$sortie->id }})"><i class="nav-icon i-Pen-2"></i></span>
                                         <span wire:loading wire:target="editSortie({{$sortie->id }})">
                                             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                             modification...

@@ -121,7 +121,7 @@
                                 <td>{{ $sortie->name }}</td>
                                 <td>
                                     @if($sortie->retour == 0)
-                                        <span class="text-primary">pas de retour</span>
+                                        <span class="text-primary"> <i class="nav-icon i-Yes font-weight-bold"></i> pas de retour</span>
                                     @else
                                         <span class="text-danger">avec retour</span>
                                     @endif

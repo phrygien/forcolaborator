@@ -168,6 +168,12 @@ class LivSortieOeuf extends Component
         $dernierSortieOeuf = SortieOeuf::where('id_type_oeuf', $this->id_type_oeuf)
             ->orderByDesc('date_sortie')
             ->first();
+        
+        $this->constatDisponibles = ConstatOeuf::whereNotIn('id', $this->getDetailsSelectionnes())
+        ->where('nb_disponible', '>', 0)
+        ->where('id_type_oeuf', $this->id_type_oeuf)
+        ->orderBy('date_entree', 'asc')
+        ->get();
 
         if ($dernierSortieOeuf) {
             $this->pu = $dernierSortieOeuf->pu;
@@ -181,6 +187,18 @@ class LivSortieOeuf extends Component
             } else {
                 $this->pu = null;
             }
+        }
+    }
+
+    public function calculateSumConstatOeuf()
+    {
+        $sommenbdisponible = ConstatOeuf::where('id_type_oeuf', $this->id_type_oeuf)
+        ->sum('nb_disponible');
+        if($sommenbdisponible > $this->qte)
+        {
+            session()->flash('somme_ok', 'opperation possible');
+        }else{
+            session()->flash('somme_non_ok', 'opperation impossible, La quantité a sortir superieur au quantité disponible pour ce type d\'oeuf ');
         }
     }
 
@@ -203,6 +221,7 @@ class LivSortieOeuf extends Component
         if (is_numeric($value) && is_numeric($this->pu) && $value != 0) {
             $this->montant = $this->pu * $value;
         }
+        $this->calculateSumConstatOeuf();
     }
 
 
@@ -255,7 +274,6 @@ class LivSortieOeuf extends Component
         $this->date_sortie = date('Y-m-d');
         $this->date_action = '';
         $this->montant = '';
-        $this->actif = 1;
         $this->creatBtn = false;
         $this->resetValidation();
     }
