@@ -24,9 +24,6 @@
         @include('livewire.sortie_poulets.create')
     @endif
 
-    @if($editSortie)
-        @include('livewire.sortie_poulets.edit')
-    @endif
 
 @if($afficherListe)
 

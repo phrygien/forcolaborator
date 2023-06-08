@@ -24,10 +24,6 @@
         @include('livewire.sortie_oeufs.create')
     @endif
 
-    @if($editSortie)
-        @include('livewire.sortie_oeufs.edit')
-    @endif
-
 @if($afficherListe)
 
 <div class="col-md-12">
