@@ -29,14 +29,14 @@ class LivSortiePoulet extends Component
     public $confirmUpdate;
     public $confirmRetour;
 
-    public $typePouletActifs;
-    public $typeSortieActifs;
-    public $clientActifs;
+    public $typePouletActifs =[];
+    public $typeSortieActifs = [];
+    public $clientActifs = [];
     public $newClient;
-    public $cycleActifs;
+    public $cycleActifs = [];
     public $existClient;
     public $selectedOption;
-    public $recordToDelete;
+    public $recordToDelete = null;
 
     public $prix_unite_select;
     public $selectedTypePoulet;
@@ -70,9 +70,6 @@ class LivSortiePoulet extends Component
     * debut utils sortie poulet
     */
     public $sortie = [
-        'nom_client' => '',
-        'adresse' => '',
-        'date_commande' => '',
         'details' => [],
     ];
 
@@ -241,7 +238,7 @@ class LivSortiePoulet extends Component
         ->join('users', 'users.id', 'sortie_poulets.id_utilisateur')
         ->select('sortie_poulets.*', 'clients.nom', 'users.name', 'type_sorties.libelle')
         ->orderBy('date_sortie', 'DESC')
-        ->paginate(7);
+        ->paginate(15);
         $prixs = $this->getPrix();
         return view('livewire.liv-sortie-poulet', [
             'sorties' => $sorties,
@@ -685,14 +682,18 @@ class LivSortiePoulet extends Component
         $this->confirmRetour = false;
         $this->retourSortie = true;
         $this->afficherListe = false;
+        $this->resetFormSortie();
     }
 
     public function afficherSortie()
     {
+        $this->isLoading = true;
         $this->afficherListe = true;
         $this->retourSortie = false;
         $this->resetValidation();
         $this->resetQteRetour();
+        $this->isLoading = false;
+        $this->resetFormSortie();
     }
 
     public function resetQteRetour()
@@ -769,6 +770,7 @@ class LivSortiePoulet extends Component
             // $this->editSortie = false;
             $this->resetQteRetour();
             $this->resetValidation();
+            $this->resetFormSortie();
             $this->confirmRetour = false;
             $this->creatBtn = true;
             $this->notification = true;

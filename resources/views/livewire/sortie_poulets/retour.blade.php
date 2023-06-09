@@ -113,8 +113,12 @@
                     <div class="col-md-12 mt-4">
                         <button class="btn btn-raised mb-3 btn-raised-primary btn-rounded" wire:click.prevent="afficherSortie()"><i class="nav-icon i-Arrow-Left-in-Circle"></i> Annuler retour</button>
 
-                        <button {{ $disableBtnValider }} class="btn btn-raised btn-raised-warning float-right btn-rounded mr-3" wire:click.prevent="confirmerRetour()">
-                            <i class="nav-icon i-Yes font-weight-bold"></i> Valider retour
+                        <button {{ $disableBtnValider }} class="btn btn-youtube btn-icon m-1 float-right mr-3 btn-rounded" wire:click.prevent="confirmerRetour()" wire:loading.attr="disabled" wire:target="confirmerRetour">
+                            <span wire:loading.remove wire:target="confirmerRetour"><i class="nav-icon i-Yes font-weight-bold"></i> Valider retour</span>
+                            <span wire:loading wire:target="confirmerRetour">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                chargement...
+                            </span>
                         </button>
                     </div>
                 </div>

@@ -111,36 +111,27 @@
                                 <td>{{ $sortie->nom }}</td>
                                 <td>{{  get_formatted_date($sortie->date_sortie, 'd - M - Y') }}</td>
                                 <td>{{ $sortie->poids_total }} kg</td>
-                                <td>{{ $sortie->nombre }} ( poulets )</td>
-                                <td>{{ $sortie->prix_unite }} Ar</td>
-                                <td>{{ $sortie->pu_poulet }} Ar</td>
-                                <td><span class="text-info"> {{ $sortie->montant }} Ar</span></td>
+                                <td>{{ number_format($sortie->nombre, 0, ',', '  ') }} ( poulets )</td>
+                                <td>{{ number_format($sortie->prix_unite, 0, ',', '  ') }} Ar</td>
+                                <td>{{ number_format($sortie->pu_poulet, 0, ',', '  ') }} Ar</td>
+                                <td><span class="text-info"> {{ number_format($sortie->montant, 0,',', '  ') }} Ar</span></td>
                                 <td>{{ $sortie->name }}</td>
                                 <td>
                                     @if($sortie->retour == 0)
-                                        <span class="text-primary"> <i class="nav-icon i-Yes font-weight-bold"></i> pas de retour</span>
+                                        <span class="text-success"> <i class="nav-icon i-Yes font-weight-bold"></i> pas de retour</span>
                                     @else
                                         <span class="text-danger">avec retour</span>
                                     @endif
                                 </td>
                                 <td>
-                                    @if($sortie->retour ==0)
-                                    <button wire:click="retourSortie({{$sortie->id }})" wire:loading.attr="disabled" wire:target="retourSortie({{$sortie->id }})" class="btn btn-raised btn-raised-danger">
-                                        <span wire:loading.remove wire:target="retourSortie({{$sortie->id }})"><i class="nav-icon i-Data-Refresh"></i> Effectuer retour</span>
+                                    <button @if($sortie->retour !=0) disabled @endif wire:click="retourSortie({{$sortie->id }})" wire:loading.attr="disabled" wire:target="retourSortie({{$sortie->id }})" class="btn btn-youtube btn-icon m-1 btn-rounded">
+                                        <span wire:loading.remove wire:target="retourSortie({{$sortie->id }})">retour produit </span>
+                                        <span class="ul-btn__icon"><i class="i-Right1"></i></span>
                                         <span wire:loading wire:target="retourSortie({{$sortie->id }})">
                                             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                             chargement...
                                         </span>
                                     </button>
-                                    @else
-                                    <button  disabled wire:click="retourSortie({{$sortie->id }})" wire:loading.attr="disabled" wire:target="retourSortie({{$sortie->id }})" class="btn btn-raised btn-raised-danger">
-                                        <span wire:loading.remove wire:target="retourSortie({{$sortie->id }})"><i class="nav-icon i-Data-Refresh"></i> Effectuer retour</span>
-                                        <span wire:loading wire:target="retourSortie({{$sortie->id }})">
-                                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                            chargement...
-                                        </span>
-                                    </button>
-                                    @endif
                                 </td>
                             </tr>                                  
                             @empty
