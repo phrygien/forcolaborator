@@ -119,8 +119,9 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <button @if($sortie->retour !=0) disabled @endif wire:click="retourSortie({{$sortie->id }})" wire:loading.attr="disabled" wire:target="retourSortie({{$sortie->id }})" class="btn btn-rounded btn-raised btn-raised-danger">
-                                        <span wire:loading.remove wire:target="retourSortie({{$sortie->id }})">effectuer une retour </span>
+                                    <button @if($sortie->retour !=0) disabled @endif wire:click="retourSortie({{$sortie->id }})" wire:loading.attr="disabled" wire:target="retourSortie({{$sortie->id }})" class="btn btn-youtube btn-icon m-1 btn-rounded">
+                                        <span wire:loading.remove wire:target="retourSortie({{$sortie->id }})">retour produit </span>
+                                        <span class="ul-btn__icon"><i class="i-Right1"></i></span>
                                         <span wire:loading wire:target="retourSortie({{$sortie->id }})">
                                             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                             chargement...

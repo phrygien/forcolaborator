@@ -232,6 +232,7 @@ class LivSortieOeuf extends Component
         ->join('type_sorties', 'type_sorties.id', 'sortie_oeufs.id_type_sortie')
         ->join('users', 'users.id', 'sortie_oeufs.id_utilisateur')
         ->select('sortie_oeufs.*', 'clients.nom', 'type_oeufs.type', 'users.name', 'type_sorties.libelle')
+        ->orderBy('date_sortie', 'desc')
         ->paginate(15);
 
         $prixs = $this->getPrix();
@@ -274,6 +275,7 @@ class LivSortieOeuf extends Component
         $this->date_action = '';
         $this->montant = '';
         $this->creatBtn = false;
+        $this->sortie['details'] = [];
         $this->resetValidation();
     }
 
@@ -650,14 +652,18 @@ class LivSortieOeuf extends Component
         $this->confirmRetour = false;
         $this->retourSortie = true;
         $this->afficherListe = false;
+        $this->resetFormSortie();
     }
 
     public function afficherSortie()
     {
+        $this->isLoading = true;
         $this->afficherListe = true;
         $this->retourSortie = false;
+        $this->resetFormSortie();
         $this->resetValidation();
         $this->resetQteRetour();
+        $this->isLoading = false;
     }
 
     public function resetQteRetour()
@@ -668,6 +674,7 @@ class LivSortieOeuf extends Component
 
     public function saveRetour()
     {
+        $this->isLoading = true;
         $this->validate([
             'qte_retour' => 'required|integer',
         ]);
@@ -735,6 +742,7 @@ class LivSortieOeuf extends Component
             // $this->editSortie = false;
             $this->resetQteRetour();
             $this->resetValidation();
+            $this->resetFormSortie();
             $this->confirmRetour = false;
             $this->creatBtn = true;
             $this->notification = true;
@@ -748,7 +756,7 @@ class LivSortieOeuf extends Component
             return $e->getMessage();
             DB::rollback();
         }
-        
+        $this->isLoading = false;
     }
 
     public function updatedQteRetour()

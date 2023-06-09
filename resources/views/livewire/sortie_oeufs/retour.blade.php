@@ -108,10 +108,20 @@
                     </div>
 
                     <div class="col-md-12 mt-4">
-                        <button class="btn btn-raised mb-3 btn-raised-primary btn-rounded" wire:click.prevent="afficherSortie()"><i class="nav-icon i-Arrow-Left-in-Circle"></i> Annuler retour</button>
+                        <button class="btn btn-raised mb-3 btn-raised-primary btn-rounded" wire:click.prevent="afficherSortie()" wire:loading.attr="disabled" wire:target="afficherSortie">
+                            <span wire:loading.remove wire:target="afficherSortie"><i class="nav-icon i-Left1"></i> Annuler retour</span>
+                            <span wire:loading wire:target="afficherSortie">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                chargement...
+                            </span>
+                        </button>
 
-                        <button {{ $disableBtnValider }} class="btn btn-raised btn-raised-warning float-right btn-rounded mr-3" wire:click.prevent="confirmerRetour()">
-                            <i class="nav-icon i-Yes font-weight-bold"></i> Valider retour
+                        <button {{ $disableBtnValider }} class="btn btn-youtube btn-icon m-1 float-right mr-3 btn-rounded" wire:click.prevent="confirmerRetour()" wire:loading.attr="disabled" wire:target="confirmerRetour">
+                            <span wire:loading.remove wire:target="confirmerRetour"><i class="nav-icon i-Yes font-weight-bold"></i> Valider retour</span>
+                            <span wire:loading wire:target="confirmerRetour">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                chargement...
+                            </span>
                         </button>
                     </div>
                 </div>
@@ -190,7 +200,13 @@
         <p class="text-black">Pouvez-vous confirmer retour sortie poulet ?</p>
         <p class="text-center">
             <button class="btn btn-secondary mr-3 btn-rounded" wire:click="cancelRetour()">{{ __('Fermer') }}</button>
-            <button class="btn btn-danger ml-2 btn-rounded" wire:click.prevent="saveRetour()">{{ __('Confirmer') }}</button>
+            <button class="btn btn-danger ml-2 btn-rounded" wire:click.prevent="saveRetour()" wire:loading.attr="disabled" wire:target="saveRetour()">
+                <span wire:loading.remove wire:target="saveRetour">{{ __('Confirmer') }}</span>
+                <span wire:loading wire:target="saveRetour">
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    validation...
+                </span>
+            </button>
         </p>
     </div>
     </div>
