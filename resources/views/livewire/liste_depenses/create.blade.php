@@ -9,7 +9,7 @@
                         <select wire:model.defer="id_unite" class="form-control form-control-rounded">
                             <option>Choisiser ununité de dépense</option>
                             @foreach ($unites as $unite)
-                                <option value="{{ $unite->id }}">{{ $unite->unite}}</option>
+                                <option value="{{ $unite->id }}">{{ $unite->label}}</option>
                             @endforeach
                         </select>
                         @error('id_unite') 
@@ -98,25 +98,26 @@
                     </div>
 
                     <div class="col-md-12">
-                        <button class="btn btn-primary btn-rounded mr-3" wire:click.prevent="saveListe()" wire:loading.attr="disabled" wire:target="saveListe()">
-                            <span wire:loading.remove wire:target="saveListe"><i class="nav-icon i-Yes font-weight-bold"></i> Enregistrer</span>
-                            <span wire:loading wire:target="saveListe">
-                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                enregistrement...
-                            </span>
-                        </button>
-                        <button class="btn btn-danger btn-rounded mr-3" wire:click.prevent="resetInput()" wire:loading.attr="disabled" wire:target="resetInput()">
-                            <span wire:loading.remove wire:target="resetInput"><i class="nav-icon i-Repeat-3 font-weight-bold"></i> Reset</span>
-                            <span wire:loading wire:target="resetInput">
-                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                reinitialisation...
-                            </span>
-                        </button>
+
                         <button class="btn btn-secondary btn-rounded" wire:click.prevent="cancelCreate()" wire:loading.attr="disabled" wire:target="cancelCreate()">
                             <span wire:loading.remove wire:target="cancelCreate"><i class="nav-icon i-Arrow-Back font-weight-bold"></i> Retour</span>
                             <span wire:loading wire:target="cancelCreate">
                                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                 annulation...
+                            </span>
+                        </button>
+                        <button class="btn float-right btn-danger btn-rounded mr-3" wire:click.prevent="resetInput()" wire:loading.attr="disabled" wire:target="resetInput()">
+                            <span wire:loading.remove wire:target="resetInput"><i class="nav-icon i-Repeat-3 font-weight-bold"></i> Reinitialiser</span>
+                            <span wire:loading wire:target="resetInput">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                reinitialisation...
+                            </span>
+                        </button>
+                        <button class="btn float-right btn-primary btn-rounded mr-3" wire:click.prevent="saveListe()" wire:loading.attr="disabled" wire:target="saveListe()">
+                            <span wire:loading.remove wire:target="saveListe"><i class="nav-icon i-Yes font-weight-bold"></i> Enregistrer</span>
+                            <span wire:loading wire:target="saveListe">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                enregistrement...
                             </span>
                         </button>
                     </div>
