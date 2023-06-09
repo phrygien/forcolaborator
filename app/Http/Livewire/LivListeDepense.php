@@ -1,11 +1,7 @@
 <?php
 
 namespace App\Http\Livewire;
-
-use App\Models\CategorieDepense;
-use App\Models\LibelleDepense;
 use App\Models\Listedepense;
-use App\Models\TypeDepense;
 use App\Models\Unite;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -14,7 +10,8 @@ use Illuminate\Support\Facades\DB;
 class LivListeDepense extends Component
 {
     use WithPagination;
-    public $isLoading, $liste_id, $nom_depense, $id_unite, $cycle_concerne, $affectation, $type, $nb_annee_amortissement, $actif;
+    public $isLoading;
+    public $liste_id, $nom_depense, $id_unite, $cycle_concerne, $affectation, $type, $nb_annee_amortissement, $actif;
     public $afficherListe=true;
     public $createListe=false;
     public $editListe=false;
@@ -22,13 +19,13 @@ class LivListeDepense extends Component
     public $confirmUpdate = false; 
     public $recordToDelete;
     public $btnCreate = true;
-    public $unites = [];
+    public $unites;
 
     protected $paginationTheme = 'bootstrap';
 
     public function mount()
     {
-        $this->actif = 1;
+        $this->actif = 2;
         $this->unites = Unite::where('actif', 1)->get();
     }
 
@@ -74,7 +71,7 @@ class LivListeDepense extends Component
             'cycle_concerne' => 'required',
             'affectation' => 'required',
             'type' => 'required',
-            'nb_annee_amortissement',
+            'nb_annee_amortissement' => 'required',
             'actif' => 'required|integer'
         ]);
 
