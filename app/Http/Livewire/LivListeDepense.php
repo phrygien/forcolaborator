@@ -34,7 +34,11 @@ class LivListeDepense extends Component
 
     public function render()
     {
-        $listes = Listedepense::where('actif', 1)->paginate(15);
+        $listes = DB::table('listedepenses')
+                ->join('unites', 'unites.id', 'listedepenses.id_unite')
+                ->select('listedepenses.*', 'unites.unite', 'unites.label')
+                ->where('listedepenses.actif', 1)
+                ->paginate(15);
         return view('livewire.liv-liste-depense', [
             'listes' => $listes
         ]);
