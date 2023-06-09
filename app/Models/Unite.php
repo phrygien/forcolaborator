@@ -13,6 +13,7 @@ class Unite extends Model
 
     protected $fillable = [
         'unite', 
-        'label'
+        'label',
+        'actif',
     ];
 }
