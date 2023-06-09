@@ -3,6 +3,7 @@
 use App\Http\Controllers\BatimentController;
 use App\Http\Controllers\CategoriedepenseController;
 use App\Http\Controllers\Depense\DepenseglobalContoller;
+use App\Http\Controllers\Depense\ListedepenseController;
 use App\Http\Controllers\Depense\UniteController;
 use App\Http\Controllers\Depense\UtilisationdepenseController;
 use App\Http\Controllers\Entree\ConstatoeufController;
@@ -76,4 +77,5 @@ Route::group(['prefix' => 'gestion_depense', 'middleware' => 'auth'], function()
     Route::get('depense_globale', [DepenseglobalContoller::class, 'page'])->name('gestion_depense.depense_globales');
     Route::get('utilisation_depense', [UtilisationdepenseController::class, 'page'])->name('gestion_depense.utilisation_depenses');
     Route::get('unite', [UniteController::class, 'page'])->name('gestion_depense.unites');
+    Route::get('liste_depense', [ListedepenseController::class, 'page'])->name('gestion_depense.liste_depense');
 });
