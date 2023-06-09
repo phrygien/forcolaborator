@@ -369,9 +369,9 @@
 				</a>
 			</li>
 			<li class="nav-item">
-				<a href="{{ route('gestion_depense.utilisation_depenses')}}">
+				<a href="#">
 					<i class="nav-icon i-Wallet"></i>
-					<span class="item-name">Utilisation depense</span>
+					<span class="item-name">Engagement charge</span>
 				</a>
 			</li>
 		</ul>
