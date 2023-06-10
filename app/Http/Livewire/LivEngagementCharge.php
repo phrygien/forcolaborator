@@ -18,7 +18,6 @@ class LivEngagementCharge extends Component
     public $editEngagement=false;
     public $notification =false; 
     public $confirmUpdate = false; 
-    public $recordToDelete;
     public $btnCreate = true;
     public $depense_charges = [];
 
@@ -26,8 +25,8 @@ class LivEngagementCharge extends Component
 
     public function mount()
     {
-        $this->date_engagement = now();
-        $this->depense_charges = Listedepense::where('type', 2)
+        $this->date_engagement = date('Y-m-d');
+        $this->depense_charges = Listedepense::where('type', 1)
                                 ->where('actif', 1)
                                 ->get();
     }
@@ -42,6 +41,24 @@ class LivEngagementCharge extends Component
         return view('livewire.liv-engagement-charge', [
             'engagements' => $engagements
         ]);
+    }
+
+    public function updatedPu()
+    {
+        if(is_numeric($this->pu) && is_numeric($this->qte)){
+            $this->prix_total = $this->pu * $this->qte;
+        }else{
+            $this->prix_total = '';
+        }
+    }
+
+    public function updatedQte()
+    {
+        if(is_numeric($this->pu) && is_numeric($this->qte)){
+            $this->prix_total = $this->pu * $this->qte;
+        }else{
+            $this->prix_total = '';
+        }
     }
 
     public function formEngagement()
@@ -60,7 +77,7 @@ class LivEngagementCharge extends Component
         $this->qte = '';
         $this->prix_total = '';
         $this->qte_disponible = '';
-        $this->date_engagement = date('Y-m-d');;
+        $this->date_engagement = date('Y-m-d');
         $this->resetValidation();
     }
 
@@ -72,7 +89,7 @@ class LivEngagementCharge extends Component
             'pu' => 'required|numeric',
             'qte' => 'required|numeric',
             'prix_total' => 'required|numeric',
-            'qte_disponible' => 'required|numeric',
+            'qte_disponible' => 'nullable|numeric',
             'date_engagement' => 'required|date'
         ]);
 
@@ -200,28 +217,5 @@ class LivEngagementCharge extends Component
         $this->btnCreate = true;
         $this->afficherListe = true;
         $this->isLoading = false;
-    }
-
-    public function confirmerDelete($id)
-    {
-        $this->recordToDelete = EngagementCharge::findOrFail($id);
-    }
-
-    public function cancelDelete()
-    {
-        $this->recordToDelete = null;
-    }
-
-    public function delete()
-    {
-        try{
-        $this->recordToDelete->delete();
-        $this->recordToDelete = null;
-        $this->notification = true;
-        session()->flash('message', 'Suppression avec sucée');
-        }catch(\Exception $e){
-            session()->flash('error', 'Engagement depense est déja utilisé ! voulez-vous vraiment le rendre inactif ?');
-        }
-
     }
 }
