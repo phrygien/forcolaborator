@@ -369,7 +369,7 @@
 				</a>
 			</li>
 			<li class="nav-item">
-				<a href="#">
+				<a href="{{ route('gestion_depense.engagement_charges') }}">
 					<i class="nav-icon i-Wallet"></i>
 					<span class="item-name">Engagement charge</span>
 				</a>
