@@ -170,13 +170,15 @@ class LivEngagementCharge extends Component
         ]);
         $engagement = EngagementCharge::findOrFail($this->engagement_id);
         $currentQte = $engagement->qte;
+        $currentQteDisponible = $engagement->qte_disponible;
+        $different_with_new_qte = $currentQte - $currentQteDisponible;
         if($currentQte <= $this->qte){
                 $engagement->update([
                     'id_depense' => $this->id_depense,
                     'pu' => $this->pu,
                     'qte' => $this->qte,
                     'prix-total' => $this->qte * $this->pu,
-                    'qte_disponible' => $this->qte_disponible,
+                    'qte_disponible' => $this->qte_disponible + $different_with_new_qte,
                     'date_engagement' => now(),
                 ]);
     
