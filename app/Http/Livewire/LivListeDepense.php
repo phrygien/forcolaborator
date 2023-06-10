@@ -65,16 +65,27 @@ class LivListeDepense extends Component
     public function saveListe()
     {
         $this->isLoading = true;
-        $data = $this->validate([
-            'nom_depense' => 'required',
-            'id_unite' => 'required',
-            'cycle_concerne' => 'required',
-            'affectation' => 'required',
-            'type' => 'required',
-            'nb_annee_amortissement' => 'required',
-            'actif' => 'required|integer'
-        ]);
-
+        if($this->type == 2){
+            $data = $this->validate([
+                'nom_depense' => 'required',
+                'id_unite' => 'required',
+                'cycle_concerne' => 'required',
+                'affectation' => 'required',
+                'type' => 'required',
+                'nb_annee_amortissement' => 'required',
+                'actif' => 'required|integer'
+            ]);
+        }else{
+            $data = $this->validate([
+                'nom_depense' => 'required',
+                'id_unite' => 'required',
+                'cycle_concerne' => 'required',
+                'affectation' => 'required',
+                'type' => 'required',
+                'nb_annee_amortissement' => 'nullable',
+                'actif' => 'required|integer'
+            ]);
+        }
         try{
 
         Listedepense::create($data);
@@ -139,17 +150,27 @@ class LivListeDepense extends Component
     public function updateListe()
     {
         $this->isLoading = true;
-
-        $this->validate([
-            'nom_depense' => 'required',
-            'id_unite' => 'required',
-            'cycle_concerne' => 'required',
-            'affectation' => 'required',
-            'type' => 'required',
-            'nb_annee_amortissement',
-            'actif' => 'required|integer'
-        ]);
-
+        if($this->type == 2){
+            $this->validate([
+                'nom_depense' => 'required',
+                'id_unite' => 'required',
+                'cycle_concerne' => 'required',
+                'affectation' => 'required',
+                'type' => 'required',
+                'nb_annee_amortissement' => 'required',
+                'actif' => 'required|integer'
+            ]);
+        }else{
+            $this->validate([
+                'nom_depense' => 'required',
+                'id_unite' => 'required',
+                'cycle_concerne' => 'required',
+                'affectation' => 'required',
+                'type' => 'required',
+                'nb_annee_amortissement' => 'nullable',
+                'actif' => 'required|integer'
+            ]);
+        }
         try{
 
             $liste = Listedepense::findOrFail($this->liste_id);
@@ -159,7 +180,7 @@ class LivListeDepense extends Component
                 'cycle_concerne' => $this->cycle_concerne,
                 'affectation' => $this->affectation,
                 'type' => $this->type,
-                'nb_annee_ammortissement' => $this->nb_annee_amortissement,
+                'nb_annee_amortissement' => $this->nb_annee_amortissement,
                 'actif' => $this->actif
             ]);
 

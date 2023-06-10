@@ -152,7 +152,11 @@
                                         Immobilisations
                                     @endif
                                 </td>
-                                <td>{{ $liste->nb_annee_amortissement }} ans</td>
+                                <td>
+                                    @if($liste->nb_annee_amortissement !=null)
+                                        {{ $liste->nb_annee_amortissement }} ans
+                                    @endif
+                                </td>
                                 <td>
                                     @if($liste->actif == 1)
                                         <span class="badge badge-success">Actif</span>
