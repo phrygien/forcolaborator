@@ -85,6 +85,8 @@ class LivEngagementCharge extends Component
     public function saveEngagement()
     {
         $this->isLoading = true;
+        $currentDate = now();
+        if ($this->date_engagement < $currentDate) {
         $data = $this->validate([
             'id_depense' => 'required|integer',
             'pu' => 'required|numeric',
@@ -107,6 +109,9 @@ class LivEngagementCharge extends Component
         }catch(\Exception $e){
             session()->flash('message', $e->getMessage());
         }
+    }else{
+        session()->flash('create_error', 'Enregistrement impossible, verifier la date d\'engagement.');
+    }
 
     }
 

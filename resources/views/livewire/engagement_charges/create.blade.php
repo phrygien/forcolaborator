@@ -2,6 +2,12 @@
     <div class="card mb-4">
         <div class="card-body">
             <div class="card-title mb-3">{{ __('Création engagement charge')}}</div>
+            @if (session()->has('create_error'))
+            <div class="alert alert-danger border-info" role="alert">
+                <i class="icon-info1"></i>{{ session('create_error')}}
+            </div>
+            @endif
+
             <form>
                 <div class="row">
                     <div class="col-md-4 form-group mb-3">
@@ -61,7 +67,7 @@
 
                     <div class="col-md-6 form-group mb-3">
                         <label for="firstName2">{{ __('Date engagement')}}</label>
-                        <input type="text" readonly wire:model.defer="date_engagement" class="form-control form-control-rounded" id="firstName2" placeholder="">
+                        <input type="date" wire:model.defer="date_engagement" class="form-control form-control-rounded" id="firstName2" placeholder="">
                         @error('date_engagement') 
                         <div class="alert alert-danger" role="alert">
                             {{ $message}}
