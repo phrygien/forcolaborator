@@ -45,7 +45,7 @@ class LivEngagementCharge extends Component
 
     public function updatedPu()
     {
-        if(is_numeric($this->pu) && is_numeric($this->qte)){
+        if(is_numeric($this->pu)){
             $this->prix_total = $this->pu * $this->qte;
         }else{
             $this->prix_total = '';
@@ -54,8 +54,9 @@ class LivEngagementCharge extends Component
 
     public function updatedQte()
     {
-        if(is_numeric($this->pu) && is_numeric($this->qte)){
+        if(is_numeric($this->qte)){
             $this->prix_total = $this->pu * $this->qte;
+            $this->qte_disponible = $this->qte;
         }else{
             $this->prix_total = '';
         }
@@ -155,7 +156,7 @@ class LivEngagementCharge extends Component
         $this->confirmUpdate = true;
     }
 
-    public function updateLibelle()
+    public function updateEngagement()
     {
         $this->isLoading = true;
 
@@ -167,31 +168,30 @@ class LivEngagementCharge extends Component
             'qte_disponible' => 'required|numeric',
             'date_engagement' => 'required|date'
         ]);
-
-        try{
-
-            $engagement = EngagementCharge::findOrFail($this->engagement_id);
-            $engagement->update([
-                'id_depense' => $this->id_depense,
-                'pu' => $this->pu,
-                'qte' => $this->qte,
-                'prix-total' => $this->qte * $this->pu,
-                'qte_disponible' => $this->qte_disponible,
-                'date_engagement' => now(),
-            ]);
-
-            session()->flash('message', 'Modification avec sucée');
-            $this->editEngagement = false;
-            $this->notification = true;
-            $this->resetInput();
-            $this->resetValidation();
-            $this->confirmUpdate = false;
-            $this->btnCreate = true;
-            $this->afficherListe = true;
-
-            $this->isLoading = false;
-        }catch(\Exception $e){
-
+        $engagement = EngagementCharge::findOrFail($this->engagement_id);
+        $currentQte = $engagement->qte;
+        if($currentQte <= $this->qte){
+                $engagement->update([
+                    'id_depense' => $this->id_depense,
+                    'pu' => $this->pu,
+                    'qte' => $this->qte,
+                    'prix-total' => $this->qte * $this->pu,
+                    'qte_disponible' => $this->qte_disponible,
+                    'date_engagement' => now(),
+                ]);
+    
+                session()->flash('message', 'Modification avec sucée');
+                $this->editEngagement = false;
+                $this->notification = true;
+                $this->resetInput();
+                $this->resetValidation();
+                $this->confirmUpdate = false;
+                $this->btnCreate = true;
+                $this->afficherListe = true;
+    
+                $this->isLoading = false;
+        }else{
+            session()->flash('update_error', 'Modification impossible, verifier la qte que vous avez entre.');
         }
 
     }

@@ -21,7 +21,7 @@
 
                     <div class="col-md-4 form-group mb-3">
                         <label for="firstName2">{{ __('Prix unitaire')}}</label>
-                        <input type="text" wire:model.defer="pu" class="form-control form-control-rounded" id="firstName2" placeholder="">
+                        <input type="text" wire:model="pu" class="form-control form-control-rounded" id="firstName2" placeholder="">
                         @error('pu') 
                         <div class="alert alert-danger" role="alert">
                             {{ $message}}
@@ -31,7 +31,7 @@
 
                     <div class="col-md-4 form-group mb-3">
                         <label for="firstName2">{{ __('Qte')}}</label>
-                        <input type="text" wire:model.defer="qte" class="form-control form-control-rounded" id="firstName2" placeholder="">
+                        <input type="text" wire:model="qte" class="form-control form-control-rounded" id="firstName2" placeholder="">
                         @error('qte') 
                         <div class="alert alert-danger" role="alert">
                             {{ $message}}
@@ -40,8 +40,8 @@
                     </div>
 
                     <div class="col-md-4 form-group mb-3">
-                        <label for="firstName2">{{ __('Qte')}}</label>
-                        <input type="text" wire:model.defer="qte_disponible" class="form-control form-control-rounded" id="firstName2" placeholder="">
+                        <label for="firstName2">{{ __('Qte disponible')}}</label>
+                        <input type="text" readonly wire:model.defer="qte_disponible" class="form-control form-control-rounded" id="firstName2" placeholder="">
                         @error('qte_disponible') 
                         <div class="alert alert-danger" role="alert">
                             {{ $message}}
