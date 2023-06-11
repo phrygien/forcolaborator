@@ -2,12 +2,14 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\Batiment;
 use App\Models\Client;
 use App\Models\ConstatOeuf;
 use App\Models\ConstatPoulet;
 use App\Models\Cycle;
 use App\Models\DetailSortie;
 use App\Models\ProduitCycle;
+use App\Models\Site;
 use App\Models\SortiePoulet;
 use App\Models\TypeOeuf;
 use App\Models\TypePoulet;
@@ -32,6 +34,9 @@ class LivConstatPoulet extends Component
     //pour le sortie du constat
     public $qte_sortie, $id_dernier_constat, $id_cycle_sortie, $date_constat_sortie, $nb_disponible_constat, $prix_unitaire_sortie, $valeur;
     public $montant, $poids_total, $prix_unite, $pu_poulet, $nombre, $id_type_sortie, $id_client, $raison_sociale, $adresse, $nom, $id_produit;
+
+    public $selectedSite;
+    public $selectedBatiment;
 
     public $confirmUpdate;
     public $typePouletActifs = [];
@@ -80,6 +85,38 @@ class LivConstatPoulet extends Component
         }
     }
 
+    public function getSites()
+    {
+        return Site::where('actif', 1)->get();
+    }
+
+    public function getBatiments()
+    {
+        $batiments = [];
+    
+        if ($this->selectedSite) {
+            $batiments = Batiment::where('id_site', $this->selectedSite)
+                        ->where('actif', 1)
+                        ->get();
+        }
+    
+        return $batiments;
+    }
+
+    public function getCycles()
+    {
+        $cyclebatiments = [];
+    
+        if ($this->selectedSite) {
+            $cyclebatiments = Cycle::where('id_batiment', $this->selectedBatiment)
+                        ->where('actif', 1)
+                        ->whereIn('id_type_poulet', [6, 8])
+                        ->get();
+        }
+    
+        return $cyclebatiments;
+    }
+
     public function updatedNewNb()
     {
         $this->calculeNewDisponible();
@@ -118,8 +155,15 @@ class LivConstatPoulet extends Component
             ->select('constat_poulets.*', 'type_poulets.type', 'cycles.description', 'users.name')
             ->paginate(10);
 
+        $sites = $this->getSites();
+        $batiments = $this->getBatiments();
+        $cyclebatiments = $this->getCycles();
+
         return view('livewire.liv-constat-poulet', [
-            'constats' => $constats
+            'constats' => $constats,
+            'sites' => $sites,
+            'batiments' => $batiments,
+            'cyclebatiments' => $cyclebatiments,
         ]);
     }
 
