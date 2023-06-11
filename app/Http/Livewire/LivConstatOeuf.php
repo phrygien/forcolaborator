@@ -8,6 +8,7 @@ use App\Models\ConstatOeuf;
 use App\Models\Cycle;
 use App\Models\DetailSortie;
 use App\Models\ProduitCycle;
+use App\Models\Site;
 use App\Models\SortieOeuf;
 use App\Models\TypeOeuf;
 use App\Models\TypeSortie;
@@ -49,6 +50,7 @@ class LivConstatOeuf extends Component
 
     public $dernierConstatOeuf;
 
+
     /*
     * debut proprieté sortie oeuf en meme temps que constat oeuf
     */
@@ -71,7 +73,7 @@ class LivConstatOeuf extends Component
         $this->date_sortie = date('Y-m-d');
         $this->date_action = date('Y-m-d');
         $this->typeOeufActifs = TypeOeuf::where('actif', 1)->get();
-        $this->cycleActifs = Cycle::where('actif', 1)->where('id', 11)->get();
+        //$this->cycleActifs = Cycle::where('actif', 1)->get();
         $this->id_utilisateur = Auth::user()->id;
         $this->clients = Client::all();
         $this->typesorties = TypeSortie::where('actif', 1)->get();
@@ -88,6 +90,37 @@ class LivConstatOeuf extends Component
         }
     }
 
+    public function getSites()
+    {
+        return Site::where('actif', 1)->get();
+    }
+
+    public function getBatiments()
+    {
+        $batiments = [];
+    
+        if ($this->selectedSite) {
+            $batiments = Batiment::where('id_site', $this->selectedSite)
+                        ->where('actif', 1)
+                        ->get();
+        }
+    
+        return $batiments;
+    }
+
+    public function getCycles()
+    {
+        $cyclebatiments = [];
+    
+        if ($this->selectedSite) {
+            $cyclebatiments = Cycle::where('id_batiment', $this->selectedBatiment)
+                        ->where('actif', 1)
+                        ->get();
+        }
+    
+        return $cyclebatiments;
+    }
+
     public function afficherTotalDonneesJournalieres()
     {
         $totalDonneesJournalieres = ConstatOeuf::whereDate('date_entree', today())
@@ -101,8 +134,10 @@ class LivConstatOeuf extends Component
         $constats = DB::table('constat_oeufs')
             ->join('type_oeufs', 'type_oeufs.id', 'constat_oeufs.id_type_oeuf')
             ->join('cycles', 'cycles.id', 'constat_oeufs.id_cycle')
+            ->join('batiments', 'batiments.id', 'cycles.id_batiment')
+            ->join('sites', 'sites.id', 'batiments.id_site')
             ->join('users', 'users.id', 'constat_oeufs.id_utilisateur')
-            ->select('constat_oeufs.*', 'type_oeufs.type', 'cycles.description', 'users.name')
+            ->select('constat_oeufs.*', 'type_oeufs.type', 'cycles.description', 'users.name', 'batiments.nom', 'sites.site', 'sites.adresse')
             ->orderBy('date_entree', 'DESC')
             ->paginate(10);
 
@@ -112,9 +147,17 @@ class LivConstatOeuf extends Component
             ->selectRaw('id_type_oeuf, type_oeufs.type as nom_type_oeuf, SUM(nb) as total')
             ->get();
 
+            
+        $sites = $this->getSites();
+        $batiments = $this->getBatiments();
+        $cyclebatiments = $this->getCycles();
+
         return view('livewire.liv-constat-oeuf', [
             'constats' => $constats,
             'totalDonneesJournalieres' => $totalDonneesJournalieres,
+            'sites' => $sites,
+            'batiments' => $batiments,
+            'cyclebatiments' => $cyclebatiments,
         ]);
     }
 

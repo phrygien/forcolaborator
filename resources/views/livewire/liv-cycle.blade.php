@@ -175,7 +175,7 @@
                                     @if($cycle->date_arret == null)
                                     
                                     @else
-                                    {{ get_formatted_date($cycle->date_arret, 'd -M - Y') }}
+                                    {{ get_formatted_date($cycle->date_arret, 'd -M -Y') }}
                                     @endif
                                 </td>
                                 <td>
