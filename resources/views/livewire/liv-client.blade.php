@@ -104,8 +104,8 @@
                                 <td>{{ $client->nom }}</td>
                                 <td>{{ $client->raison_sociale }}</td>
                                 <td>{{ $client->adresse }}</td>
-                                <td><span class="text-success text-14">{{ number_format($client->total_montant_poulet, 0, ',', ' ')  }}</span> (Ar)</td>
-                                <td><span class="text-primary text-14">{{ number_format($client->total_montant_oeuf, 0, ',', ' ')  }}</span> (Ar)</td>
+                                <td><span class="text-success text-14"><b>{{ number_format($client->total_montant_poulet, 0, ',', ' ')  }}</span> (Ar) </b></td>
+                                <td><span class="text-primary text-14"><b> {{ number_format($client->total_montant_oeuf, 0, ',', ' ')  }}</span> (Ar) </b></td>
                                 <td>
                                     @if($client->date_vente_poulet !=null)
                                     {{  get_formatted_date($client->date_vente_poulet, 'd - M - Y') }}
