@@ -6,7 +6,7 @@
                 <div class="row">
                     <div class="col-md-6 form-group mb-3">
                         <label for="picker1">{{ __('Cycle')}}</label>
-                        <select wire:model.defer="id_cycle" class="form-control form-control-rounded">
+                        <select disabled wire:model.defer="id_cycle" class="form-control form-control-rounded">
                             <option>Choisir un cycle</option>
                             @foreach ($cycleActifs as $cycle)
                                 <option value="{{ $cycle->id }}">{{ $cycle->description }}</option>
@@ -92,7 +92,7 @@
                         <button class="float-right btn btn-primary btn-rounded mr-3" wire:click.prevent="confirmerUpdate()">
                             <i class="nav-icon i-Yes font-weight-bold"></i> Enregistrer
                         </button>
-                        <button class="btn btn-secondary btn-rounded" wire:click.prevent="cancelUpdate()">
+                        <button class="btn float-left btn-secondary btn-rounded" wire:click.prevent="cancelUpdate()">
                             <i class="nav-icon i-Arrow-Back font-weight-bold"></i> Retour
                         </button>
                     </div>

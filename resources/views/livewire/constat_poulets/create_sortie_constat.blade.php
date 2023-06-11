@@ -44,6 +44,12 @@
                             {{ $message}}
                         </div>
                         @enderror
+
+                        @if (session()->has('error_nb'))
+                        <div class="alert alert-warning border-info" role="alert">
+                            {{ session('error_nb')}}
+                        </div>
+                        @endif
                     </div>
 
                                         

@@ -117,6 +117,17 @@ class LivConstatPoulet extends Component
         return $cyclebatiments;
     }
 
+    // public function updatedNombre()
+    // {
+    //     if($this->nombre > $this->nb_disponible_constat)
+    //     {
+    //         session()->flash('error_nb', 'La Qte à sortir ne doit pas >  aux nombre disponible'.' / '. 'Qte disponible du constat est : '.$this->nb_disponible_constat);
+    //         $this->btn_disabled = 'disabled';
+    //     }else{
+    //         $this->btn_disabled = '';
+    //     }
+    // }
+
     public function updatedNewNb()
     {
         $this->calculeNewDisponible();
@@ -155,7 +166,7 @@ class LivConstatPoulet extends Component
             ->join('type_poulets', 'type_poulets.id', 'cycles.id_type_poulet')
             ->join('users', 'users.id', 'constat_poulets.id_utilisateur')
             ->select('constat_poulets.*', 'type_poulets.type', 'cycles.description', 'users.name', 'batiments.nom', 'sites.site', 'sites.adresse')
-            ->paginate(10);
+            ->paginate(20);
 
         $sites = $this->getSites();
         $batiments = $this->getBatiments();
@@ -251,7 +262,9 @@ class LivConstatPoulet extends Component
             'id_cycle' => 'required|integer',
             'date_constat' => 'required|date',
             'id_utilisateur' => 'nullable',
-            'date_action' => 'nullable'
+            'date_action' => 'nullable',
+            'selectedSite' => 'required',
+            "selectedBatiment" => 'required'
         ]);
 
         //DB::beginTransaction();
