@@ -170,12 +170,12 @@
                                 <td>{{ number_format($cycle->nb_poulet, 0, ',', ' ') }}</td>
                                 <td>{{ $cycle->nom }}</td>
                                 <td>{{ $cycle->site }}</td>
-                                <td>{{ get_formatted_date($cycle->date_debut, "d/M/Y") }}</td>
+                                <td>{{ get_formatted_date($cycle->date_debut, "d - M - Y") }}</td>
                                 <td>
                                     @if($cycle->date_arret == null)
                                     
                                     @else
-                                    {{ get_formatted_date($cycle->date_arret, 'd/M/Y') }}
+                                    {{ get_formatted_date($cycle->date_arret, 'd -M - Y') }}
                                     @endif
                                 </td>
                                 <td>

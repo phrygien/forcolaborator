@@ -166,6 +166,8 @@ class LivSortiePoulet extends Component
                         ->get();
     }
 
+    // get constat selon type sortie
+
     public $selectedType = '';
 
     public function updatedSelectedType()

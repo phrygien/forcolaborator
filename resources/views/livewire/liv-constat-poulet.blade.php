@@ -120,9 +120,9 @@
                                         <td>{{ $constat->type }}</td>
                                         <td>{{ $constat->nb }} </td>
                                         <td>{{ $constat->nb_disponible }} </td>
-                                        <td>{{  get_formatted_date($constat->date_constat, 'd/M/Y') }}</td>
+                                        <td>{{  get_formatted_date($constat->date_constat, 'd - M - Y') }}</td>
                                         <td>{{ $constat->name }}</td>
-                                        <td>{{  get_formatted_date($constat->updated_at, 'd/ M/ Y - H:s') }}</td>
+                                        <td>{{  get_formatted_date($constat->updated_at, 'd - M - Y - H:s') }}</td>
                                         <td>
                                             <button wire:click="editConstat({{$constat->id }})" wire:loading.attr="disabled" wire:target="editConstat({{$constat->id }})" class="btn btn-raised btn-rounded btn-raised-primary">
                                                 <span wire:loading.remove wire:target="editConstat({{$constat->id }})"><i class="nav-icon i-Pen-2 font-weight-bold"></i></span>

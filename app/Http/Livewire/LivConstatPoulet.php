@@ -34,8 +34,8 @@ class LivConstatPoulet extends Component
     public $montant, $poids_total, $prix_unite, $pu_poulet, $nombre, $id_type_sortie, $id_client, $raison_sociale, $adresse, $nom, $id_produit;
 
     public $confirmUpdate;
-    public $typePouletActifs;
-    public $cycleActifs;
+    public $typePouletActifs = [];
+    public $cycleActifs = [];
 
     public $recordToDelete;
     public $isLoading;
@@ -421,6 +421,14 @@ class LivConstatPoulet extends Component
         }else
         {
             $this->montant = '';
+        }
+
+        if(is_numeric($this->montant) && is_numeric($this->nombre))
+        {
+            $this->pu_poulet = round($this->montant * $this->nombre, 2);
+        }else
+        {
+            $this->pu_poulet = '';
         }
     }
 
