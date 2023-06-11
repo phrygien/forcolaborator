@@ -35,7 +35,8 @@ class LivEngagementCharge extends Component
     {
         $engagements = DB::table('engagement_charges')
                         ->join('listedepenses', 'listedepenses.id', 'engagement_charges.id_depense')
-                        ->select('engagement_charges.*', 'listedepenses.nom_depense')
+                        ->join('unites', 'unites.id', 'listedepenses.id_unite')
+                        ->select('engagement_charges.*', 'listedepenses.nom_depense', 'unites.label')
                         ->paginate(15);
 
         return view('livewire.liv-engagement-charge', [
@@ -45,7 +46,7 @@ class LivEngagementCharge extends Component
 
     public function updatedPu()
     {
-        if(is_numeric($this->pu)){
+        if(is_numeric($this->pu) && is_numeric($this->qte)){
             $this->prix_total = $this->pu * $this->qte;
         }else{
             $this->prix_total = '';
@@ -54,7 +55,7 @@ class LivEngagementCharge extends Component
 
     public function updatedQte()
     {
-        if(is_numeric($this->qte)){
+        if(is_numeric($this->qte) && is_numeric($this->qte)){
             $this->prix_total = $this->pu * $this->qte;
             $this->qte_disponible = $this->qte;
         }else{

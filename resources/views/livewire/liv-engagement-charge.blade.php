@@ -55,10 +55,10 @@
                             <tr>
                                 <td>{{ $engagement->nom_depense }}</td>
                                 <td>{{ $engagement->pu }}</td>
-                                <td>{{ $engagement->qte }}</td>
+                                <td>{{ $engagement->qte }} {{ $engagement->label }}</td>
                                 <td>{{ $engagement->prix_total }}</td>
                                 <td>{{ get_formatted_date($engagement->date_engagement, "d - M - Y a H:s") }}</td>
-                                <td>{{ $engagement->qte_disponible }}</td>
+                                <td>{{ $engagement->qte_disponible }}  {{ $engagement->label }}</td>
                                 <td>{{ get_formatted_date($engagement->created_at, "d - M - Y a H:s") }}</td>
                                 <td>
                                     <button wire:click="editEngagement({{$engagement->id }})" wire:loading.attr="disabled" wire:target="editEngagement({{$engagement->id }})" class="btn btn-raised btn-rounded btn-raised-primary">
