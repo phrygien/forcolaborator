@@ -33,8 +33,8 @@ class LivConstatOeuf extends Component
     public $selectedBatiment;
 
     public $confirmUpdate;
-    public $cycleActifs;
-    public $typeOeufActifs;
+    public $cycleActifs = [];
+    public $typeOeufActifs = [];
 
     public $recordToDelete;
     public $isLoading;
@@ -73,7 +73,7 @@ class LivConstatOeuf extends Component
         $this->date_sortie = date('Y-m-d');
         $this->date_action = date('Y-m-d');
         $this->typeOeufActifs = TypeOeuf::where('actif', 1)->get();
-        //$this->cycleActifs = Cycle::where('actif', 1)->get();
+        $this->cycleActifs = Cycle::where('actif', 1)->get();
         $this->id_utilisateur = Auth::user()->id;
         $this->clients = Client::all();
         $this->typesorties = TypeSortie::where('actif', 1)->get();
@@ -231,6 +231,8 @@ class LivConstatOeuf extends Component
             'date_entree' => 'required|date',
             'id_utilisateur' => 'nullable',
             'date_action' => 'nullable',
+            'selectedSite' => 'required',
+            "selectedBatiment" => 'required'
         ]);
 
         DB::beginTransaction();

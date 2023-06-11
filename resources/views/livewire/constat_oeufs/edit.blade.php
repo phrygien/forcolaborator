@@ -6,7 +6,7 @@
 
                 <div class="col-md-6 form-group mb-3">
                     <label for="picker1">{{ __('Cycle')}}</label>
-                    <select wire:model.defer="id_cycle" class="form-control form-control-rounded">
+                    <select disabled wire:model.defer="id_cycle" class="form-control form-control-rounded">
                         <option>Choisir un cycle</option>
                         @foreach ($cycleActifs as $cycle)
                             <option value="{{ $cycle->id }}">{{ $cycle->description }}</option>
