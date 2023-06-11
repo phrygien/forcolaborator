@@ -104,6 +104,8 @@
                                 <thead>
                                     <tr>
                                         <th scope="col">{{ __('Cycle')}}</th>
+                                        <th scope="col">{{ __('Batiment')}}</th>
+                                        <th scope="col">{{ __('Site batiment')}}</th>
                                         <th scope="col">{{ __('Type poulet')}}</th>
                                         <th scope="col">{{ __('Nombre poulets')}}</th>
                                         <th scope="col">{{ __('Nombre disponible')}}</th>
@@ -117,6 +119,8 @@
                                     @forelse ($constats as $constat)
                                     <tr>
                                         <td>{{ $constat->description }}</td>
+                                        <td>{{ $constat->nom }}</td>
+                                        <td>{{ $constat->site }} , {{ $constat->adresse }}</td>
                                         <td>{{ $constat->type }}</td>
                                         <td>{{ $constat->nb }} </td>
                                         <td>{{ $constat->nb_disponible }} </td>

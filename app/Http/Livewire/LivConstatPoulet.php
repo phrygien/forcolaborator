@@ -69,7 +69,7 @@ class LivConstatPoulet extends Component
         $this->date_constat = date('Y-m-d');
         $this->date_sortie = date('Y-m-d');
         $this->typePouletActifs = TypePoulet::where('actif', 1)->get();
-        $this->cycleActifs = Cycle::where('actif', 1)->get();
+        $this->cycleActifs = Cycle::where('actif', 1)->whereIn('id_type_poulet', [6, 8])->get();
         $this->id_utilisateur = Auth::user()->id;
 
         $this->clients = Client::all();
@@ -150,9 +150,11 @@ class LivConstatPoulet extends Component
     {
         $constats = DB::table('constat_poulets')
             ->join('cycles', 'cycles.id', 'constat_poulets.id_cycle')
+            ->join('batiments', 'batiments.id', 'cycles.id_batiment')
+            ->join('sites', 'sites.id', 'batiments.id_site')
             ->join('type_poulets', 'type_poulets.id', 'cycles.id_type_poulet')
             ->join('users', 'users.id', 'constat_poulets.id_utilisateur')
-            ->select('constat_poulets.*', 'type_poulets.type', 'cycles.description', 'users.name')
+            ->select('constat_poulets.*', 'type_poulets.type', 'cycles.description', 'users.name', 'batiments.nom', 'sites.site', 'sites.adresse')
             ->paginate(10);
 
         $sites = $this->getSites();

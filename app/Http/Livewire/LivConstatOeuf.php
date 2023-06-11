@@ -73,7 +73,7 @@ class LivConstatOeuf extends Component
         $this->date_sortie = date('Y-m-d');
         $this->date_action = date('Y-m-d');
         $this->typeOeufActifs = TypeOeuf::where('actif', 1)->get();
-        $this->cycleActifs = Cycle::where('actif', 1)->get();
+        $this->cycleActifs = Cycle::where('actif', 1)->where('id_type_poulet', 7)->get();
         $this->id_utilisateur = Auth::user()->id;
         $this->clients = Client::all();
         $this->typesorties = TypeSortie::where('actif', 1)->get();
@@ -115,6 +115,7 @@ class LivConstatOeuf extends Component
         if ($this->selectedSite) {
             $cyclebatiments = Cycle::where('id_batiment', $this->selectedBatiment)
                         ->where('actif', 1)
+                        ->where('id_type_poulet', 7)
                         ->get();
         }
     
