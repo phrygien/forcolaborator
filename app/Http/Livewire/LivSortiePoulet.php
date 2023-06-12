@@ -104,7 +104,11 @@ class LivSortiePoulet extends Component
 
     public function getNombreDisponible($id_constat)
     {
+        if($this->id_type_sortie !=13){
         $constat = ConstatPoulet::find($id_constat);
+        }else{
+            $constat = ConstatPoulard::find($id_constat);
+        }
     
         if ($constat) {
             return $constat->nb_disponible;
@@ -161,10 +165,33 @@ class LivSortiePoulet extends Component
         //$this->montant = ($this->prix_unite * $this->nombre);
         $this->actif = 1;
 
-        $this->constatDisponibles = ConstatPoulet::whereNotIn('id', $this->getDetailsSelectionnes())
-                        ->where('nb_disponible', '>', 0)
-                        ->orderBy('date_constat', 'asc')
-                        ->get();
+        if($this->id_type_sortie == 13){
+            $this->constatDisponibles = ConstatPoulard::whereNotIn('id', $this->getDetailsSelectionnes())
+            ->where('nb_disponible', '>', 0)
+            ->orderBy('date_constat', 'asc')
+            ->get();
+        }else{
+            $this->constatDisponibles = ConstatPoulet::whereNotIn('id', $this->getDetailsSelectionnes())
+            ->where('nb_disponible', '>', 0)
+            ->orderBy('date_constat', 'asc')
+            ->get();
+        }
+    }
+
+    
+    public function updatedIdTypeSortie()
+    {
+        if($this->id_type_sortie == 13){
+            $this->constatDisponibles = ConstatPoulard::whereNotIn('id', $this->getDetailsSelectionnes())
+            ->where('nb_disponible', '>', 0)
+            ->orderBy('date_constat', 'asc')
+            ->get();
+        }else{
+            $this->constatDisponibles = ConstatPoulet::whereNotIn('id', $this->getDetailsSelectionnes())
+            ->where('nb_disponible', '>', 0)
+            ->orderBy('date_constat', 'asc')
+            ->get();
+        }
     }
 
     // get constat selon type sortie
@@ -188,7 +215,6 @@ class LivSortiePoulet extends Component
     
         return $prixs;
     }
-
 
     public function updatedIdTypePoulet()
     {
@@ -457,12 +483,19 @@ class LivSortiePoulet extends Component
                             ]);
 
                             // Modifier la quantité de stock du constat utilisé dans le sortie
-                            $constatUsed = ConstatPoulet::where('id', $detail['id_constat'])->first();
-                            if ($constatUsed) {
-                                $constatUsed->nb_disponible -= $detail['qte_detail'];
-                                $constatUsed->save();
+                            if($this->id_type_sortie !=13){
+                                $constatUsed = ConstatPoulet::where('id', $detail['id_constat'])->first();
+                                if ($constatUsed) {
+                                    $constatUsed->nb_disponible -= $detail['qte_detail'];
+                                    $constatUsed->save();
+                                }
+                            }else{
+                                $constatUsed = ConstatPoulard::where('id', $detail['id_constat'])->first();
+                                if ($constatUsed) {
+                                    $constatUsed->nb_disponible -= $detail['qte_detail'];
+                                    $constatUsed->save();
+                                }  
                             }
-
                             //$constatData = ConstatPoulet::where('id', $detail['id_constat'])->first();
                             // enregistrement produit cycle
                             $produitCycle = new ProduitCycle();
