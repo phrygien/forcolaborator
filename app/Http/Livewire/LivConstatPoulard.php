@@ -74,7 +74,7 @@ class LivConstatPoulard extends Component
         $this->id_utilisateur = Auth::user()->id;
 
         $this->clients = Client::all();
-        $this->typesorties = TypeSortie::where('actif', 1)->get();
+        $this->typesorties = TypeSortie::where('actif', 1)->where('id', 13)->get();
         $this->dernierConstatPoulet = ConstatPoulard::latest()->first();
         if ($this->dernierConstatPoulet) {
             // Assign the retrieved information to the class property
@@ -211,6 +211,7 @@ class LivConstatPoulard extends Component
                 $this->date_constat_sortie = $this->dernierConstatPoulet->date_constat;
                 //$this->date_action = $this->dernierConstatPoulet->date_action;
                 $this->nb_disponible_constat = $this->dernierConstatPoulet->nb_disponible;
+                $this->qte_sortie = $this->dernierConstatPoulet->nb_disponible;
             }
             //return redirect()->to('gestion_entree/constat_poulet');
             //DB::commit();
@@ -454,6 +455,16 @@ class LivConstatPoulard extends Component
         {
             $this->pu_poulet = '';
         }
+
+        //definier prix unitaire detail automatiquement
+        if(is_numeric($this->prix_unite))
+        {
+            $this->prix_unitaire_sortie = $this->prix_unite;
+            $this->valeur = $this->prix_unitaire_sortie * $this->qte_sortie;
+        }else{
+            $this->prix_unitaire_sortie = '';
+            $this->valeur = '';
+        }
     }
 
     public function updatedPoidsTotal($value)
@@ -471,6 +482,17 @@ class LivConstatPoulard extends Component
         }else
         {
             $this->pu_poulet = '';
+        }
+    }
+
+    public function compareNombre()
+    {
+        if($this->nombre > $this->nb_disponible_constat)
+        {
+            session()->flash('disponible_error', 'verifier vos stock');
+            $this->btn_disabled = 'disabled';
+        }else{
+            $this->btn_disabled = '';
         }
     }
 
@@ -632,7 +654,7 @@ class LivConstatPoulard extends Component
         if($constat !=null)
         {
             if($this->nombre > $constat->nb_disponible){
-                session()->flash('stock_not_ok', 'Opération impossible, stock insuffisant');
+                session()->flash('stock_not_ok', 'Opération impossible, stock insuffisant. Stock actuele :'.$this->nb_disponible_constat);
             }else{
             DB::beginTransaction();
                     try{

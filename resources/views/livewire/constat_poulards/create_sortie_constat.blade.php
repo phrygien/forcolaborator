@@ -2,7 +2,7 @@
     <form> 
     <div class="card mb-4" style="border-bottom: solid 3px purple;">
         <div class="card-body">
-            <div class="card-title mb-3"><i class="nav-icon i-File-Edit"></i> {{ __('Création sortie poulard')}}</div>
+            <div class="card-title mb-3"> {{ __('Création sortie poulard')}}</div>
 
                 <div class="row">
                     <div class="col-md-6 form-group mb-3">
@@ -38,16 +38,16 @@
                     
                     <div class="col-md-6 form-group mb-3">
                         <label for="firstName2">{{ __('Nombre des poulet')}}</label>
-                        <input type="number" wire:model.defer="nombre" class="form-control form-control-rounded" id="firstName2" placeholder="">
+                        <input type="number" wire:model.defer="nombre" wire:change="compareNombre()" class="form-control form-control-rounded" id="firstName2" placeholder="">
                         @error('nombre') 
                         <div class="alert alert-danger" role="alert">
                             {{ $message}}
                         </div>
                         @enderror
 
-                        @if (session()->has('error_nb'))
+                        @if (session()->has('stock_not_ok'))
                         <div class="alert alert-warning border-info" role="alert">
-                            {{ session('error_nb')}}
+                            {{ session('stock_not_ok')}}
                         </div>
                         @endif
                     </div>
@@ -162,7 +162,7 @@
 
     <div class="card mb-4" style="border-bottom: solid 3px rgb(12, 161, 92);">
         <div class="card-body">
-            <div class="card-title mb-3"><i class="nav-icon i-Remove-Cart"></i> {{ __('Détails sortie poulet')}}</div>
+            <div class="card-title mb-3">{{ __('Détails sortie poulet')}}</div>
                 <div class="row">
                     <div class="col-md-6 form-group mb-3">
                         <label for="id_dernier_constat">ID du constat</label>
