@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use App\Models\Client;
+use App\Models\ConstatPoulard;
 use App\Models\ConstatPoulet;
 use App\Models\Cycle;
 use App\Models\DetailSortie;
@@ -745,6 +746,7 @@ class LivSortiePoulet extends Component
                 }else{
                     break;
                 }
+                if($sortie->id_type_sortie !=13){
                 // trouver constat du detail sortie
                 $constat = ConstatPoulet::where('id', $details->id_constat)->first();
 
@@ -767,6 +769,28 @@ class LivSortiePoulet extends Component
                 $constatPoulet->id_utilisateur = Auth::user()->id;
                 $constatPoulet->retour = 0;
                 $constatPoulet->save();
+                }else{
+                // trouver constat du detail sortie
+                $constat = ConstatPoulard::where('id', $details->id_constat)->first();
+
+                $produitCycle = new ProduitCycle();
+                $produitCycle->id_cycle = $constat->id_cycle;
+                $produitCycle->id_produit = $details['id_produit'];
+                $produitCycle->id_sortie = $this->sortie_id;
+                $produitCycle->qte = -$details->qte;
+                $produitCycle->pu = -$details->pu;
+                $produitCycle->valeur = -$details->valeur;
+                $produitCycle->save();
+
+                // creation nouveau constat
+                $constatPoulet = new ConstatPoulard();
+                $constatPoulet->nb = $details->qte;
+                $constatPoulet->id_cycle = $constat->id_cycle;
+                $constatPoulet->date_constat = now();
+                $constatPoulet->nb_disponible = $details->qte;
+                $constatPoulet->retour = 0;
+                $constatPoulet->save();  
+                }
 
             }
             // $this->editSortie = false;
