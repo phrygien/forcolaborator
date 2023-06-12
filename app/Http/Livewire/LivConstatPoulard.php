@@ -194,7 +194,7 @@ class LivConstatPoulard extends Component
 
         try{
             $data['nb_disponible'] = $this->nb;
-            ConstatPoulet::create($data);
+            ConstatPoulard::create($data);
             
             $this->resetFormConstat();
             $this->resetValidation();
