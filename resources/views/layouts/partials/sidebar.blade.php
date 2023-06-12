@@ -315,6 +315,12 @@
 					<span class="item-name">{{ __('Constat poulet')}}</span>
 				</a>
 			</li>
+			<li class="nav-item">
+				<a href="{{ route('gestion_entree.constat_poulards')}}">
+					<i class="nav-icon i-File-Copy"></i>
+					<span class="item-name">{{ __('Constat poularde')}}</span>
+				</a>
+			</li>
 		</ul>
 		{{-- debut gestion sortie --}}
 		<ul class="childNav" data-parent="gsortie">

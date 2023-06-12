@@ -8,6 +8,7 @@ use App\Http\Controllers\Depense\ListedepenseController;
 use App\Http\Controllers\Depense\UniteController;
 use App\Http\Controllers\Depense\UtilisationdepenseController;
 use App\Http\Controllers\Entree\ConstatoeufController;
+use App\Http\Controllers\Entree\ConstatpoulardController;
 use App\Http\Controllers\Entree\ConstatpouletController;
 use App\Http\Controllers\Entree\CycleController;
 use Illuminate\Support\Facades\Route;
@@ -60,6 +61,7 @@ Route::group(['prefix' => 'gestion_entree', 'middleware' => 'auth'], function(){
     Route::get('constat_oeuf', [ConstatoeufController::class, 'page'])->name('gestion_entree.constat_oeufs');
     Route::get('donnee_du_jour_constat_oeuf', [ConstatoeufController::class, 'donneeJournalierConstat'])->name('gestion_entree.donnee_du_jour_constat_oeuf');
     Route::get('constat_poulet', [ConstatpouletController::class, 'page'])->name('gestion_entree.constat_poulets');
+    Route::get('constat_poulard', [ConstatpoulardController::class, 'page'])->name('gestion_entree.constat_poulards');
 });
 
 Route::group(['prefix' => 'gestion_sortie', 'middleware' => 'auth'], function(){
