@@ -16,6 +16,7 @@ class CreateConstatPoulardsTable extends Migration
         Schema::create('constat_poulards', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('id_cycle');
+            $table->foreign('id_cycle')->references('id')->on('cycles');
             $table->integer('nb_poulet');
             $table->string('date_constat');
             $table->integer('nb_disponible');
