@@ -212,6 +212,7 @@ class LivConstatPoulard extends Component
                 //$this->date_action = $this->dernierConstatPoulet->date_action;
                 $this->nb_disponible_constat = $this->dernierConstatPoulet->nb_disponible;
                 $this->qte_sortie = $this->dernierConstatPoulet->nb_disponible;
+                $this->nombre = $this->dernierConstatPoulet->nb_disponible;
             }
             //return redirect()->to('gestion_entree/constat_poulet');
             //DB::commit();
