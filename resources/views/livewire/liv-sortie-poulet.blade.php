@@ -27,7 +27,7 @@
 
 @if($afficherListe)
 @if($filter)
-<div class="col-md-12">
+<div class="col-md-12" wire:transition.fade.duration.900ms>
     <div class="card mb-4">
         <div class="card-body">
             <div class="card-title mb-3">Filtrer liste sortie</div>
