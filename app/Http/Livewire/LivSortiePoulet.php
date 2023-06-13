@@ -341,6 +341,7 @@ class LivSortiePoulet extends Component
         $this->montant = '';
         $this->actif = 1;
         $this->creatBtn = false;
+        $this->filter = false;
         $this->resetValidation();
         $this->sortie['details'] = [];
     }
@@ -573,6 +574,7 @@ class LivSortiePoulet extends Component
         $this->resetFormSortie();
         $this->sortie['details'] = [];
         $this->resetValidation();
+        $this->filter = false;
         $this->isLoading = false;
         $this->creatBtn = true;
     }
@@ -734,6 +736,7 @@ class LivSortiePoulet extends Component
             $this->retour_pu = $detail->pu;
         }
 
+        $this->filter = false;
         $this->isLoading = false;
 
     }
