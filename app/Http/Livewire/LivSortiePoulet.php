@@ -54,6 +54,7 @@ class LivSortiePoulet extends Component
     public $pu_poulet;
     public $sommeQteDetail;
     public $detailSortie;
+    public $filter = false;
 
     /*
     * propriete retour sortie poulet
@@ -259,6 +260,16 @@ class LivSortiePoulet extends Component
         }
     }
 
+    public function getFilterData()
+    {
+        $this->filter = true;
+    }
+
+    public $type_sortie_poulet;
+    public $date_debut;
+    public $date_fin;
+    public $statuts_sortie;
+
     public function render()
     {
         $sorties = DB::table('sortie_poulets')
@@ -266,8 +277,27 @@ class LivSortiePoulet extends Component
         ->join('type_sorties', 'type_sorties.id', 'sortie_poulets.id_type_sortie')
         ->join('users', 'users.id', 'sortie_poulets.id_utilisateur')
         ->select('sortie_poulets.*', 'clients.nom', 'users.name', 'type_sorties.libelle')
-        ->orderBy('date_sortie', 'DESC')
-        ->paginate(15);
+        ->orderBy('date_sortie', 'DESC');
+        if (!empty($this->type_sortie_poulet)) {
+            $sorties->where('sortie_poulets.id_type_sortie', $this->type_sortie_poulet);
+        }
+
+        if (!empty($this->date_debut)) {
+            $sorties->where('sortie_poulets.date_sortie', '>=', $this->date_debut);
+        }
+
+        if (!empty($this->date_fin)) {
+            $sorties->where('sortie_poulets.date_sortie', '<=', $this->date_fin);
+        }
+
+        if (!empty($this->statuts_sortie)) {
+                $sorties->where('sortie_poulets.retour', $this->statuts_sortie);
+
+        }
+
+        $sorties = $sorties->paginate(15);
+
+        //->paginate(15);
         $prixs = $this->getPrix();
         return view('livewire.liv-sortie-poulet', [
             'sorties' => $sorties,

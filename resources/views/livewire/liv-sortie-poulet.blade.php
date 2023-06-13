@@ -26,7 +26,48 @@
 
 
 @if($afficherListe)
+@if($filter)
+<div class="col-md-12">
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="card-title mb-3">Filtrer liste sortie</div>
+            <form>
+                <div class="row">
 
+                    <div class="col-md-3 form-group mb-3">
+                        <label for="picker1">Type de sortie</label>
+                        <select class="form-control form-control-rounded" wire:model="type_sortie_poulet">
+                            <option value="">Tous</option>
+                            <option value="12">Vente poulet</option>
+                            <option value="13">Vente poularde</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3 form-group mb-3">
+                        <label for="firstName2">Date debut</label>
+                        <input type="date" id="picker3" class="form-control form-control-rounded" wire:model="date_debut" placeholder="yyyy-mm-dd" name="dp">
+                    </div>
+
+                    <div class="col-md-3 form-group mb-3">
+                        <label for="lastName2">Date fin</label>
+                        <input type="date" id="picker3" class="form-control form-control-rounded" wire:model="date_fin" placeholder="yyyy-mm-dd" name="dp">
+                    </div>
+
+                    <div class="col-md-3 form-group mb-3">
+                        <label for="picker1">Status sortie</label>
+                        <select class="form-control form-control-rounded" wire:model="statuts_sortie">
+                            <option value="">Tous</option>
+                            <option value="0">Sans retour de produit</option>
+                            <option value="1">Avec retour de produit</option>
+                        </select>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@endif
 <div class="col-md-12">
     <div class="card text-left">
 
@@ -40,9 +81,11 @@
                             création...
                         </span>
                     </button>
+
+                    <button wire:click="getFilterData" class="float-right btn-raised btn btn-raised-warning"><i class="nav-icon i-Filter-2 font-weight-bold"></i></button>
                 </p>
             </h4>
-
+            
             <div class="table-responsive">
                                         
                 {{-- @if($recordToDelete)
