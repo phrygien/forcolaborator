@@ -380,6 +380,12 @@
 					<span class="item-name">Engagement charge</span>
 				</a>
 			</li>
+			<li class="nav-item">
+				<a href="{{ route('gestion_depense.utilisation_charges') }}">
+					<i class="nav-icon i-File-Word"></i>
+					<span class="item-name">Utilisation charge</span>
+				</a>
+			</li>
 		</ul>
 		{{-- fin gestion depense--}}
 		<ul class="childNav" data-parent="sessions">
