@@ -46,7 +46,7 @@ class LivUtilisationCharge extends Component
         ->join('listedepenses', 'listedepenses.id', '=', 'utilisaction_charges.id_depense')
         ->leftJoin('sites', 'sites.id', '=', 'utilisaction_charges.id_site')
         ->leftJoin('cycles', 'cycles.id', '=', 'utilisaction_charges.id_cycle')
-        ->select('utilisaction_charges.*','listedepenses.nom_depense', 'sites.site')
+        ->select('utilisaction_charges.*','listedepenses.nom_depense', 'sites.site', 'cycles.description')
         ->paginate(20);
 
         return view('livewire.liv-utilisation-charge', [
