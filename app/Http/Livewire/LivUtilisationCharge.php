@@ -82,7 +82,6 @@ class LivUtilisationCharge extends Component
             'qte' => 'required|numeric',
             'date_utilisation' => 'required|date',
             'id_utilisateur' => 'nullable',
-            'date_application' => 'required|unique:prix_poulets,date_application'
         ]);
 
         try{
