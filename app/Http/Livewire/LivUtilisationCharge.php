@@ -42,11 +42,11 @@ class LivUtilisationCharge extends Component
 
     public function render()
     {
-        $utilisations = DB::table('utilisation_charges')
-        ->join('listedepenses', 'listedepenses.id', '=', 'utilisation_charges.id_depense')
-        ->leftJoin('sites', 'sites.id', '=', 'utilisation_charges.id_site')
-        ->leftJoin('cycles', 'cycles.id', '=', 'utilisation_charges.id_cycles')
-        ->select('utilisation_charges.*','listedepenses.nom_depense', 'sites.site')
+        $utilisations = DB::table('utilisaction_charges')
+        ->join('listedepenses', 'listedepenses.id', '=', 'utilisaction_charges.id_depense')
+        ->leftJoin('sites', 'sites.id', '=', 'utilisaction_charges.id_site')
+        ->leftJoin('cycles', 'cycles.id', '=', 'utilisaction_charges.id_cycle')
+        ->select('utilisaction_charges.*','listedepenses.nom_depense', 'sites.site')
         ->paginate(20);
 
         return view('livewire.liv-utilisation-charge', [
