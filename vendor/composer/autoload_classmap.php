@@ -78,6 +78,7 @@ return array(
     'App\\Http\\Middleware\\TrustHosts' => $baseDir . '/app/Http/Middleware/TrustHosts.php',
     'App\\Http\\Middleware\\TrustProxies' => $baseDir . '/app/Http/Middleware/TrustProxies.php',
     'App\\Http\\Middleware\\VerifyCsrfToken' => $baseDir . '/app/Http/Middleware/VerifyCsrfToken.php',
+    'App\\Models\\Amortissement' => $baseDir . '/app/Models/Amortissement.php',
     'App\\Models\\Batiment' => $baseDir . '/app/Models/Batiment.php',
     'App\\Models\\CategorieDepense' => $baseDir . '/app/Models/CategorieDepense.php',
     'App\\Models\\Client' => $baseDir . '/app/Models/Client.php',
