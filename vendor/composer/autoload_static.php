@@ -614,6 +614,8 @@ class ComposerStaticInit52c8c6453fbfbf9e55abd1b7f8884981
         'App\\Models\\ConstatPoulard' => __DIR__ . '/../..' . '/app/Models/ConstatPoulard.php',
         'App\\Models\\ConstatPoulet' => __DIR__ . '/../..' . '/app/Models/ConstatPoulet.php',
         'App\\Models\\Cycle' => __DIR__ . '/../..' . '/app/Models/Cycle.php',
+        'App\\Models\\DepenseCycle' => __DIR__ . '/../..' . '/app/Models/DepenseCycle.php',
+        'App\\Models\\DepenseDetail' => __DIR__ . '/../..' . '/app/Models/DepenseDetail.php',
         'App\\Models\\DepenseGlobal' => __DIR__ . '/../..' . '/app/Models/DepenseGlobal.php',
         'App\\Models\\DetailSortie' => __DIR__ . '/../..' . '/app/Models/DetailSortie.php',
         'App\\Models\\EngagementCharge' => __DIR__ . '/../..' . '/app/Models/EngagementCharge.php',

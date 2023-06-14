@@ -85,6 +85,8 @@ return array(
     'App\\Models\\ConstatPoulard' => $baseDir . '/app/Models/ConstatPoulard.php',
     'App\\Models\\ConstatPoulet' => $baseDir . '/app/Models/ConstatPoulet.php',
     'App\\Models\\Cycle' => $baseDir . '/app/Models/Cycle.php',
+    'App\\Models\\DepenseCycle' => $baseDir . '/app/Models/DepenseCycle.php',
+    'App\\Models\\DepenseDetail' => $baseDir . '/app/Models/DepenseDetail.php',
     'App\\Models\\DepenseGlobal' => $baseDir . '/app/Models/DepenseGlobal.php',
     'App\\Models\\DetailSortie' => $baseDir . '/app/Models/DetailSortie.php',
     'App\\Models\\EngagementCharge' => $baseDir . '/app/Models/EngagementCharge.php',
