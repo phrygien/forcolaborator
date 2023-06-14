@@ -90,6 +90,7 @@ return array(
     'App\\Models\\DepenseGlobal' => $baseDir . '/app/Models/DepenseGlobal.php',
     'App\\Models\\DetailSortie' => $baseDir . '/app/Models/DetailSortie.php',
     'App\\Models\\EngagementCharge' => $baseDir . '/app/Models/EngagementCharge.php',
+    'App\\Models\\Immobilisation' => $baseDir . '/app/Models/Immobilisation.php',
     'App\\Models\\LibelleDepense' => $baseDir . '/app/Models/LibelleDepense.php',
     'App\\Models\\Listedepense' => $baseDir . '/app/Models/Listedepense.php',
     'App\\Models\\PrixOeuf' => $baseDir . '/app/Models/PrixOeuf.php',

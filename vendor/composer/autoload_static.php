@@ -619,6 +619,7 @@ class ComposerStaticInit52c8c6453fbfbf9e55abd1b7f8884981
         'App\\Models\\DepenseGlobal' => __DIR__ . '/../..' . '/app/Models/DepenseGlobal.php',
         'App\\Models\\DetailSortie' => __DIR__ . '/../..' . '/app/Models/DetailSortie.php',
         'App\\Models\\EngagementCharge' => __DIR__ . '/../..' . '/app/Models/EngagementCharge.php',
+        'App\\Models\\Immobilisation' => __DIR__ . '/../..' . '/app/Models/Immobilisation.php',
         'App\\Models\\LibelleDepense' => __DIR__ . '/../..' . '/app/Models/LibelleDepense.php',
         'App\\Models\\Listedepense' => __DIR__ . '/../..' . '/app/Models/Listedepense.php',
         'App\\Models\\PrixOeuf' => __DIR__ . '/../..' . '/app/Models/PrixOeuf.php',
