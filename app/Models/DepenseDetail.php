@@ -8,4 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class DepenseDetail extends Model
 {
     use HasFactory;
+
+    protected $table = "depense_details";
+    
+    protected $fillable = [
+        'id_cycle',
+        'id_utilisation',
+        'type_depense',
+        'qte',
+        'valeur'
+    ];
 }

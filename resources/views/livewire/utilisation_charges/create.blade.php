@@ -36,7 +36,7 @@
 
                     <div class="col-md-6 form-group mb-3">
                         <label for="picker1">{{ __('Cycles')}}</label>
-                        <select wire:model="id_depense" class="form-control form-control-rounded">
+                        <select wire:model="id_cycle" class="form-control form-control-rounded">
                             <option value="">Choisir un cycle</option>
                                 @foreach ($cycles as $cycle)
                                     <option value="{{ $cycle->id }}">{{ $cycle->description}}</option>
@@ -51,7 +51,7 @@
 
                     <div class="col-md-6 form-group mb-3">
                         <label for="picker1">{{ __('Site')}}</label>
-                        <select wire:model="id_siste" class="form-control form-control-rounded">
+                        <select wire:model="id_site" class="form-control form-control-rounded">
                             <option value="">Choisir un site</option>
                                 @foreach ($sites as $site)
                                     <option value="{{ $site->id }}">{{ $site->site}}</option>

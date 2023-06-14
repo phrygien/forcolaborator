@@ -19,7 +19,7 @@ use Livewire\WithPagination;
 class LivUtilisationCharge extends Component
 {
     use WithPagination;
-    public $isLoading, $utilisation_id, $id_depense, $id_cycle, $id_site, $qte, $date_utilisation, $id_utilisateur, $avec_retour;
+    public $isLoading, $utilisation_id, $id_depense, $id_cycle, $id_site, $qte, $date_utilisation, $id_utilisateur, $avec_retour, $affectation;
     public $afficherListe=true;
     public $createUtilisation=false;
     public $editUtilisation=false;
@@ -106,13 +106,13 @@ class LivUtilisationCharge extends Component
             $utilisationCharge->id_cycle = $this->id_cycle;
             $utilisationCharge->qte = $this->qte;
             $utilisationCharge->date_utilisation = $this->date_utilisation;
-            $utilisationCharge->id_utilisateur = Auth::user()->id;
+            $utilisationCharge->id_utilisateur = $this->id_utilisateur;
             $utilisationCharge->save();
             
             $engagementCharges = EngagementCharge::where('qte_disponible', '>', 0)
                             ->orderBy('date_engagement', 'DESC')
                             ->get();
-
+        
             $totalQte = $this->qte;
             $selectedEngagement = collect();
         
@@ -136,12 +136,11 @@ class LivUtilisationCharge extends Component
                 //create depense cycle
                 $depenseCycle = new DepenseCycle();
                 $depenseCycle->id_cycle = $this->id_cycle;
-                $depenseCycle->id_site = $this->id_site;
-                $depenseCycle->qte = $utilisationQte;
+                $depenseCycle->id_depense = $engagementCharge->id_depense;
                 $depenseCycle->id_utilisation = $utilisationCharge->id;
-                //avoir depense used in engagement charge
                 $depenseType = Listedepense::where('id', $engagementCharge->id_depense)->first();
-                $depenseCycle->type_depense = $depenseType->id_depense;
+                $depenseCycle->type_depense = $depenseType->id;
+                $depenseCycle->qte = $utilisationQte;
                 $depenseCycle->valeur = $utilisationQte * $engagementCharge->pu;
                 $depenseCycle->save();
 
@@ -149,7 +148,7 @@ class LivUtilisationCharge extends Component
                 $depenseDetails = new DepenseDetail();
                 $depenseDetails->id_cycle = $this->id_cycle;
                 $depenseDetails->id_utilisation = $utilisationCharge->id;
-                $depenseDetails->type_depense = $depenseType->id_depense;
+                $depenseDetails->type_depense = $depenseType->id;
                 $depenseDetails->qte = $utilisationQte;
                 $depenseDetails->valeur = $engagementCharge->pu * $utilisationQte;
                 $depenseDetails->save();

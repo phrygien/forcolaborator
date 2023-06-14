@@ -52,7 +52,7 @@
                                 <td>{{ $utilisation->site }}</td>
                                 <td>{{ $utilisation->description }}</td>
                                 <td>{{ $utilisation->qte }}</td>
-                                <td>{{ get_formatted_date($prix->date_utilisation, "d - M - Y") }}</td>
+                                <td>{{ get_formatted_date($utilisation->date_utilisation, "d - M - Y") }}</td>
                                 <td>
                                     <button class="btn btn-danger">Retour</button>
                                     {{-- <button wire:click="editType({{$prix->id }})" wire:loading.attr="disabled" wire:target="editType({{$prix->id }})" class="btn btn-raised btn-rounded btn-raised-primary">
