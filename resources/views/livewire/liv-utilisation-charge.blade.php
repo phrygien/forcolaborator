@@ -91,3 +91,17 @@
         });
     </script>
 @endpush
+
+@push('scripts')
+<script>
+    document.addEventListener('livewire:load', function () {
+        Livewire.on('affectationUpdated', function (value) {
+            if (value === '2') {
+                document.getElementById('id_site_div').style.display = 'block';
+            } else {
+                document.getElementById('id_site_div').style.display = 'none';
+            }
+        });
+    });
+</script>
+@endpush

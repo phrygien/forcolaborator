@@ -75,14 +75,36 @@ class LivUtilisationCharge extends Component
     public function saveUtilisation()
     {
         $this->isLoading = true;
-        $data = $this->validate([
-            'id_depense' => 'required',
-            'id_site' => 'nullable|integer',
-            'id_cycle' => 'nullable',
-            'qte' => 'required|numeric',
-            'date_utilisation' => 'required|date',
-            'id_utilisateur' => 'nullable',
-        ]);
+
+        if($this->affectation ==2){
+            $this->validate([
+                'id_depense' => 'required',
+                'id_site' => 'required|integer',
+                'id_cycle' => 'nullable',
+                'qte' => 'required|numeric',
+                'date_utilisation' => 'required|date',
+                'id_utilisateur' => 'nullable',
+            ]);
+        }
+        elseif($this->affectation ==3){
+            $this->validate([
+                'id_depense' => 'required',
+                'id_site' => 'nullable|integer',
+                'id_cycle' => 'required|integer',
+                'qte' => 'required|numeric',
+                'date_utilisation' => 'required|date',
+                'id_utilisateur' => 'nullable',
+            ]);
+        }else{
+            $this->validate([
+                'id_depense' => 'required',
+                'id_site' => 'nullable|integer',
+                'id_cycle' => 'nullable|integer',
+                'qte' => 'required|numeric',
+                'date_utilisation' => 'required|date',
+                'id_utilisateur' => 'nullable',
+            ]);
+        }
 
         try{
         DB::beginTransaction();
@@ -193,5 +215,19 @@ class LivUtilisationCharge extends Component
     }
 
 
+    public function resetIdCycle()
+    {
+        $this->id_cycle = null;
+    }
+    
+    public function resetIdSite()
+    {
+        $this->id_site = null;
+    }
 
+
+    public function updatedAffectation($value)
+{
+    $this->emit('affectationUpdated', $value);
+}
 }

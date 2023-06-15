@@ -33,36 +33,41 @@
                         </div>
                         @enderror
                     </div>
-
-                    <div class="col-md-6 form-group mb-3">
-                        <label for="picker1">{{ __('Cycles')}}</label>
-                        <select wire:model="id_cycle" class="form-control form-control-rounded">
-                            <option value="">Choisir un cycle</option>
-                                @foreach ($cycles as $cycle)
-                                    <option value="{{ $cycle->id }}">{{ $cycle->description}}</option>
-                                @endforeach
-                        </select>
-                        @error('id_cycle') 
-                        <div class="alert alert-danger" role="alert">
-                            {{ $message}}
-                        </div>
-                        @enderror
-                    </div>
-
-                    <div class="col-md-6 form-group mb-3">
-                        <label for="picker1">{{ __('Site')}}</label>
-                        <select wire:model="id_site" class="form-control form-control-rounded">
-                            <option value="">Choisir un site</option>
+                    @if ($affectation == 2)
+                    <!-- Sélection de l'ID du site -->
+                    <div class="col-md-6 form-group mb-3" wire:loading.remove>
+                            <label for="picker1">{{ __('Site')}}</label>
+                            <select wire:model="id_site" class="form-control form-control-rounded">
+                                <option value="">Choisir un site</option>
                                 @foreach ($sites as $site)
                                     <option value="{{ $site->id }}">{{ $site->site}}</option>
                                 @endforeach
-                        </select>
-                        @error('id_site') 
-                        <div class="alert alert-danger" role="alert">
-                            {{ $message}}
-                        </div>
-                        @enderror
+                            </select>
+                            @error('id_site') 
+                            <div class="alert alert-danger" role="alert">
+                                {{ $message}}
+                            </div>
+                            @enderror
                     </div>
+                    @endif
+
+                    @if ($affectation == 3)
+                    <!-- Sélection de l'ID du cycle -->
+                    <div class="col-md-6 form-group mb-3" wire:loading.remove>
+                            <label for="picker1">{{ __('Cycle')}}</label>
+                            <select wire:model="id_cycle" class="form-control form-control-rounded">
+                                <option value="">Choisir un cycle</option>
+                                @foreach ($cycles as $cycle)
+                                    <option value="{{ $cycle->id }}">{{ $cycle->description}}</option>
+                                @endforeach
+                            </select>
+                            @error('id_cycle') 
+                            <div class="alert alert-danger" role="alert">
+                                {{ $message}}
+                            </div>
+                            @enderror
+                    </div>
+                    @endif
 
 
                     <div class="col-md-6 form-group mb-3">
