@@ -183,6 +183,16 @@ class LivUtilisationCharge extends Component
                 $depensecycle->qte = $qteUtilisee;
                 $depensecycle->valeur = $qteUtilisee * $engagementCharge->pu;
                 $depensecycle->save();
+
+                //enregistrement details depenses
+                $depensedetail =  new DepenseDetail();
+                $depensedetail->id_cycle = $this->id_cycle;
+                $depensedetail->id_utilisation = $utilisationCharge->id;
+                $depensedetail->type_depense = 1;
+                $depensedetail->qte = $qteUtilisee;
+                $depensedetail->valeur = $qteUtilisee * $engagementCharge->pu;
+                $depensedetail->save();
+                
                 DB::commit();
                 $this->notification = true;
                 session()->flash('message', 'Utilisation charge bien enregistré!');
@@ -191,7 +201,7 @@ class LivUtilisationCharge extends Component
             }
 
         }else{
-            session()->flash('qte_error', 'La quantité disponible est insuffisante, quantiré disponible actuele :'.$total_qte_disponible);
+            session()->flash('qte_error', 'La quantité disponible est insuffisante, quantité disponible actuele :'.$total_qte_disponible);
             DB::rollBack();
         }
         $this->isLoading = false;
