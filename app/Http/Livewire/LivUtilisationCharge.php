@@ -34,7 +34,7 @@ class LivUtilisationCharge extends Component
 
     public function mount()
     {
-        $this->depenses = Listedepense::where('actif', 1)->where('type', 1)->get();
+        //$this->depenses = Listedepense::where('actif', 1)->where('type', 1)->get();
         $this->sites = Site::where('actif', 1)->get();
         $this->cycles = Cycle::where('actif', 1)->get();
         $this->id_utilisateur = Auth::user()->id;
@@ -49,8 +49,11 @@ class LivUtilisationCharge extends Component
         ->select('utilisaction_charges.*','listedepenses.nom_depense', 'sites.site', 'cycles.description')
         ->paginate(20);
 
+        $listedepenses = Listedepense::where('affectation', $this->affectation)->where('actif', 1)->get();
+
         return view('livewire.liv-utilisation-charge', [
-            'utilisations' => $utilisations
+            'utilisations' => $utilisations,
+            'listedepenses' => $listedepenses,
         ]);
     }
 

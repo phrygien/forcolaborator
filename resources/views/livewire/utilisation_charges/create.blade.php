@@ -23,7 +23,7 @@
                         <label for="picker1">{{ __('Depense charges')}}</label>
                         <select wire:model="id_depense" class="form-control form-control-rounded">
                             <option value="">Choisir un depense charge</option>
-                                @foreach ($depenses as $depense)
+                                @foreach ($listedepenses as $depense)
                                     <option value="{{ $depense->id }}">{{ $depense->nom_depense}}</option>
                                 @endforeach
                         </select>
