@@ -34,7 +34,7 @@ class LivUtilisationCharge extends Component
 
     public function mount()
     {
-        //$this->depenses = Listedepense::where('actif', 1)->where('type', 1)->get();
+        $this->depenses = Listedepense::where('actif', 1)->where('type', 1)->get();
         $this->sites = Site::where('actif', 1)->get();
         $this->cycles = Cycle::where('actif', 1)->get();
         $this->id_utilisateur = Auth::user()->id;
@@ -49,8 +49,7 @@ class LivUtilisationCharge extends Component
         ->select('utilisaction_charges.*','listedepenses.nom_depense', 'sites.site', 'cycles.description')
         ->paginate(20);
 
-        $listedepenses = Listedepense::where('affectation', $this->affectation)->where('actif', 1)->get();
-
+        $listedepenses = Listedepense::where('affectation', $this->affectation)->where('type', 1)->where('actif', 1)->get();
         return view('livewire.liv-utilisation-charge', [
             'utilisations' => $utilisations,
             'listedepenses' => $listedepenses,
@@ -234,7 +233,79 @@ class LivUtilisationCharge extends Component
     }
 
     public function updatedAffectation($value)
-{
-    $this->emit('affectationUpdated', $value);
-}
+    {
+        $this->emit('affectationUpdated', $value);
+    }
+
+    /*
+    * debut retour utilisation charge
+    */
+    public $retourUtilisation = false;
+    public $detailDepense = [];
+    public $retour_id, $retour_id_cycle, $retour_id_utilisation, $retour_type_depense, $retour_qte, $retour_valeur, $qte_retour;
+    public $confirmRetour;
+    public $disableBtnValider = '';
+    public function retourUtilisation($id)
+    {
+        $this->retourUtilisation = true;
+        $this->afficherListe = false;
+        $this->isLoading = true;
+
+        $utilisation = UtilisactionCharge::findOrFail($id);
+        $this->utilisation_id = $id;
+        $this->id_depense = $utilisation->id_depense;
+        $this->id_site = $utilisation->id_site;
+        $this->id_cycle = $utilisation->id_cycle;
+        $this->qte = $utilisation->qte;
+        $this->date_utilisation = $utilisation->date_utilisation;
+    
+        //$this->detailDepense = DepenseDetail::where('id_utilisation', $this->utilisation_id)->get();
+        $this->detailDepense = DB::table('depense_details')
+                                ->leftJoin('cycles', 'cycles.id','=','depense_details.id_cycle')
+                                ->select('depense_details.*', 'cycles.description')
+                                ->where('depense_details.id_utilisation', $this->utilisation_id)
+                                ->get();
+
+        
+
+        foreach($this->detailDepense as $detail)
+        {
+            $this->retour_id_cycle = $detail->id_cycle;
+            $this->retour_id_utilisation = $detail->id_utilisation;
+            $this->retour_type_depense = $detail->type_depense;
+            $this->retour_qte = $detail->qte;
+            $this->retour_valeur = $detail->valeur;
+        }
+        $this->isLoading = false;
+    }
+
+    public function cancelRetour()
+    {
+        $this->confirmRetour = false;
+        $this->retourUtilisation = true;
+        $this->afficherListe = false;
+        $this->resetInput();
+    }
+
+    public function confirmerRetour()
+    {
+        $this->confirmRetour = true;
+    }
+
+    public function resetQteRetour()
+    {
+        $this->qte_retour = '';
+        $this->resetValidation();
+    }
+
+    public function afficherUtilisation()
+    {
+        $this->isLoading = true;
+        $this->afficherListe = true;
+        $this->retourUtilisation = false;
+        $this->resetInput();
+        $this->resetValidation();
+        $this->resetQteRetour();
+        $this->isLoading = false;
+    }
 }

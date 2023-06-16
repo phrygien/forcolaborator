@@ -74,17 +74,14 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <button class="btn btn-danger">Retour</button>
-                                    {{-- <button wire:click="editType({{$prix->id }})" wire:loading.attr="disabled" wire:target="editType({{$prix->id }})" class="btn btn-raised btn-rounded btn-raised-primary">
-                                        <span wire:loading.remove wire:target="editType({{$prix->id }})"><i class="nav-icon i-Pen-2 font-weight-bold"></i></span>
-                                        <span wire:loading wire:target="editType({{$prix->id }})">
+                                    <button @if($utilisation->avec_retour !=0) disabled @endif wire:click="retourUtilisation({{$utilisation->id }})" wire:loading.attr="disabled" wire:target="retourUtilisation({{$utilisation->id }})" class="btn btn-youtube btn-icon m-1 btn-rounded">
+                                        <span wire:loading.remove wire:target="retourUtilisation({{$utilisation->id }})">retour utilisation </span>
+                                        <span class="ul-btn__icon"><i class="i-Right1"></i></span>
+                                        <span wire:loading wire:target="retourUtilisation({{$utilisation->id }})">
                                             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                            modification...
+                                            chargement...
                                         </span>
                                     </button>
-                                    <button class="btn btn-raised btn-rounded btn-raised-danger"  wire:click="confirmerDelete({{$prix->id }})">
-                                        <i class="nav-icon i-Close-Window font-weight-bold"></i>
-                                    </button> --}}
                                 </td>
                             </tr>                                  
                             @endforeach
@@ -99,6 +96,10 @@
     </div>
     <!-- end of col-->
     @endif
+    @if($retourUtilisation)
+        @include('livewire.utilisation_charges.retour')
+    @endif
+
 </div>
 @push('scripts')
     <script>
