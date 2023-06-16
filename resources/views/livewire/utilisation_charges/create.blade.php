@@ -1,6 +1,12 @@
 <div class="col-md-12">
     <div class="card mb-4">
         <div class="card-body">
+            @if (session()->has('qte_error'))
+            <div class="alert alert-danger border-info" role="alert">
+                <i class="icon-info1"></i>{{ session('qte_error')}}
+            </div>
+            @endif
+
             <div class="card-title mb-3">{{ __('Création utilisation charge')}}</div>
             <form>
                 <div class="row">
@@ -53,7 +59,7 @@
 
                     @if ($affectation == 3)
                     <!-- Sélection de l'ID du cycle -->
-                    <div class="col-md-6 form-group mb-3" wire:loading.remove>
+                    <div class="col-md-6 form-group mb-3">
                             <label for="picker1">{{ __('Cycle')}}</label>
                             <select wire:model="id_cycle" class="form-control form-control-rounded">
                                 <option value="">Choisir un cycle</option>

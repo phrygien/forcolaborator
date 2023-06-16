@@ -42,6 +42,7 @@
                                 <th scope="col">{{ __('Cycle')}}</th>
                                 <th scope="col">{{ __('Qte')}}</th>
                                 <th scope="col">{{ __('Date utilisation')}}</th>
+                                <th scope="col">{{ __('Status')}}</th>
                                 <th scope="col" width="149px">{{ __('Actions')}}</th>
                             </tr>
                         </thead>
@@ -49,10 +50,29 @@
                             @foreach ($utilisations as $utilisation)
                             <tr>
                                 <td>{{ $utilisation->nom_depense }}</td>
-                                <td>{{ $utilisation->site }}</td>
-                                <td>{{ $utilisation->description }}</td>
+                                <td>
+                                    @if($utilisation->site !=null)
+                                    {{ $utilisation->site }}
+                                    @else
+                                        --
+                                    @endif
+                                </td>
+                                <td>
+                                    @if($utilisation->description !=null)
+                                        {{ $utilisation->description }}
+                                    @else
+                                        --
+                                    @endif
+                                </td>
                                 <td>{{ $utilisation->qte }}</td>
                                 <td>{{ get_formatted_date($utilisation->date_utilisation, "d - M - Y") }}</td>
+                                <td>
+                                    @if($utilisation->avec_retour == 0)
+                                        <span class="text-success"> <i class="nav-icon i-Yes font-weight-bold"></i> aucun retour</span>
+                                    @else
+                                        <span class="text-danger"> <i class="nav-icon i-Reload font-weight-bold"></i> deja retourner</span>
+                                    @endif
+                                </td>
                                 <td>
                                     <button class="btn btn-danger">Retour</button>
                                     {{-- <button wire:click="editType({{$prix->id }})" wire:loading.attr="disabled" wire:target="editType({{$prix->id }})" class="btn btn-raised btn-rounded btn-raised-primary">
