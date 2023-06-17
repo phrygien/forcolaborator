@@ -69,7 +69,7 @@ return [
     |
     */
 
-    'timezone' => 'Africa/Nairobi',
+    'timezone' => 'Indian/Antananarivo',
 
     /*
     |--------------------------------------------------------------------------
