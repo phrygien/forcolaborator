@@ -200,7 +200,7 @@ class LivUtilisationCharge extends Component
             }
 
         }else{
-            session()->flash('qte_error', 'La quantité disponible est insuffisante, quantité disponible actuele :'.$total_qte_disponible);
+            session()->flash('qte_error', 'La quantité disponible est insuffisante, quantité engagement disponible actuele :'.$total_qte_disponible);
             DB::rollBack();
         }
         $this->isLoading = false;
@@ -278,6 +278,90 @@ class LivUtilisationCharge extends Component
         }
         $this->isLoading = false;
     }
+
+    public function saveRetour()
+    {
+        $this->isLoading = true;
+        // $this->validate([
+        //     'qte_retour' => 'required|integer',
+        // ]);
+
+        DB::beginTransaction();
+
+        try{
+
+            $utilisation = UtilisactionCharge::findOrFail($this->utilisation_id);
+            $utilisation->update([
+                'avec_retour' => 1,
+            ]);
+            // recuperation details sortie l'utilisation
+            $detailUtilisation = DepenseDetail::where('id_utilisation', $this->utilisation_id)->get();
+            $somme_valeur_detail = 0;
+            
+            $totalQteRetour = $this->qte;
+            $selectedDetails = collect();
+        
+            $remainingQte = $totalQteRetour;
+
+            
+            foreach($detailUtilisation as $details)
+            {
+                $qte = $details->qte;
+
+                if ($remainingQte > 0) {
+                    if ($remainingQte >= $qte) {
+                        $selectedDetails->push($details);
+                        $remainingQte -= $qte;
+                    } else {
+                        // Si la quantité restante est inférieure à la quantité du détail actuel, divisez le détail en deux parties
+                        $selectedDetails->push($details->replicate(['qte']));
+                        $remainingQte = 0;
+                    }
+                }else{
+                    break;
+                }
+                // trouver engagement du detail depense
+                //$engagement = EngagementCharge::where('id', $details->id_constat)->first();
+                // $somme_valeur_detail +=$details->valeur;
+                // $engagementt = new EngagementCharge();
+                // $engagementt->id_depense = $this->id_depense;
+                // $engagementt->pu = ($details->valeur / $details->qte);
+                // $engagementt->qte = $this->qte;
+                // $engagementt->prix_total = $somme_valeur_detail;
+                // $engagementt->qte_disponible = $this->qte;
+                // $engagementt->retour = 0;
+                // $engagementt->save();
+            
+                $depensecycle = new DepenseCycle();
+                $depensecycle->id_cycle = $this->id_cycle;
+                $depensecycle->id_depense = $this->id_depense;
+                $depensecycle->id_utilisation = $this->utilisation_id;
+                $depensecycle->type_depense = 1;
+                $depensecycle->qte = -$details['qte'];
+                $depensecycle->valeur = -($details['qte'] * ($details['valeur'] / $details['qte']));
+                $depensecycle->save();
+
+            }
+            // $this->editSortie = false;
+            $this->resetQteRetour();
+            $this->resetValidation();
+            $this->resetInput();
+            $this->confirmRetour = false;
+            //$this->creatBtn = true;
+            $this->notification = true;
+            session()->flash('message', 'Retour produit bien enregistré!');
+            $this->afficherListe = true;
+            $this->retourUtilisation = false;
+
+            DB::commit();
+
+        }catch(\Exception $e){
+            return $e->getMessage();
+            DB::rollback();
+        }
+        $this->isLoading = false;
+    }
+
 
     public function cancelRetour()
     {

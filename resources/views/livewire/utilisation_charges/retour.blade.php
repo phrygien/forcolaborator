@@ -27,7 +27,7 @@
 
                     <div class="col-md-6 form-group mb-3">
                         <label for="picker1">{{ __('Depense charges')}}</label>
-                        <select wire:model="id_depense" class="form-control form-control-rounded">
+                        <select wire:model="id_depense" disabled class="form-control form-control-rounded">
                             <option value="">Depense charge utilise</option>
                                 @foreach ($depenses as $depense)
                                     <option value="{{ $depense->id }}">{{ $depense->nom_depense}}</option>
@@ -43,7 +43,7 @@
                     <!-- Sélection de l'ID du site -->
                     <div class="col-md-6 form-group mb-3" wire:loading.remove>
                             <label for="picker1">{{ __('Site')}}</label>
-                            <select wire:model="id_site" class="form-control form-control-rounded">
+                            <select wire:model="id_site" disabled class="form-control form-control-rounded">
                                 <option value="">Choisir un site</option>
                                 @foreach ($sites as $site)
                                     <option value="{{ $site->id }}">{{ $site->site}}</option>
@@ -59,7 +59,7 @@
                     <!-- Sélection de l'ID du cycle -->
                     <div class="col-md-6 form-group mb-3">
                             <label for="picker1">{{ __('Cycle')}}</label>
-                            <select wire:model="id_cycle" class="form-control form-control-rounded">
+                            <select disabled wire:model="id_cycle" class="form-control form-control-rounded">
                                 <option value="">Choisir un cycle</option>
                                 @foreach ($cycles as $cycle)
                                     <option value="{{ $cycle->id }}">{{ $cycle->description}}</option>
@@ -76,7 +76,7 @@
 
                     <div class="col-md-6 form-group mb-3">
                         <label for="firstName2">{{ __('Qte')}}</label>
-                        <input type="number" wire:model.defer="qte" class="form-control form-control-rounded" id="firstName2" placeholder="">
+                        <input type="number" disabled wire:model.defer="qte" class="form-control form-control-rounded" id="firstName2" placeholder="">
                         @error('qte') 
                         <div class="alert alert-danger" role="alert">
                             {{ $message}}
@@ -86,13 +86,28 @@
 
                     <div class="col-md-6 form-group mb-3">
                         <label for="firstName2">{{ __('Date utilisation')}}</label>
-                        <input type="date" wire:model.defer="date_utilisation" class="form-control form-control-rounded" id="firstName2" placeholder="">
+                        <input type="date" disabled wire:model.defer="date_utilisation" class="form-control form-control-rounded" id="firstName2" placeholder="">
                         @error('date_utilisation') 
                         <div class="alert alert-danger" role="alert">
                             {{ $message}}
                         </div>
                         @enderror
                     </div>
+{{-- 
+                    <div class="col-md-6 form-group mb-3">
+                        <label for="firstName2">{{ __('Quantite retour')}}</label>
+                        <input type="number" wire:model="qte_retour" class="disable form-control form-control-rounded" style="border-bottom: solid 3px rgb(177, 139, 16);">
+                        @error('qte_retour') 
+                        <div class="alert alert-danger" role="alert">
+                            {{ $message}}
+                        </div>
+                        @enderror
+                        @if (session()->has('retour_impossible'))
+                        <div class="alert alert-danger border-info" role="alert">
+                            <i class="icon-info1"></i>{{ session('retour_impossible')}}
+                        </div>
+                        @endif
+                    </div> --}}
 
                     <div class="col-md-6 form-group mb-3" hidden>
                         <label for="firstName2">{{ __('Utilisateur ID')}}</label>
@@ -122,7 +137,7 @@
     </div>
 </div>
 
-@if($detailDepense)
+{{-- @if($detailDepense)
 <div class="col-md-12 col-lg-12 mb-4">
     <div class="card text-left" style="border-top: solid 3px purple;">
 
@@ -170,7 +185,7 @@
         </div>
     </div>
 </div>
-@endif
+@endif --}}
 
 @if($confirmRetour)
 <!-- CSS -->
@@ -197,8 +212,8 @@
 <div class="overlay">
     <div class="centered">
     <div class="alert alert-warning text-center">
-        <strong class="text-black">{{ __('Retour sortie poulet')}} !</strong>
-        <p class="text-black">Pouvez-vous confirmer retour sortie poulet ?</p>
+        <strong class="text-black">{{ __('Retour utilisation charge')}} !</strong>
+        <p class="text-black">Pouvez-vous confirmer retour utilisation ?</p>
         <p class="text-center">
             <button class="btn btn-secondary mr-3 btn-rounded" wire:click="cancelRetour()">{{ __('Fermer') }}</button>
             <button class="btn btn-danger ml-2 btn-rounded" wire:click.prevent="saveRetour()" wire:loading.attr="disabled" wire:target="saveRetour()">
