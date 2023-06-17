@@ -137,7 +137,7 @@
     </div>
 </div>
 
-{{-- @if($detailDepense)
+@if($detailDepense)
 <div class="col-md-12 col-lg-12 mb-4">
     <div class="card text-left" style="border-top: solid 3px purple;">
 
@@ -159,22 +159,22 @@
                         @foreach ($detailDepense as $detail)
                         <tr>
                             <td> 
-                                @if($detail->id_cycle !=null)
-                                    {{ $detail->description }}
+                                @if($detail['id_cycle'] !=null)
+                                    {{ $detail['description'] }}
                                 @else
                                     --
                                 @endif</td>
                             <td>
-                                @if($detail->type_depense == 1)
+                                @if($detail['type_depense'] == 1)
                                     Charges
                                 @endif
 
-                                @if($detail->type_depense == 2)
+                                @if($detail['type_depense'] == 2)
                                     Immobilisations
                                 @endif
                             </td>
-                            <td>{{ number_format($detail->qte, 0, ',', ' ') }}</td>
-                            <td><b>{{ number_format($detail->valeur, 0, ',', ' ') }} Ar</b></td>
+                            <td>{{ number_format($detail['qte'], 0, ',', ' ') }}</td>
+                            <td><b>{{ number_format($detail['valeur'], 0, ',', ' ') }} Ar</b></td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -185,7 +185,7 @@
         </div>
     </div>
 </div>
-@endif --}}
+@endif
 
 @if($confirmRetour)
 <!-- CSS -->

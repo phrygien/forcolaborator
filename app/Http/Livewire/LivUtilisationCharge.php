@@ -266,15 +266,19 @@ class LivUtilisationCharge extends Component
                                 ->where('depense_details.id_utilisation', $this->utilisation_id)
                                 ->get();
 
+        $this->detailDepense = $this->detailDepense->map(function ($item) {
+            return (array) $item;
+        })->all();
+
         
 
         foreach($this->detailDepense as $detail)
         {
-            $this->retour_id_cycle = $detail->id_cycle;
-            $this->retour_id_utilisation = $detail->id_utilisation;
-            $this->retour_type_depense = $detail->type_depense;
-            $this->retour_qte = $detail->qte;
-            $this->retour_valeur = $detail->valeur;
+            $this->retour_id_cycle = $detail['id_cycle'];
+            $this->retour_id_utilisation = $detail['id_utilisation'];
+            $this->retour_type_depense = $detail['type_depense'];
+            $this->retour_qte = $detail['qte'];
+            $this->retour_valeur = $detail['valeur'];
         }
         $this->isLoading = false;
     }
