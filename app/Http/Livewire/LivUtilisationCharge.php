@@ -279,6 +279,38 @@ class LivUtilisationCharge extends Component
         $this->isLoading = false;
     }
 
+    
+    public function cancelRetour()
+    {
+        $this->confirmRetour = false;
+        $this->retourUtilisation = true;
+        $this->afficherListe = false;
+        $this->resetInput();
+    }
+
+    public function confirmerRetour()
+    {
+        $this->confirmRetour = true;
+    }
+
+    public function resetQteRetour()
+    {
+        $this->qte_retour = '';
+        $this->resetValidation();
+    }
+
+    public function afficherUtilisation()
+    {
+        $this->isLoading = true;
+        $this->afficherListe = true;
+        $this->retourUtilisation = false;
+        $this->resetInput();
+        $this->resetValidation();
+        $this->resetQteRetour();
+        $this->isLoading = false;
+    }
+
+
     public function saveRetour()
     {
         $this->isLoading = true;
@@ -321,17 +353,7 @@ class LivUtilisationCharge extends Component
                     break;
                 }
                 // trouver engagement du detail depense
-                //$engagement = EngagementCharge::where('id', $details->id_constat)->first();
-                // $somme_valeur_detail +=$details->valeur;
-                // $engagementt = new EngagementCharge();
-                // $engagementt->id_depense = $this->id_depense;
-                // $engagementt->pu = ($details->valeur / $details->qte);
-                // $engagementt->qte = $this->qte;
-                // $engagementt->prix_total = $somme_valeur_detail;
-                // $engagementt->qte_disponible = $this->qte;
-                // $engagementt->retour = 0;
-                // $engagementt->save();
-            
+
                 $depensecycle = new DepenseCycle();
                 $depensecycle->id_cycle = $this->id_cycle;
                 $depensecycle->id_depense = $this->id_depense;
@@ -340,6 +362,18 @@ class LivUtilisationCharge extends Component
                 $depensecycle->qte = -$details['qte'];
                 $depensecycle->valeur = -($details['qte'] * ($details['valeur'] / $details['qte']));
                 $depensecycle->save();
+
+                $somme_valeur_detail +=$details->valeur;
+
+                $engagementt = new EngagementCharge();
+                $engagementt->id_depense = $this->id_depense;
+                $engagementt->pu = ($details['valeur'] / $details['qte']);
+                $engagementt->qte = $this->qte;
+                $engagementt->prix_total = $somme_valeur_detail;
+                $engagementt->qte_disponible = $this->qte;
+                $engagementt->date_engagement = now();
+                $engagementt->retour = 0;
+                $engagementt->save();
 
             }
             // $this->editSortie = false;
@@ -362,34 +396,15 @@ class LivUtilisationCharge extends Component
         $this->isLoading = false;
     }
 
-
-    public function cancelRetour()
+    public function saveNewEngagement($id_depense,$pu, $qte, $prix_total, $qte_disponible, $retour )
     {
-        $this->confirmRetour = false;
-        $this->retourUtilisation = true;
-        $this->afficherListe = false;
-        $this->resetInput();
-    }
-
-    public function confirmerRetour()
-    {
-        $this->confirmRetour = true;
-    }
-
-    public function resetQteRetour()
-    {
-        $this->qte_retour = '';
-        $this->resetValidation();
-    }
-
-    public function afficherUtilisation()
-    {
-        $this->isLoading = true;
-        $this->afficherListe = true;
-        $this->retourUtilisation = false;
-        $this->resetInput();
-        $this->resetValidation();
-        $this->resetQteRetour();
-        $this->isLoading = false;
+        $engagementt = new EngagementCharge();
+        $engagementt->id_depense = $id_depense;
+        $engagementt->pu = $pu;
+        $engagementt->qte = $qte;
+        $engagementt->prix_total = $prix_total;
+        $engagementt->qte_disponible = $qte_disponible;
+        $engagementt->retour = $retour;
+        $engagementt->save();
     }
 }
