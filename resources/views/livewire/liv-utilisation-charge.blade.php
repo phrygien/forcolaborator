@@ -43,6 +43,7 @@
                                 <th scope="col">{{ __('Qte')}}</th>
                                 <th scope="col">{{ __('Date utilisation')}}</th>
                                 <th scope="col">{{ __('Status')}}</th>
+                                <th scope="col">{{ __('Date creation')}}</th>
                                 <th scope="col" width="149px">{{ __('Actions')}}</th>
                             </tr>
                         </thead>
@@ -73,6 +74,7 @@
                                         <span class="text-danger"> <i class="nav-icon i-Reload font-weight-bold"></i> deja retourner</span>
                                     @endif
                                 </td>
+                                <td>{{ get_formatted_date($utilisation->created_at, "d - M - Y a H:s") }}</td>
                                 <td>
                                     <button @if($utilisation->avec_retour !=0) disabled @endif wire:click="retourUtilisation({{$utilisation->id }})" wire:loading.attr="disabled" wire:target="retourUtilisation({{$utilisation->id }})" class="btn btn-youtube btn-icon m-1 btn-rounded">
                                         <span wire:loading.remove wire:target="retourUtilisation({{$utilisation->id }})">retour utilisation </span>
