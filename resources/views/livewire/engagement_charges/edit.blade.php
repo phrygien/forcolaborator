@@ -1,7 +1,7 @@
 <div class="col-md-12">
     <div class="card mb-4">
         <div class="card-body">
-            <div class="card-title mb-3">{{ __('Modification libelle depense')}}</div>
+            <div class="card-title mb-3">{{ __('Modification engagement charge')}}</div>
             @if (session()->has('update_error'))
             <div class="alert alert-danger border-info" role="alert">
                 <i class="icon-info1"></i>{{ session('update_error')}}
