@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BatimentController;
 use App\Http\Controllers\CategoriedepenseController;
+use App\Http\Controllers\Depense\AcquisitionController;
 use App\Http\Controllers\Depense\DepenseglobalContoller;
 use App\Http\Controllers\Depense\EngagementchargeController;
 use App\Http\Controllers\Depense\ListedepenseController;
@@ -84,4 +85,5 @@ Route::group(['prefix' => 'gestion_depense', 'middleware' => 'auth'], function()
     Route::get('liste_depense', [ListedepenseController::class, 'page'])->name('gestion_depense.liste_depenses');
     Route::get('engagement_charge', [EngagementchargeController::class, 'page'])->name('gestion_depense.engagement_charges');
     Route::get('utilisation_charge', [UtilisationchargeController::class, 'page'])->name('gestion_depense.utilisation_charges');
+    Route::get('acquisition', [AcquisitionController::class, 'page'])->name('gestion_depense.acquisitions');
 });
