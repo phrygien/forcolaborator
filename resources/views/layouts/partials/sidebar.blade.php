@@ -388,7 +388,7 @@
 			</li>
 			<li class="nav-item">
 				<a href="{{ route('gestion_depense.acquisitions') }}">
-					<i class="nav-icon i-File-Word"></i>
+					<i class="nav-icon i-Cloud-Laptop"></i>
 					<span class="item-name">Acquisition d'immobilisation</span>
 				</a>
 			</li>
