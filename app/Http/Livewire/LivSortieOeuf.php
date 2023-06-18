@@ -7,11 +7,9 @@ use App\Models\ConstatOeuf;
 use App\Models\Cycle;
 use App\Models\DetailSortie;
 use App\Models\PrixOeuf;
-use App\Models\PrixPoulet;
 use App\Models\ProduitCycle;
 use App\Models\SortieOeuf;
 use App\Models\TypeOeuf;
-use App\Models\TypePoulet;
 use App\Models\TypeSortie;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -36,7 +34,6 @@ class LivSortieOeuf extends Component
     public $cycleActifs;
     public $existClient;
     public $selectedOption;
-    public $recordToDelete;
 
     public $prix_unite_select;
     public $selectedTypePoulet;
@@ -129,7 +126,7 @@ class LivSortieOeuf extends Component
         $this->date_action = date('Y-m-d');
         $this->date_sortie = date('Y-m-d');
         $this->typeOeufActifs = TypeOeuf::where('actif', 1)->get();
-        $this->typeSortieActifs = TypeSortie::where('actif', 1)->get();
+        $this->typeSortieActifs = TypeSortie::where('actif', 1)->whereIn('id', ['14','15'])->get();
         $this->clientActifs = Client::all();
         $this->cycleActifs = Cycle::where('actif', 1)->get();
         $this->id_utilisateur = Auth::user()->id;
@@ -583,23 +580,7 @@ class LivSortieOeuf extends Component
         $this->notification = false;
     }
 
-    public function comfirmerDelete($id)
-    {
-        $this->recordToDelete = SortieOeuf::findOrFail($id);
-    }
 
-    public function cancelDelete()
-    {
-        $this->recordToDelete = null;
-    }
-
-    public function delete()
-    {
-        $this->recordToDelete->delete();
-        $this->recordToDelete = null;
-        $this->notification = true;
-        session()->flash('message', 'Suppression avec succée');
-    }
 
     public $retourSortie;
     public $retour;
@@ -652,7 +633,7 @@ class LivSortieOeuf extends Component
         $this->confirmRetour = false;
         $this->retourSortie = true;
         $this->afficherListe = false;
-        $this->resetFormSortie();
+        //$this->resetFormSortie();
     }
 
     public function afficherSortie()

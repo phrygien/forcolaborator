@@ -198,10 +198,14 @@ class LivConstatOeuf extends Component
             $this->dernierConstatOeuf = ConstatOeuf::latest()->first();
             if($this->dernierConstatOeuf)
             {
+                $this->id_type_oeuf = $this->dernierConstatOeuf->id_type_oeuf;
+                $this->qte_sortie = $this->dernierConstatOeuf->nb_disponible;
+                $this->qte_sortie_detail = $this->dernierConstatOeuf->nb_disponible;
                 $this->id_dernier_constat = $this->dernierConstatOeuf->id;
                 $this->id_cycle_sortie = $this->dernierConstatOeuf->id_cycle;
                 $this->date_constat_sortie = $this->dernierConstatOeuf->date_entree;
                 $this->nb_disponible_constat = $this->dernierConstatOeuf->nb_disponible;
+                $this->valeur = ($this->qte_sortie_detail * $this->pu_sortie);
             }
         }catch(\Exception $e)
         {
@@ -451,6 +455,7 @@ class LivConstatOeuf extends Component
         {
             if (is_numeric($value) && is_numeric($this->qte_sortie) && $this->qte_sortie != 0) {
                 $this->montant_sortie = $value * $this->qte_sortie;
+                $this->prix_unitaire_detail = $this->pu_sortie;
             }
         }
 

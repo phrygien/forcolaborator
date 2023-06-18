@@ -43,49 +43,6 @@
             </h4>
 
             <div class="table-responsive">
-                                        
-                {{-- @if($recordToDelete)
-                <!-- CSS -->
-                <style>
-                    .overlay {
-                    position: fixed;
-                    top: 0;
-                    left: 0;
-                    bottom: 0;
-                    right: 0;
-                    background-color: rgba(0, 0, 0, 0.5);
-                    z-index: 9999;
-                    }
-                    
-                    .centered {
-                    position: absolute;
-                    top: 50%;
-                    left: 50%;
-                    transform: translate(-50%, -50%);
-                    }
-                </style>
-  
-                <!-- HTML -->
-                <div class="overlay">
-                    <div class="centered">
-                    <div class="alert alert-warning text-center">
-                        <strong class="text-black">Suppression sortie oeuf !</strong>
-                        <p class="text-black">Vous etes sure de supprimer le sortie : {{$recordToDelete->date_sortie }}?</p>
-                        <p class="text-center">
-                            <button class="btn btn-secondary btn-rounded" wire:click="cancelDelete()">{{ __('Annuler') }}</button>
-                            <button class="btn btn-danger btn-rounded" wire:click="delete()">{{ __('Supprimer') }}</button>
-                        </p>
-                    </div>
-                    </div>
-                </div>
-  
-                <script>
-                    // Désactiver le clic sur le reste de la page
-                    document.querySelector('.overlay').addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    });
-                </script>
-                @endif --}}
 
                     <table class="table table-striped table-hover">
                         <thead>

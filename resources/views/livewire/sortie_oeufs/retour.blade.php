@@ -157,8 +157,8 @@
                             <td>{{ $detail->id_constat }}</td>
                             <td>{{ $detail->id_produit }}</td>
                             <td>{{ $detail->qte }}</td>
-                            <td>{{ $detail->valeur }}</td>
-                            <td>{{ $detail->pu }}</td>
+                            <td>{{ $detail->pu }} Ar</td>
+                            <td>{{ $detail->valeur }} Ar</td>
                         </tr>
                         @endforeach
                     </tbody>
