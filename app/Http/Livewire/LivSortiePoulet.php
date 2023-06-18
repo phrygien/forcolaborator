@@ -159,7 +159,7 @@ class LivSortiePoulet extends Component
         $this->date_action = date('Y-m-d');
         $this->date_sortie = date('Y-m-d');
         $this->typePouletActifs = TypePoulet::where('actif', 1)->get();
-        $this->typeSortieActifs = TypeSortie::where('actif', 1)->get();
+        $this->typeSortieActifs = TypeSortie::where('actif', 1)->whereIn('id', ['12','13'])->get();
         $this->clientActifs = Client::all();
         $this->cycleActifs = Cycle::where('actif', 1)->get();
         $this->id_utilisateur = Auth::user()->id;

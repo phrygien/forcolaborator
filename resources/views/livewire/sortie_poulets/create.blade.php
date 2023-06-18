@@ -205,7 +205,7 @@
                         <input type="text" wire:model="id_utilisateur" class="form-control form-control-rounded">
                     </div>
 
-                    
+                    @if($id_type_sortie)
                     <div class="col-md-12 col-lg-12">
                         <div class="alert alert-card alert-info" role="alert">
                             <strong class="text-capitalize">Détails de la sortie</strong> - veuillez ajouter les éléments pour la sortie.
@@ -298,7 +298,8 @@
                             </div>
                         </p>
                     </div>
-
+                    @endif
+                    
                     <div class="col-md-12">
                         <button class="btn btn-secondary btn-rounded" wire:click.prevent="cancelCreate()" wire:loading.attr="disabled" wire:target="cancelCreate()">
                             <span wire:loading.remove wire:target="cancelCreate"><i class="nav-icon i-Arrow-Back font-weight-bold"></i> Retour</span>
