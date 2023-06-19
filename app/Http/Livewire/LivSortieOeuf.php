@@ -388,83 +388,140 @@ class LivSortieOeuf extends Component
             'date_action' => 'nullable',
         ]);
 
-        $total = 0;
-
-        if($this->sortie['details']){
-            foreach ($this->sortie['details'] as $detail) {
-                $total += $detail['qte_detail'];
-            }
-        }
-
-        if($total == $this->qte){
             DB::beginTransaction();
             try{
 
-                //création sortie poulet
-                $sortieOeuf = new SortieOeuf();
-                $sortieOeuf->id_type_oeuf = $this->id_type_oeuf;
-                $sortieOeuf->id_type_sortie = $this->id_type_sortie;
-                $sortieOeuf->qte = $this->qte;
-                $sortieOeuf->pu = $this->pu;
-                $sortieOeuf->date_sortie = $this->date_sortie;
-                $sortieOeuf->date_action = now();
-                $sortieOeuf->id_client = $this->id_client;
-                $sortieOeuf->id_utilisateur = $this->id_utilisateur;
-                $sortieOeuf->montant = ($this->pu * $this->qte);
-        
-        
-                $sortieOeuf->save();
+                $ouefs = ConstatOeuf::where('nb_disponible', '>', 0)
+                ->where('id_type_oeuf', $this->id_type_oeuf)
+                ->get();
+
+                $total_nb_disponible = 0;
+                if($ouefs)
+                {
+                    foreach($ouefs as $oeuf){
+                        $total_nb_disponible +=$oeuf->nb_disponible;
+                    }
+                }
+
+                if($this->qte <= $total_nb_disponible)
+                {
+                    // recuper oeuf par type d'oeuf
+                    $ouefs = ConstatOeuf::where('nb_disponible', '>', 0)
+                    ->where('id_type_oeuf', $this->id_type_oeuf)
+                    ->orderBy('date_entree', 'DESC')
+                    ->get();
+
+                    $totalQte = $this->qte;
+                    $selectedOeuf = collect();
+                
+                    $utilisationQte = $totalQte;
+
+                    foreach($ouefs as $detail)
+                    {
+                        $qte = $detail->nb_disponible;
+
+                        if($utilisationQte > 0){
+                            if($utilisationQte >= $qte){
+                                $selectedOeuf->push($detail);
+                                $utilisationQte -= $qte;
+                                $detail->update(['nb_disponible' => $qte - $qte]);
+                                $qteUtilisee = $qte;
+                            }else{
+                                $selectedOeuf->push($detail->replicate(['nb_disponible']));
+                                $detail->update(['nb_disponible' => $qte - $utilisationQte]);
+                                $qteUtilisee = $utilisationQte;
+                                $utilisationQte = 0;
+                            }
+                        }else{
+                            break;
+                        }
+
+                        //création sortie oeuf
+                        $sortieOeuf = new SortieOeuf();
+                        $sortieOeuf->id_type_oeuf = $this->id_type_oeuf;
+                        $sortieOeuf->id_type_sortie = $this->id_type_sortie;
+                        $sortieOeuf->qte = $this->qte;
+                        $sortieOeuf->pu = $this->pu;
+                        $sortieOeuf->date_sortie = $this->date_sortie;
+                        $sortieOeuf->date_action = now();
+                        $sortieOeuf->id_client = $this->id_client;
+                        $sortieOeuf->id_utilisateur = $this->id_utilisateur;
+                        $sortieOeuf->montant = ($this->pu * $this->qte);
+                        $sortieOeuf->save();
+
+                        // enregistrer details sortie
+                        DetailSortie::create([
+                            'id_sortie' => $sortieOeuf->id,
+                            'id_constat' => $detail->id,
+                            'id_produit' => 'oeuf',
+                            'qte' => $qteUtilisee,
+                            'pu' => $this->pu,
+                            'valeur' => $this->pu * $qteUtilisee,
+                        ]);
+
+                        $constatUsed = ConstatOeuf::where('id', $detail->id)->first();
+                        // enregistrement produit cycle
+                        $produitCycle = new ProduitCycle();
+                        $produitCycle->id_cycle = $constatUsed->id_cycle;
+                        $produitCycle->id_produit = 'oeuf';
+                        $produitCycle->id_sortie = $sortieOeuf->id;
+                        $produitCycle->qte = $qteUtilisee;
+                        $produitCycle->pu = $this->pu;
+                        $produitCycle->valeur = $this->pu * $qteUtilisee;
+                        $produitCycle->save();
+
+                        $this->resetFormSortie();
+                        $this->resetValidation();
+                        $this->isLoading = false;
+                        $this->notification = true;
+                        session()->flash('message', 'Sortie oeuf bien enregistré!');
+                        DB::commit();
+                        $this->createSortie = false;
+                        $this->afficherListe = true;
+                        $this->resetPage();
+                    }
+
+                }else{
+                    session()->flash('impossible', 'Opération impossible. La somme des quantités de détail doit être égale au nombre de poulets à sortir !');
+                }
         
                 // Enregistrer les détails de la commande dans la table "details_commande"
-                foreach ($this->sortie['details'] as $detail) {
-                DetailSortie::create([
-                    'id_sortie' => $sortieOeuf->id,
-                    'id_constat' => $detail['id_constat'],
-                    'id_produit' => $detail['id_produit'],
-                    'qte' => $detail['qte_detail'],
-                    'pu' => $detail['prix_unitaire_detail'],
-                    'valeur' => $detail['montant_total_detail'],
-                ]);
+                // foreach ($this->sortie['details'] as $detail) {
+                // DetailSortie::create([
+                //     'id_sortie' => $sortieOeuf->id,
+                //     'id_constat' => $detail['id_constat'],
+                //     'id_produit' => $detail['id_produit'],
+                //     'qte' => $detail['qte_detail'],
+                //     'pu' => $detail['prix_unitaire_detail'],
+                //     'valeur' => $detail['montant_total_detail'],
+                // ]);
 
                 // Modifier la quantité de stock du constat utilisé dans le sortie
-                $constatUsed = ConstatOeuf::where('id', $detail['id_constat'])->first();
-                if ($constatUsed) {
-                    $constatUsed->nb_disponible -= $detail['qte_detail'];
-                    $constatUsed->save();
-                }
+                // $constatUsed = ConstatOeuf::where('id', $detail['id_constat'])->first();
+                // if ($constatUsed) {
+                //     $constatUsed->nb_disponible -= $detail['qte_detail'];
+                //     $constatUsed->save();
+                // }
 
                 //$constatData = ConstatPoulet::where('id', $detail['id_constat'])->first();
                 // enregistrement produit cycle
-                $produitCycle = new ProduitCycle();
-                $produitCycle->id_cycle = $constatUsed->id_cycle;
-                $produitCycle->id_produit = $detail['id_produit'];
-                $produitCycle->id_sortie = $sortieOeuf->id;
-                $produitCycle->qte = $detail['qte_detail'];
-                $produitCycle->pu = $detail['prix_unitaire_detail'];
-                $produitCycle->valeur = $detail['montant_total_detail'];
-                $produitCycle->save();
+                // $produitCycle = new ProduitCycle();
+                // $produitCycle->id_cycle = $constatUsed->id_cycle;
+                // $produitCycle->id_produit = $detail['id_produit'];
+                // $produitCycle->id_sortie = $sortieOeuf->id;
+                // $produitCycle->qte = $detail['qte_detail'];
+                // $produitCycle->pu = $detail['prix_unitaire_detail'];
+                // $produitCycle->valeur = $detail['montant_total_detail'];
+                // $produitCycle->save();
                 
-            }
-
-                $this->resetFormSortie();
-                $this->resetValidation();
-                $this->isLoading = false;
-                $this->notification = true;
-                session()->flash('message', 'Sortie oeuf bien enregistré!');
-                DB::commit();
-                $this->createSortie = false;
-                $this->afficherListe = true;
-                $this->resetPage();
-                }catch(\Exception $e){
+                
+            }catch(\Exception $e){
         
                     return $e->getMessage();
                     //session()->flash('message', $e->getMessage());
                     DB::rollBack();
                     
-                }
-            }else{
-                //$this->notification = true;
-                session()->flash('impossible', 'Opération impossible. La somme des quantités de détail doit être égale au nombre de poulets à sortir !');
+                
             }
     }
 

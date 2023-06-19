@@ -159,7 +159,7 @@
                         <input type="text" wire:model.defer="id_utilisateur" class="form-control form-control-rounded">
                     </div>
 
-                                  
+{{--                                   
                     @if($id_type_oeuf)
                     <div class="col-md-12 col-lg-12">
                         <div class="alert alert-card alert-info" role="alert">
@@ -253,7 +253,7 @@
                             </div>
                         </p>
                     </div>
-                    @endif
+                    @endif --}}
                     <div class="col-md-12">
                         @if ($selectedOption == 'existe')
                         <button class="btn btn-primary btn-rounded mr-3" wire:click.prevent="saveExistSortie()" wire:loading.attr="disabled" wire:target="saveExistSortie()">
