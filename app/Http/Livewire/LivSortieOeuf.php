@@ -189,7 +189,7 @@ class LivSortieOeuf extends Component
     {
         $sommenbdisponible = ConstatOeuf::where('id_type_oeuf', $this->id_type_oeuf)
         ->sum('nb_disponible');
-        if($sommenbdisponible > $this->qte)
+        if($sommenbdisponible >= $this->qte)
         {
             $this->addLigne = true;
         }else{
@@ -470,50 +470,25 @@ class LivSortieOeuf extends Component
                         $produitCycle->valeur = $this->pu * $qteUtilisee;
                         $produitCycle->save();
 
-                        $this->resetFormSortie();
-                        $this->resetValidation();
-                        $this->isLoading = false;
-                        $this->notification = true;
-                        session()->flash('message', 'Sortie oeuf bien enregistré!');
                         DB::commit();
-                        $this->createSortie = false;
-                        $this->afficherListe = true;
-                        $this->resetPage();
+
+                        // $this->isLoading = false;
+                        // $this->notification = true;
+                        // session()->flash('message', 'Sortie oeuf bien enregistré!');
+                        // DB::commit();
                     }
+                    $this->notification = true;
+                    session()->flash('message', 'Utilisation charge bien enregistré!');
+                    $this->resetFormSortie();
+                    $this->resetValidation();
+
+                    $this->createSortie = false;
+                    $this->afficherListe = true;
+                    $this->resetPage();
 
                 }else{
                     session()->flash('impossible', 'Opération impossible. La somme des quantités de détail doit être égale au nombre de poulets à sortir !');
                 }
-        
-                // Enregistrer les détails de la commande dans la table "details_commande"
-                // foreach ($this->sortie['details'] as $detail) {
-                // DetailSortie::create([
-                //     'id_sortie' => $sortieOeuf->id,
-                //     'id_constat' => $detail['id_constat'],
-                //     'id_produit' => $detail['id_produit'],
-                //     'qte' => $detail['qte_detail'],
-                //     'pu' => $detail['prix_unitaire_detail'],
-                //     'valeur' => $detail['montant_total_detail'],
-                // ]);
-
-                // Modifier la quantité de stock du constat utilisé dans le sortie
-                // $constatUsed = ConstatOeuf::where('id', $detail['id_constat'])->first();
-                // if ($constatUsed) {
-                //     $constatUsed->nb_disponible -= $detail['qte_detail'];
-                //     $constatUsed->save();
-                // }
-
-                //$constatData = ConstatPoulet::where('id', $detail['id_constat'])->first();
-                // enregistrement produit cycle
-                // $produitCycle = new ProduitCycle();
-                // $produitCycle->id_cycle = $constatUsed->id_cycle;
-                // $produitCycle->id_produit = $detail['id_produit'];
-                // $produitCycle->id_sortie = $sortieOeuf->id;
-                // $produitCycle->qte = $detail['qte_detail'];
-                // $produitCycle->pu = $detail['prix_unitaire_detail'];
-                // $produitCycle->valeur = $detail['montant_total_detail'];
-                // $produitCycle->save();
-                
                 
             }catch(\Exception $e){
         
